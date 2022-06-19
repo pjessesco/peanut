@@ -26,5 +26,16 @@ int main() {
     mat.elem(1, 1) = 100;
     mat.print_mat();
 
+    std::cout<<"\n======"<<std::endl;
+    std::cout<<is_matrix_v<int><<std::endl;
+    std::cout<<is_matrix_v<Matrix<int, 2, 2>><<std::endl;
+    std::cout<<is_matrix_v<MatrixExpr<int>><<std::endl;
+
+    std::cout<<is_equal_size_mat_v<Matrix<int, 2, 2>, Matrix<int, 2, 2>><<std::endl;
+    std::cout<<is_equal_size_mat_v<Matrix<int, 2, 2>, Matrix<int, 2, 3>><<std::endl;
+
+    std::cout<<is_square_v<Matrix<int, 2, 2>><<std::endl;
+    std::cout<<is_square_v<Matrix<int, 2, 3>><<std::endl;
+
     return 0;
 }

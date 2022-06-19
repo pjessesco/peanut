@@ -34,6 +34,7 @@
 
 // Peanut headers
 #include "common.h"
+#include "matrix_type_traits.h"
 
 // Dependencies headers
 
@@ -78,7 +79,7 @@ namespace Peanut {
 
         static Matrix zeros() {return Matrix();}
 
-        static Matrix identity() requires(Row == Col) {
+        static Matrix identity() requires is_square_v<Matrix> {
             Matrix a;
             a.m_data.fill(t_0);
             for (Index i = 0; i < Row * Col; i += (Row + 1)) {
