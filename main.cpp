@@ -21,6 +21,10 @@ int main() {
 
     Matrix<int, 2, 2> mat = werwe;
     mat.print_mat();
+    mat.elem(0, 0);
+
+    mat.elem(1, 1) = 100;
+    mat.print_mat();
 
     return 0;
 }

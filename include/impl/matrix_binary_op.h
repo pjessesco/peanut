@@ -44,8 +44,9 @@ namespace Peanut {
     struct MatrixSum : public MatrixExpr<MatrixSum<E1, E2>>{
         MatrixSum(const E1 &x, const E2 &y) : x{x}, y{y} {}
 
-        auto operator[](Index i) const{
-            return x[i] + y[i];
+        // Static polymorphism implementation of MatrixExpr
+        auto elem(Index r, Index c) const{
+            return x.elem(r, c) + y.elem(r, c);
         }
 
         const E1 &x;
@@ -63,8 +64,9 @@ namespace Peanut {
     struct MatrixSub : public MatrixExpr<MatrixSub<E1, E2>>{
         MatrixSub(const E1 &x, const E2 &y) : x{x}, y{y} {}
 
-        auto operator[](Index i) const{
-            return x[i] - y[i];
+        // Static polymorphism implementation of MatrixExpr
+        auto elem(Index r, Index c) const{
+            return x.elem(r, c) - y.elem(r, c);
         }
 
         const E1 &x;

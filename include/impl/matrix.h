@@ -30,6 +30,7 @@
 #include <array>
 #include <algorithm>
 #include <cstring>
+#include <cassert>
 
 // Peanut headers
 #include "common.h"
@@ -40,9 +41,14 @@ namespace Peanut {
 
     template <typename E>
     struct MatrixExpr{
-        auto operator[] (Index i) const{
-            return static_cast<const E&>(*this)[i];
+        auto elem(Index r, Index c) const{
+            return static_cast<const E&>(*this).elem(r, c);
         }
+
+        auto& elem(Index r, Index c) {
+            return static_cast<const E&>(*this).elem(r, c);
+        }
+
         [[nodiscard]] static constexpr Index row() {
             return E::row();
         }
@@ -63,8 +69,10 @@ namespace Peanut {
 
         template<typename E>
         Matrix(const MatrixExpr<E> &expr) {
-            for(int i=0;i<Row*Col;i++){
-                m_data[i] = expr[i];
+            for(Index r=0;r<Row;r++){
+                for(Index c=0;c<Col;c++){
+                    elem(r, c) = expr.elem(r, c);
+                }
             }
         }
 
@@ -80,8 +88,15 @@ namespace Peanut {
         }
 
         // Static polymorphism implementation of MatrixExpr
-        T operator[](Index i) const {return m_data[i];}
-        T& operator[](Index i) {return m_data[i];}
+        T elem(Index r, Index c) const{
+            assert((0<=r) && (r < Row) && (0<=c) && (c < Col));
+            return m_data[Col*r+c];
+        }
+
+        T& elem(Index r, Index c) {
+            assert((0<=r) && (r < Row) && (0<=c) && (c < Col));
+            return m_data[Col*r+c];
+        }
 
         [[nodiscard]] static constexpr Index row() {return Row;}
         [[nodiscard]] static constexpr Index col() {return Col;}
@@ -97,4 +112,5 @@ namespace Peanut {
         static constexpr T t_0 = static_cast<T>(0);
         std::array<T, Row*Col> m_data;
     };
+
 }
