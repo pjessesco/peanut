@@ -57,6 +57,27 @@ namespace Peanut {
         return MatrixSum<E1, E2>(static_cast<const E1&>(x), static_cast<const E2&>(y));
     }
 
+    // =========================================================================
+
+    template <typename E1, typename E2>
+    struct MatrixSub : public MatrixExpr<MatrixSub<E1, E2>>{
+        MatrixSub(const E1 &x, const E2 &y) : x{x}, y{y} {}
+
+        auto operator[](Index i) const{
+            return x[i] - y[i];
+        }
+
+        const E1 &x;
+        const E2 &y;
+    };
+
+    template <typename E1, typename E2>
+    MatrixSub<E1, E2> operator-(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y){
+        return MatrixSub<E1, E2>(static_cast<const E1&>(x), static_cast<const E2&>(y));
+    }
+
+    // =========================================================================
+
 
 
 }

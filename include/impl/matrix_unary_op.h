@@ -25,11 +25,22 @@
 #pragma once
 
 // Standard headers
+#include <algorithm>
+#include <array>
+#include <cstring>
+#include <initializer_list>
+#include <iostream>
+#include <type_traits>
 
 // Peanut headers
-#include "impl/matrix.h"
-#include "impl/matrix_binary_op.h"
-#include "impl/matrix_unary_op.h"
-
+#include "common.h"
+#include "matrix.h"
 
 // Dependencies headers
+
+namespace Peanut {
+
+
+
+
+}
