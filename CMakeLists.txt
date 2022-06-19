@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_executable(Peanut
     main.cpp
-    include/common.h
-    include/matrix.h
+    include/impl/common.h
+    include/impl/matrix.h
+    include/Matrix.h
 )
