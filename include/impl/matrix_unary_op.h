@@ -67,27 +67,27 @@ namespace Peanut {
 
     // =========================================================================
 
-    template <typename E> requires is_matrix_v<E> && is_square_v<E>
-    struct MatrixInverse : public MatrixExpr<MatrixInverse<E>>{
-        MatrixInverse(const E &x) : x{x} {}
-
+    template <Index row_start, Index col_start, Index row_size, Index col_size, typename E>
+    requires is_matrix_v<E> && is_between_v<0, row_start, E::row()> && is_between_v<0, col_start, E::col()> &&
+             is_between_v<0, row_start+row_size, E::row()> && is_between_v<0, col_start+col_size, E::col()>
+    struct MatrixBlock : public MatrixExpr<MatrixBlock<row_start, col_start, row_size, col_size, E>>{
+        MatrixBlock(const E &x) : x{x} {}
+        
         // Static polymorphism implementation of MatrixExpr
         inline auto elem(Index r, Index c) const{
-            return 0;
+            return x.elem(row_start+r, col_start+c);
         }
+        [[nodiscard]] static constexpr Index row() {return row_size;}
+        [[nodiscard]] static constexpr Index col() {return col_size;}
 
         const E &x;
     };
 
-
-    template <typename E> requires is_matrix_v<E> && is_square_v<E>
-    E Inv(const MatrixInverse<E> &x){
-        return static_cast<const E&>(x.x);
-    }
-
-    template <typename E> requires is_matrix_v<E> && is_square_v<E>
-    MatrixInverse<E> Inv(const MatrixExpr<E> &x){
-        return MatrixInverse<E>(static_cast<const E&>(x));
+    template <Index row_start, Index col_start, Index row_size, Index col_size, typename E>
+    requires is_matrix_v<E> && is_between_v<0, row_start, E::row()> && is_between_v<0, col_start, E::col()> &&
+             is_between_v<0, row_start+row_size, E::row()> && is_between_v<0, col_start+col_size, E::col()>
+    MatrixBlock<row_start, col_start, row_size, col_size, E> Block(const MatrixExpr<E> &x){
+        return MatrixBlock<row_start, col_start, row_size, col_size, E>(static_cast<const E&>(x));
     }
 
     // =========================================================================

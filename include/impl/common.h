@@ -51,4 +51,11 @@ namespace Peanut {
         }
     }
 
+    template <Index start, Index var, Index end>
+    struct is_between{
+        static constexpr bool value = (start<=var) && (var<end);
+    };
+
+    template <Index start, Index var, Index end>
+    constexpr bool is_between_v = is_between<start, var, end>::value;
 }

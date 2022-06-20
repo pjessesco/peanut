@@ -69,7 +69,7 @@ namespace Peanut {
         explicit Matrix(const std::vector<T> &data) : m_data{data} {}
 
         template<typename E>
-        Matrix(const MatrixExpr<E> &expr) {
+        Matrix(const MatrixExpr<E> &expr) requires is_equal_size_mat_v<E, Matrix>{
             for(Index r=0;r<Row;r++){
                 for(Index c=0;c<Col;c++){
                     elem(r, c) = expr.elem(r, c);
