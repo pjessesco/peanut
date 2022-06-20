@@ -31,6 +31,7 @@
 #include <algorithm>
 #include <cstring>
 #include <cassert>
+#include <iostream>
 
 // Peanut headers
 #include "common.h"
@@ -42,11 +43,11 @@ namespace Peanut {
 
     template <typename E>
     struct MatrixExpr{
-        auto elem(Index r, Index c) const{
+        inline auto elem(Index r, Index c) const{
             return static_cast<const E&>(*this).elem(r, c);
         }
 
-        auto& elem(Index r, Index c) {
+        inline auto& elem(Index r, Index c) {
             return static_cast<const E&>(*this).elem(r, c);
         }
 
@@ -58,8 +59,7 @@ namespace Peanut {
         }
     };
 
-    template<typename T, Index Row, Index Col>
-    requires std::is_arithmetic_v<T> && (Row > 0) && (Col > 0)
+    template<typename T, Index Row, Index Col> requires std::is_arithmetic_v<T> && (Row > 0) && (Col > 0)
     struct Matrix : public MatrixExpr<Matrix<T, Row, Col>>{
         Matrix() {m_data.fill(t_0);}
         Matrix(const std::initializer_list<T> &il) {
@@ -89,12 +89,12 @@ namespace Peanut {
         }
 
         // Static polymorphism implementation of MatrixExpr
-        T elem(Index r, Index c) const{
+        inline T elem(Index r, Index c) const{
             assert((0<=r) && (r < Row) && (0<=c) && (c < Col));
             return m_data[Col*r+c];
         }
 
-        T& elem(Index r, Index c) {
+        inline T& elem(Index r, Index c) {
             assert((0<=r) && (r < Row) && (0<=c) && (c < Col));
             return m_data[Col*r+c];
         }
@@ -103,15 +103,61 @@ namespace Peanut {
         [[nodiscard]] static constexpr Index col() {return Col;}
 
         void print_mat() const {
-            for (int i = 0; i < Row * Col; i++) {
-                std::cout << m_data[i] << " ";
+            for(int r=0;r<Row;r++){
+                for (int c = 0; c < Col; c++) {
+                    std::cout << elem(r, c) << " ";
+                }
+                std::cout<<"\n";
             }
         }
+
+        void subtract_row(Index r1, Index r2, T scalar){
+            for(int i=0;i<Col;i++){
+                elem(r1, i) -= scalar * elem(r2, i);
+            }
+        }
+
+        Matrix<Float, Row, Col> gaussian_elem() const{
+            Matrix<Float, Row, Col> ret = this->cast_to<Float>();
+            for(int j=0;j<Row-1;j++){
+                const Float denom = static_cast<Float>(ret.elem(j,j));
+                if(is_zero(denom)){
+                    continue;
+                }
+                for(int i=j+1;i<Row;i++){
+                    const Float ratio = static_cast<Float>(ret.elem(i, j)) / denom;
+                    ret.subtract_row(i, j, ratio);
+                }
+            }
+            return ret;
+        }
+
+        Float det() const requires is_square_v<Matrix>{
+            auto upper_triangular = gaussian_elem();
+            Float det = upper_triangular.elem(0, 0);
+            for(int i=1;i<Row;i++){
+                det *= upper_triangular.elem(i, i);
+            }
+            return det;
+        }
+
+        template <typename T1>
+        Matrix<T1, Row, Col> cast_to() const{
+            std::array<T1, Row*Col> tmp;
+            for(Index i=0;i<Row*Col;i++){
+                tmp[i] = static_cast<T1>(m_data[i]);
+            }
+            return Matrix<T1, Row, Col>{tmp};
+        }
+
 
     private:
         static constexpr T t_1 = static_cast<T>(1);
         static constexpr T t_0 = static_cast<T>(0);
         std::array<T, Row*Col> m_data;
     };
+
+
+
 
 }

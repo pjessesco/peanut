@@ -35,12 +35,61 @@
 // Peanut headers
 #include "common.h"
 #include "matrix.h"
+#include "matrix_type_traits.h"
 
 // Dependencies headers
 
 namespace Peanut {
 
+    template <typename E> requires is_matrix_v<E>
+    struct MatrixTranspose : public MatrixExpr<MatrixTranspose<E>>{
+        MatrixTranspose(const E &x) : x{x} {}
+
+        // Static polymorphism implementation of MatrixExpr
+        inline auto elem(Index r, Index c) const{
+            return x.elem(c, r);
+        }
+        [[nodiscard]] static constexpr Index row() {return E::col();}
+        [[nodiscard]] static constexpr Index col() {return E::row();}
+
+        const E &x;
+    };
+
+    template <typename E> requires is_matrix_v<E>
+    E T(const MatrixTranspose<E> &x){
+        return static_cast<const E&>(x.x);
+    }
+
+    template <typename E> requires is_matrix_v<E>
+    MatrixTranspose<E> T(const MatrixExpr<E> &x){
+        return MatrixTranspose<E>(static_cast<const E&>(x));
+    }
+
+    // =========================================================================
+
+    template <typename E> requires is_matrix_v<E> && is_square_v<E>
+    struct MatrixInverse : public MatrixExpr<MatrixInverse<E>>{
+        MatrixInverse(const E &x) : x{x} {}
+
+        // Static polymorphism implementation of MatrixExpr
+        inline auto elem(Index r, Index c) const{
+            return 0;
+        }
+
+        const E &x;
+    };
 
 
+    template <typename E> requires is_matrix_v<E> && is_square_v<E>
+    E Inv(const MatrixInverse<E> &x){
+        return static_cast<const E&>(x.x);
+    }
+
+    template <typename E> requires is_matrix_v<E> && is_square_v<E>
+    MatrixInverse<E> Inv(const MatrixExpr<E> &x){
+        return MatrixInverse<E>(static_cast<const E&>(x));
+    }
+
+    // =========================================================================
 
 }

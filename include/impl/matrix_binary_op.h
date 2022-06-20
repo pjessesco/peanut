@@ -35,51 +35,82 @@
 // Peanut headers
 #include "common.h"
 #include "matrix.h"
+#include "matrix_type_traits.h"
 
 // Dependencies headers
 
 namespace Peanut {
 
-    template <typename E1, typename E2>
+    template <typename E1, typename E2> requires is_equal_size_mat_v<E1, E2>
     struct MatrixSum : public MatrixExpr<MatrixSum<E1, E2>>{
         MatrixSum(const E1 &x, const E2 &y) : x{x}, y{y} {}
 
         // Static polymorphism implementation of MatrixExpr
-        auto elem(Index r, Index c) const{
+        inline auto elem(Index r, Index c) const{
             return x.elem(r, c) + y.elem(r, c);
         }
+
+        [[nodiscard]] static constexpr Index row() {return E1::row();}
+        [[nodiscard]] static constexpr Index col() {return E1::col();}
 
         const E1 &x;
         const E2 &y;
     };
 
-    template <typename E1, typename E2>
+    template <typename E1, typename E2> requires is_equal_size_mat_v<E1, E2>
     MatrixSum<E1, E2> operator+(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y){
         return MatrixSum<E1, E2>(static_cast<const E1&>(x), static_cast<const E2&>(y));
     }
 
     // =========================================================================
 
-    template <typename E1, typename E2>
+    template <typename E1, typename E2> requires is_equal_size_mat_v<E1, E2>
     struct MatrixSub : public MatrixExpr<MatrixSub<E1, E2>>{
         MatrixSub(const E1 &x, const E2 &y) : x{x}, y{y} {}
 
         // Static polymorphism implementation of MatrixExpr
-        auto elem(Index r, Index c) const{
+        inline auto elem(Index r, Index c) const{
             return x.elem(r, c) - y.elem(r, c);
         }
+
+        [[nodiscard]] static constexpr Index row() {return E1::row();}
+        [[nodiscard]] static constexpr Index col() {return E1::col();}
 
         const E1 &x;
         const E2 &y;
     };
 
-    template <typename E1, typename E2>
+    template <typename E1, typename E2> requires is_equal_size_mat_v<E1, E2>
     MatrixSub<E1, E2> operator-(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y){
         return MatrixSub<E1, E2>(static_cast<const E1&>(x), static_cast<const E2&>(y));
     }
 
     // =========================================================================
 
+    template <typename E1, typename E2> requires (E1::col()==E2::row())
+    struct MatrixMult : public MatrixExpr<MatrixMult<E1, E2>>{
+        MatrixMult(const E1 &x, const E2 &y) : x{x}, y{y} {}
+
+        // Static polymorphism implementation of MatrixExpr
+        inline auto elem(Index r, Index c) const{
+            auto ret = x.elem(r, 0) * y.elem(0, c);
+            for(Index i=1;i<E1::col();i++){
+                ret += x.elem(r, i) * y.elem(i, c);
+            }
+            return ret;
+        }
+        [[nodiscard]] static constexpr Index row() {return E1::row();}
+        [[nodiscard]] static constexpr Index col() {return E2::col();}
+
+        const E1 &x;
+        const E2 &y;
+    };
+
+    // General implementation
+    template <typename E1, typename E2> requires (E1::col()==E2::row())
+    MatrixMult<E1, E2> operator*(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y){
+        return MatrixMult<E1, E2>(static_cast<const E1&>(x), static_cast<const E2&>(y));
+    }
 
 
 }

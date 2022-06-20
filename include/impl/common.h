@@ -25,6 +25,8 @@
 #pragma once
 
 // Standard headers
+#include <limits>
+#include <cmath>
 
 // Peanut headers
 
@@ -32,5 +34,21 @@
 
 namespace Peanut {
     using Index = unsigned int;
+    using Float = float;
+
+    inline const Index rc_to_idx(Index Col, Index r, Index c) {
+        return Col*r + c;
+    }
+
+    template<typename T>
+    bool is_zero(T val){
+        if constexpr (std::is_floating_point_v<T>){
+            return std::fabs(val-static_cast<T>(0)) <= std::numeric_limits<T>::epsilon() ||
+                   std::fabs(val-static_cast<T>(0)) < std::numeric_limits<T>::min();
+        }
+        else{
+            return val == static_cast<T>(0);
+        }
+    }
 
 }
