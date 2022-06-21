@@ -61,6 +61,7 @@ namespace Peanut {
 
     template<typename T, Index Row, Index Col> requires std::is_arithmetic_v<T> && (Row > 0) && (Col > 0)
     struct Matrix : public MatrixExpr<Matrix<T, Row, Col>>{
+        using Type = T;
         Matrix() {m_data.fill(t_0);}
         Matrix(const std::initializer_list<T> &il) {
             std::copy(il.begin(), il.end(), m_data);

@@ -43,6 +43,7 @@ namespace Peanut {
 
     template <typename E> requires is_matrix_v<E>
     struct MatrixTranspose : public MatrixExpr<MatrixTranspose<E>>{
+        using Type = typename E::Type;
         MatrixTranspose(const E &x) : x{x} {}
 
         // Static polymorphism implementation of MatrixExpr
@@ -71,6 +72,7 @@ namespace Peanut {
     requires is_matrix_v<E> && is_between_v<0, row_start, E::row()> && is_between_v<0, col_start, E::col()> &&
              is_between_v<0, row_start+row_size, E::row()> && is_between_v<0, col_start+col_size, E::col()>
     struct MatrixBlock : public MatrixExpr<MatrixBlock<row_start, col_start, row_size, col_size, E>>{
+        using Type = typename E::Type;
         MatrixBlock(const E &x) : x{x} {}
         
         // Static polymorphism implementation of MatrixExpr
@@ -95,6 +97,7 @@ namespace Peanut {
     template <Index row_ex, Index col_ex, typename E>
     requires is_matrix_v<E> && is_square_v<E> && is_between_v<0, row_ex, E::row()> && is_between_v<0, col_ex, E::col()>
     struct MatrixAdjugate : public MatrixExpr<MatrixAdjugate<row_ex, col_ex, E>>{
+        using Type = typename E::Type;
         MatrixAdjugate(const E &x) : x{x} {}
         
         // Static polymorphism implementation of MatrixExpr

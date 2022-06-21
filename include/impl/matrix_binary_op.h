@@ -43,6 +43,7 @@ namespace Peanut {
 
     template <typename E1, typename E2> requires is_equal_size_mat_v<E1, E2>
     struct MatrixSum : public MatrixExpr<MatrixSum<E1, E2>>{
+        using Type = typename E1::Type;
         MatrixSum(const E1 &x, const E2 &y) : x{x}, y{y} {}
 
         // Static polymorphism implementation of MatrixExpr
@@ -66,6 +67,7 @@ namespace Peanut {
 
     template <typename E1, typename E2> requires is_equal_size_mat_v<E1, E2>
     struct MatrixSub : public MatrixExpr<MatrixSub<E1, E2>>{
+        using Type = typename E1::Type;
         MatrixSub(const E1 &x, const E2 &y) : x{x}, y{y} {}
 
         // Static polymorphism implementation of MatrixExpr
@@ -89,6 +91,7 @@ namespace Peanut {
 
     template <typename E1, typename E2> requires (E1::col()==E2::row())
     struct MatrixMult : public MatrixExpr<MatrixMult<E1, E2>>{
+        using Type = typename E1::Type;
         MatrixMult(const E1 &x, const E2 &y) : x{x}, y{y} {}
 
         // Static polymorphism implementation of MatrixExpr
