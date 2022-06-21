@@ -134,13 +134,29 @@ namespace Peanut {
             return ret;
         }
 
-        Float det() const requires is_square_v<Matrix>{
+        constexpr T det() const requires is_square_v<Matrix>{
             auto upper_triangular = gaussian_elem();
             Float det = upper_triangular.elem(0, 0);
             for(int i=1;i<Row;i++){
                 det *= upper_triangular.elem(i, i);
             }
             return det;
+        }
+
+        constexpr T det2() const requires is_square_v<Matrix>{
+            if constexpr(Col==1){
+                return elem(0, 0);
+            }
+            else if constexpr (Col==2){
+                return elem(0, 0) * elem(1, 1) - elem(0, 1) * elem(1, 0);
+            }
+            else{
+                T ret = static_cast<T>(0);
+                Peanut::for_<Col>([&] (auto c) {
+                    ret += (c.value % 2 ? -1 : 1) * elem(0, c.value) * DeleteRC<0, c.value>(*this).eval().det();
+                });
+                return ret;
+            }
         }
 
     private:
