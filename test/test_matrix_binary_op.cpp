@@ -92,6 +92,63 @@ TEST_CASE("test_matrix_binary_op"){
         CHECK(sum_mat2.elem(1, 1) == Catch::Approx(-15.8f));
     }
 
+    SECTION("Scalar * Mat, Mat * Scalar"){
+        // IntMat * Int
+        {
+            Peanut::Matrix<int, 2, 2> int_22_mat1{std::array<int, 4>{1,2,3,4}};
+            Peanut::Matrix<int, 2, 2> scalar_mat_mul1 = int_22_mat1 * 3;
+            Peanut::Matrix<int, 2, 2> scalar_mat_mul2 = 3 * int_22_mat1;
+            // Build error
+            // Peanut::Matrix<float, 2, 2> scalar_mat_mul1 = int_22_mat1 * 3;
+
+            CHECK(scalar_mat_mul1.elem(0, 0) == 3);
+            CHECK(scalar_mat_mul1.elem(0, 1) == 6);
+            CHECK(scalar_mat_mul1.elem(1, 0) == 9);
+            CHECK(scalar_mat_mul1.elem(1, 1) == 12);
+
+            CHECK(scalar_mat_mul2.elem(0, 0) == 3);
+            CHECK(scalar_mat_mul2.elem(0, 1) == 6);
+            CHECK(scalar_mat_mul2.elem(1, 0) == 9);
+            CHECK(scalar_mat_mul2.elem(1, 1) == 12);
+        }
+        // IntMat * Float
+        {
+            Peanut::Matrix<int, 2, 2> int_22_mat1{std::array<int, 4>{1,2,3,4}};
+            Peanut::Matrix<float, 2, 2> scalar_mat_mul1 = int_22_mat1 * 2.0f;
+            // Build error
+            // Peanut::Matrix<int, 2, 2> scalar_mat_mul2 = int_22_mat1 * 2.0f;
+
+            CHECK(scalar_mat_mul1.elem(0, 0) == 2.0f);
+            CHECK(scalar_mat_mul1.elem(0, 1) == 4.0f);
+            CHECK(scalar_mat_mul1.elem(1, 0) == 6.0f);
+            CHECK(scalar_mat_mul1.elem(1, 1) == 8.0f);
+        }
+        // FloatMat * Int
+        {
+            Peanut::Matrix<float, 2, 2> flt_22_mat1{std::array<float, 4>{1.1f,2.2f,3.3f,4.4f}};
+            Peanut::Matrix<float, 2, 2> scalar_mat_mul1 = flt_22_mat1 * 2;
+            // Build error
+            // Peanut::Matrix<int, 2, 2> scalar_mat_mul2 = flt_22_mat1 * 2;
+            CHECK(scalar_mat_mul1.elem(0, 0) == 2.2f);
+            CHECK(scalar_mat_mul1.elem(0, 1) == 4.4f);
+            CHECK(scalar_mat_mul1.elem(1, 0) == 6.6f);
+            CHECK(scalar_mat_mul1.elem(1, 1) == 8.8f);
+        }
+        // FloatMat * Float
+        {
+            Peanut::Matrix<float, 2, 2> flt_22_mat1{std::array<float, 4>{1.1f,2.2f,3.3f,4.4f}};
+            Peanut::Matrix<float, 2, 2> scalar_mat_mul1 = flt_22_mat1 * 2.0f;
+            // Build error
+            // Peanut::Matrix<int, 2, 2> scalar_mat_mul2 = flt_22_mat1 * 2.0f;
+            CHECK(scalar_mat_mul1.elem(0, 0) == 2.2f);
+            CHECK(scalar_mat_mul1.elem(0, 1) == 4.4f);
+            CHECK(scalar_mat_mul1.elem(1, 0) == 6.6f);
+            CHECK(scalar_mat_mul1.elem(1, 1) == 8.8f);
+        }
+
+
+    }
+
     SECTION("Mat * Mat * Mat"){
         std::array<float, 4> fltarr1{1,2,3,4};
         Peanut::Matrix<float, 2, 2> flt_22_mat1{fltarr1};

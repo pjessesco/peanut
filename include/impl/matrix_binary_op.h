@@ -90,6 +90,36 @@ namespace Peanut {
     }
 
     // =========================================================================
+    
+    template <typename E, typename T> requires is_matrix_v<E> && std::is_arithmetic_v<T>
+    struct MatrixMultScalar : public MatrixExpr<MatrixMultScalar<E, T>>{
+        using Type = typename std::conditional<
+                                    std::is_floating_point_v<typename E::Type> || std::is_floating_point_v<T>,
+                                    Float, T>::type;
+        MatrixMultScalar(const E &x, T y) : x{x}, y{y} {}
+
+        // Static polymorphism implementation of MatrixExpr
+        inline Type elem(Index r, Index c) const{
+            return static_cast<Type>(x.elem(r, c)) * static_cast<Type>(y);
+        }
+        [[nodiscard]] static constexpr Index row() {return E::row();}
+        [[nodiscard]] static constexpr Index col() {return E::col();}
+
+        const E &x;
+        T y;
+    };
+
+    template <typename E, typename T> requires is_matrix_v<E> && std::is_arithmetic_v<T>
+    MatrixMultScalar<E, T> operator*(const MatrixExpr<E> &x, const T &y){
+        return MatrixMultScalar<E, T>(static_cast<const E&>(x), y);
+    }
+
+    template <typename E, typename T> requires is_matrix_v<E> && std::is_arithmetic_v<T>
+    MatrixMultScalar<E, T> operator*(const T x, const MatrixExpr<E> &y){
+        return MatrixMultScalar<E, T>(static_cast<const E&>(y), x);
+    }
+    
+    // =========================================================================
 
     template <typename E1, typename E2> requires (E1::col()==E2::row())
     struct MatrixMult : public MatrixExpr<MatrixMult<E1, E2>>{
