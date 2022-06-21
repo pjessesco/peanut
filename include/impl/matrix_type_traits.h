@@ -63,5 +63,25 @@ namespace Peanut {
     template <typename E>
     constexpr bool is_square_v = is_square<E>::value;
 
+    // =========================================================================
+
+    template <typename E1, typename E2> requires is_matrix_v<E1> && is_matrix_v<E2>
+    struct is_equal_type{
+        static constexpr bool value = std::is_same_v<typename E1::Type, typename E2::Type>;
+    };
+
+    template <typename E1, typename E2>
+    constexpr bool is_equal_type_v = is_equal_type<E1, E2>::value;
+
+    // =========================================================================
+
+    template <typename E1, typename E2> requires is_matrix_v<E1> && is_matrix_v<E2>
+    struct is_equal_type_size{
+        static constexpr bool value = (is_equal_type_v<E1, E2> && is_equal_size_mat_v<E1, E2>);
+    };
+
+    template <typename E1, typename E2>
+    constexpr bool is_equal_type_size_v = is_equal_type_size<E1, E2>::value;
+
 
 }
