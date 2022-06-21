@@ -22,8 +22,6 @@
 // SOFTWARE.
 //
 
-#pragma once
-
 // Standard headers
 #include <type_traits>
 #include <chrono>
