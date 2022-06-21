@@ -105,8 +105,9 @@ namespace Peanut {
         [[nodiscard]] static constexpr Index row() {return E1::row();}
         [[nodiscard]] static constexpr Index col() {return E2::col();}
 
-        const E1 &x;
-        const E2 &y;
+        // Specify member type as Matrix for evaluation
+        const Matrix<Type, E1::row(), E1::col()> x;
+        const Matrix<Type, E2::row(), E2::col()> y;
     };
 
     // General implementation
