@@ -115,6 +115,31 @@ namespace Peanut {
         return MatrixAdjugate<row_ex, col_ex, E>(static_cast<const E&>(x));
     }
 
-
     // =========================================================================
+    
+    template <typename E> requires is_matrix_v<E> && is_square_v<E>
+    struct MatrixInverse : public MatrixExpr<MatrixInverse<E>>{
+        using Type = typename E::Type;
+        MatrixInverse(const E &x) : x{x} {}
+        
+        // Static polymorphism implementation of MatrixExpr
+        inline auto elem(Index r, Index c) const{
+            // TBD
+            return 0;
+        }
+        [[nodiscard]] static constexpr Index row() {return E::row();}
+        [[nodiscard]] static constexpr Index col() {return E::col();}
+        
+        const Matrix<Type, E::row(), E::col()> x;
+    };
+    
+    template <typename E> requires is_matrix_v<E> && is_square_v<E>
+    E Inv(const MatrixInverse<E> &x){
+        return static_cast<const E&>(x.x);
+    }
+
+    template <typename E> requires is_matrix_v<E> && is_square_v<E>
+    MatrixInverse<E> Inv(const MatrixExpr<E> &x){
+        return MatrixInverse<E>(static_cast<const E&>(x));
+    }
 }
