@@ -141,12 +141,12 @@ namespace Peanut {
             return mat_eval.elem(r, c);
         }
 
-        Matrix<Type, E::col() - 1, E::col() - 1> eval(){
-            return Matrix<Type, E::col() - 1, E::col() - 1>(*this);
+        Matrix<Type, E::row(), E::col()> eval(){
+            return mat_eval;
         }
 
-        [[nodiscard]] static constexpr Index row() {return E::row() - 1;}
-        [[nodiscard]] static constexpr Index col() {return E::col() - 1;}
+        [[nodiscard]] static constexpr Index row() {return E::row();}
+        [[nodiscard]] static constexpr Index col() {return E::col();}
 
         Matrix<Type, row(), col()> mat_eval;
         const Matrix<Type, row(), col()> &x;
