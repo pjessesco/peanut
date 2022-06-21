@@ -25,8 +25,9 @@
 #pragma once
 
 // Standard headers
-#include <limits>
 #include <cmath>
+#include <limits>
+#include <utility>
 
 // Peanut headers
 
@@ -58,4 +59,33 @@ namespace Peanut {
 
     template <Index start, Index var, Index end>
     constexpr bool is_between_v = is_between<start, var, end>::value;
+
+    // Compile-time for loop, usage :
+    //
+    //    Peanut::for_<3>([&] (auto i) {
+    //        std::cout<<i.value<<std::endl;
+    //    });
+    //
+    // Output :
+    //   0
+    //   1
+    //   2
+    //
+    template<std::size_t N>
+    struct num { static const constexpr auto value = N; };
+
+    template <class F, std::size_t... Is>
+    void for_(F func, std::index_sequence<Is...>)
+    {
+        (func(num<Is>{}), ...);
+    }
+
+    template <std::size_t N, typename F>
+    void for_(F func)
+    {
+        for_(func, std::make_index_sequence<N>());
+    }
+
+    // Usage
+
 }
