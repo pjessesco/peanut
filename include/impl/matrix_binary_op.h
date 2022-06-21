@@ -34,12 +34,14 @@
 
 // Peanut headers
 #include "common.h"
-#include "matrix.h"
 #include "matrix_type_traits.h"
 
 // Dependencies headers
 
 namespace Peanut {
+
+    template<typename T, Index Row, Index Col> requires std::is_arithmetic_v<T> && (Row > 0) && (Col > 0)
+    struct Matrix;
 
     template <typename E1, typename E2> requires is_equal_size_mat_v<E1, E2>
     struct MatrixSum : public MatrixExpr<MatrixSum<E1, E2>>{

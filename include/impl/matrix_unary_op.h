@@ -34,12 +34,14 @@
 
 // Peanut headers
 #include "common.h"
-#include "matrix.h"
 #include "matrix_type_traits.h"
 
 // Dependencies headers
 
 namespace Peanut {
+
+    template<typename T, Index Row, Index Col> requires std::is_arithmetic_v<T> && (Row > 0) && (Col > 0)
+    struct Matrix;
 
     template <typename E> requires is_matrix_v<E>
     struct MatrixTranspose : public MatrixExpr<MatrixTranspose<E>>{
@@ -116,7 +118,28 @@ namespace Peanut {
     }
 
     // =========================================================================
-    
+
+    template <typename T, typename E> requires std::is_arithmetic_v<T> && is_matrix_v<E>
+    struct MatrixCastType : public MatrixExpr<MatrixCastType<T, E>>{
+        using Type = T;
+        MatrixCastType(const E &x) : x{x} {}
+
+        // Static polymorphism implementation of MatrixExpr
+        inline T elem(Index r, Index c) const{
+            return static_cast<T>(x.elem(r, c));
+        }
+        [[nodiscard]] static constexpr Index row() {return E::row();}
+        [[nodiscard]] static constexpr Index col() {return E::col();}
+
+        const E &x;
+    };
+
+    template <typename T, typename E> requires std::is_arithmetic_v<T> && is_matrix_v<E>
+    MatrixCastType<T, E> cast_to(const MatrixExpr<E> &x){
+        return MatrixCastType<T, E>(static_cast<const E&>(x));
+    }
+
+    // =========================================================================
     template <typename E> requires is_matrix_v<E> && is_square_v<E>
     struct MatrixInverse : public MatrixExpr<MatrixInverse<E>>{
         using Type = typename E::Type;

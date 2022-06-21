@@ -36,6 +36,7 @@
 // Peanut headers
 #include "common.h"
 #include "matrix_type_traits.h"
+#include "matrix_unary_op.h"
 
 // Dependencies headers
 
@@ -119,7 +120,7 @@ namespace Peanut {
         }
 
         Matrix<Float, Row, Col> gaussian_elem() const{
-            Matrix<Float, Row, Col> ret = this->cast_to<Float>();
+            Matrix<Float, Row, Col> ret = cast_to<Float>(*this);
             for(int j=0;j<Row-1;j++){
                 const Float denom = static_cast<Float>(ret.elem(j,j));
                 if(is_zero(denom)){
@@ -141,16 +142,6 @@ namespace Peanut {
             }
             return det;
         }
-
-        template <typename T1>
-        Matrix<T1, Row, Col> cast_to() const{
-            std::array<T1, Row*Col> tmp;
-            for(Index i=0;i<Row*Col;i++){
-                tmp[i] = static_cast<T1>(m_data[i]);
-            }
-            return Matrix<T1, Row, Col>{tmp};
-        }
-
 
     private:
         static constexpr T t_1 = static_cast<T>(1);
