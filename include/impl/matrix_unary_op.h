@@ -98,23 +98,87 @@ namespace Peanut {
 
     template <Index row_ex, Index col_ex, typename E>
     requires is_matrix_v<E> && is_square_v<E> && is_between_v<0, row_ex, E::row()> && is_between_v<0, col_ex, E::col()>
-    struct MatrixAdjugate : public MatrixExpr<MatrixAdjugate<row_ex, col_ex, E>>{
+    struct MatrixDeleteRowCol : public MatrixExpr<MatrixDeleteRowCol<row_ex, col_ex, E>>{
         using Type = typename E::Type;
-        MatrixAdjugate(const E &x) : x{x} {}
-        
+        MatrixDeleteRowCol(const E &x) : x{x} {}
+
         // Static polymorphism implementation of MatrixExpr
         inline auto elem(Index r, Index c) const{
             return x.elem(r<row_ex?r:r+1, c<col_ex?c:c+1);
         }
+
+        Matrix<Type, E::col() - 1, E::col() - 1> eval(){
+            return Matrix<Type, E::col() - 1, E::col() - 1>(*this);
+        }
+
         [[nodiscard]] static constexpr Index row() {return E::row() - 1;}
         [[nodiscard]] static constexpr Index col() {return E::col() - 1;}
-        
+
         const E &x;
     };
 
     template <Index row_ex, Index col_ex, typename E>
-    MatrixAdjugate<row_ex, col_ex, E> Adj(const MatrixExpr<E> &x){
-        return MatrixAdjugate<row_ex, col_ex, E>(static_cast<const E&>(x));
+    MatrixDeleteRowCol<row_ex, col_ex, E> DeleteRC(const MatrixExpr<E> &x){
+        return MatrixDeleteRowCol<row_ex, col_ex, E>(static_cast<const E&>(x));
+    }
+
+    // =========================================================================
+
+    template <Index row_ex, Index col_ex, typename E>
+    requires is_matrix_v<E> && is_square_v<E> && is_between_v<0, row_ex, E::row()> && is_between_v<0, col_ex, E::col()>
+    struct MatrixMinor : public MatrixExpr<MatrixMinor<row_ex, col_ex, E>>{
+        using Type = typename E::Type;
+        MatrixMinor(const E &x) : x{x} {
+            Peanut::for_<row()>([&] (auto r) {
+                Peanut::for_<col()>([&] (auto c) {
+                    mat_eval.elem(r.value, c.value) = DeleteRC<r.value, c.value>(x).eval().det();
+                });
+            });
+        }
+
+        // Static polymorphism implementation of MatrixExpr
+        inline auto elem(Index r, Index c) const{
+            return mat_eval.elem(r, c);
+        }
+
+        Matrix<Type, E::col() - 1, E::col() - 1> eval(){
+            return Matrix<Type, E::col() - 1, E::col() - 1>(*this);
+        }
+
+        [[nodiscard]] static constexpr Index row() {return E::row() - 1;}
+        [[nodiscard]] static constexpr Index col() {return E::col() - 1;}
+
+        Matrix<Type, row(), col()> mat_eval;
+        const Matrix<Type, row(), col()> &x;
+    };
+
+    template <Index row_ex, Index col_ex, typename E>
+    MatrixMinor<row_ex, col_ex, E> Minor(const MatrixExpr<E> &x){
+        return MatrixMinor<row_ex, col_ex, E>(static_cast<const E&>(x));
+    }
+
+    // =========================================================================
+
+    template <typename E>
+    requires is_matrix_v<E> && is_square_v<E>
+    struct MatrixCofactor : public MatrixExpr<MatrixCofactor<E>>{
+        using Type = typename E::Type;
+        MatrixCofactor(const E &_x) : x{_x}, mat_minor{Minor<E>(_x)} {}
+
+        // Static polymorphism implementation of MatrixExpr
+        inline auto elem(Index r, Index c) const{
+            return ((r+c)%2==0?1:-1) * x.elem(r, c);
+        }
+        [[nodiscard]] static constexpr Index row() {return E::row();}
+        [[nodiscard]] static constexpr Index col() {return E::col();}
+
+        const Matrix<Type, row(), col()> &mat_minor;
+        const E &x;
+    };
+
+    template <typename E>
+    MatrixCofactor<E> Cofactor(const MatrixExpr<E> &x){
+        return MatrixCofactor<E>(static_cast<const E&>(x));
     }
 
     // =========================================================================
