@@ -104,8 +104,8 @@ namespace Peanut {
         inline auto elem(Index r, Index c) const{
             return x.elem(r<row_ex?r:r+1, c<col_ex?c:c+1);
         }
-        [[nodiscard]] static constexpr Index row() {return E::col() - 1;}
-        [[nodiscard]] static constexpr Index col() {return E::row() - 1;}
+        [[nodiscard]] static constexpr Index row() {return E::row() - 1;}
+        [[nodiscard]] static constexpr Index col() {return E::col() - 1;}
         
         const E &x;
     };
