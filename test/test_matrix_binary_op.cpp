@@ -152,32 +152,5 @@ TEST_CASE("test_matrix_binary_op"){
         }
 
         CHECK(result.det() == Catch::Approx(-2.72254839985536151f).epsilon(0.001f));
-
-    }
-
-    SECTION("Compare running time"){
-
-        auto start = high_resolution_clock::now();
-        for(int i=0;i<1000000;i++){
-            Peanut::Matrix<float, 4, 4> mat1(std::array<float, 16>{1.2f, 5.4f, 3.3f, 6.4f,
-                                                                   1.3f, 2.5f, 7.6f, 9.9f,
-                                                                   3.3f, 6.3f, 2.5f, 1.6f,
-                                                                   7.5f, 6.6f, 1.3f, 5.2f});
-
-            Peanut::Matrix<float, 4, 4> mat2(std::array<float, 16>{7.0f, 6.0f, 2.0f, 5.0f,
-                                                                   8.0f, 9.0f, 5.0f, 2.0f,
-                                                                   1.0f, 3.0f, 5.0f, 7.0f,
-                                                                   9.0f, 8.0f, 4.0f, 1.0f});
-
-            Peanut::Matrix<float, 4, 4> mat3(std::array<float, 16>{6.9f, 8.1f, 7.2f, 6.3f,
-                                                                   4.9f, 8.7f, 1.2f, 6.9f,
-                                                                   3.8f, 4.7f, 6.1f, 2.9f,
-                                                                   3.4f, 6.1f, 9.2f, 3.1f});
-
-            Peanut::Matrix<float, 4, 4> result = mat3 - (mat1 * (mat3 + mat2 - mat1) * mat2 * (mat2 - mat1 - mat3));
-        }
-        auto stop = high_resolution_clock::now();
-        auto duration = duration_cast<microseconds>(stop - start);
-        std::cout<<"running time : "<<duration.count() << std::endl;
     }
 }
