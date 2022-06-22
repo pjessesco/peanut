@@ -52,12 +52,8 @@ namespace Peanut {
             return static_cast<const E&>(*this).elem(r, c);
         }
 
-        [[nodiscard]] static constexpr Index row() {
-            return E::row();
-        }
-        [[nodiscard]] static constexpr Index col() {
-            return E::col();
-        }
+        static constexpr Index row = E::row;
+        static constexpr Index col = E::col;
     };
 
     template<typename T, Index Row, Index Col> requires std::is_arithmetic_v<T> && (Row > 0) && (Col > 0)
@@ -102,8 +98,12 @@ namespace Peanut {
             return m_data[Col*r+c];
         }
 
-        [[nodiscard]] static constexpr Index row() {return Row;}
-        [[nodiscard]] static constexpr Index col() {return Col;}
+        static constexpr Index row = Row;
+        static constexpr Index col = Col;
+
+        inline Matrix<Type, row, col> eval() const{
+            return Matrix<Type, row, col>(*this);
+        }
 
         void print_mat() const {
             for(int r=0;r<Row;r++){
@@ -165,8 +165,4 @@ namespace Peanut {
         static constexpr T t_0 = static_cast<T>(0);
         std::array<T, Row*Col> m_data;
     };
-
-
-
-
 }

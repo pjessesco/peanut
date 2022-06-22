@@ -47,7 +47,7 @@ namespace Peanut {
 
     template <typename E1, typename E2> requires is_matrix_v<E1> && is_matrix_v<E2>
     struct is_equal_size_mat{
-        static constexpr bool value = (E1::row() == E2::row() && E1::col() == E2::col());
+        static constexpr bool value = (E1::row == E2::row && E1::col == E2::col);
     };
 
     template <typename E1, typename E2>
@@ -57,7 +57,7 @@ namespace Peanut {
 
     template <typename E> requires is_matrix_v<E>
     struct is_square{
-        static constexpr bool value = E::row() == E::col();
+        static constexpr bool value = E::row == E::col;
     };
 
     template <typename E>

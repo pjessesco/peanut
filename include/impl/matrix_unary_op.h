@@ -43,6 +43,8 @@ namespace Peanut {
     template<typename T, Index Row, Index Col> requires std::is_arithmetic_v<T> && (Row > 0) && (Col > 0)
     struct Matrix;
 
+    // =========================================================================
+
     template <typename E> requires is_matrix_v<E>
     struct MatrixTranspose : public MatrixExpr<MatrixTranspose<E>>{
         using Type = typename E::Type;
@@ -52,8 +54,13 @@ namespace Peanut {
         inline auto elem(Index r, Index c) const{
             return x.elem(c, r);
         }
-        [[nodiscard]] static constexpr Index row() {return E::col();}
-        [[nodiscard]] static constexpr Index col() {return E::row();}
+
+        static constexpr Index row = E::col;
+        static constexpr Index col = E::row;
+
+        inline Matrix<Type, row, col> eval() const{
+            return Matrix<Type, row, col>(*this);
+        }
 
         const E &x;
     };
@@ -71,8 +78,8 @@ namespace Peanut {
     // =========================================================================
 
     template <Index row_start, Index col_start, Index row_size, Index col_size, typename E>
-    requires is_matrix_v<E> && is_between_v<0, row_start, E::row()> && is_between_v<0, col_start, E::col()> &&
-             is_between_v<0, row_start+row_size, E::row()> && is_between_v<0, col_start+col_size, E::col()>
+    requires is_matrix_v<E> && is_between_v<0, row_start, E::row> && is_between_v<0, col_start, E::col> &&
+             is_between_v<0, row_start+row_size, E::row> && is_between_v<0, col_start+col_size, E::col>
     struct MatrixBlock : public MatrixExpr<MatrixBlock<row_start, col_start, row_size, col_size, E>>{
         using Type = typename E::Type;
         MatrixBlock(const E &x) : x{x} {}
@@ -81,15 +88,20 @@ namespace Peanut {
         inline auto elem(Index r, Index c) const{
             return x.elem(row_start+r, col_start+c);
         }
-        [[nodiscard]] static constexpr Index row() {return row_size;}
-        [[nodiscard]] static constexpr Index col() {return col_size;}
+
+        static constexpr Index row = row_size;
+        static constexpr Index col = col_size;
+
+        inline Matrix<Type, row, col> eval() const{
+            return Matrix<Type, row, col>(*this);
+        }
 
         const E &x;
     };
 
     template <Index row_start, Index col_start, Index row_size, Index col_size, typename E>
-    requires is_matrix_v<E> && is_between_v<0, row_start, E::row()> && is_between_v<0, col_start, E::col()> &&
-             is_between_v<0, row_start+row_size, E::row()> && is_between_v<0, col_start+col_size, E::col()>
+    requires is_matrix_v<E> && is_between_v<0, row_start, E::row> && is_between_v<0, col_start, E::col> &&
+             is_between_v<0, row_start+row_size, E::row> && is_between_v<0, col_start+col_size, E::col>
     MatrixBlock<row_start, col_start, row_size, col_size, E> Block(const MatrixExpr<E> &x){
         return MatrixBlock<row_start, col_start, row_size, col_size, E>(static_cast<const E&>(x));
     }
@@ -97,7 +109,7 @@ namespace Peanut {
     // =========================================================================
 
     template <Index row_ex, Index col_ex, typename E>
-    requires is_matrix_v<E> && is_square_v<E> && is_between_v<0, row_ex, E::row()> && is_between_v<0, col_ex, E::col()>
+    requires is_matrix_v<E> && is_square_v<E> && is_between_v<0, row_ex, E::row> && is_between_v<0, col_ex, E::col>
     struct MatrixDeleteRowCol : public MatrixExpr<MatrixDeleteRowCol<row_ex, col_ex, E>>{
         using Type = typename E::Type;
         MatrixDeleteRowCol(const E &x) : x{x} {}
@@ -107,12 +119,12 @@ namespace Peanut {
             return x.elem(r<row_ex?r:r+1, c<col_ex?c:c+1);
         }
 
-        Matrix<Type, E::col() - 1, E::col() - 1> eval(){
-            return Matrix<Type, E::col() - 1, E::col() - 1>(*this);
-        }
+        static constexpr Index row = E::row - 1;
+        static constexpr Index col = E::col - 1;
 
-        [[nodiscard]] static constexpr Index row() {return E::row() - 1;}
-        [[nodiscard]] static constexpr Index col() {return E::col() - 1;}
+        inline Matrix<Type, row, col> eval() const{
+            return Matrix<Type, row, col>(*this);
+        }
 
         const E &x;
     };
@@ -125,12 +137,12 @@ namespace Peanut {
     // =========================================================================
 
     template <Index row_ex, Index col_ex, typename E>
-    requires is_matrix_v<E> && is_square_v<E> && is_between_v<0, row_ex, E::row()> && is_between_v<0, col_ex, E::col()>
+    requires is_matrix_v<E> && is_square_v<E> && is_between_v<0, row_ex, E::row> && is_between_v<0, col_ex, E::col>
     struct MatrixMinor : public MatrixExpr<MatrixMinor<row_ex, col_ex, E>>{
         using Type = typename E::Type;
         MatrixMinor(const E &x) : x{x} {
-            Peanut::for_<row()>([&] (auto r) {
-                Peanut::for_<col()>([&] (auto c) {
+            Peanut::for_<row>([&] (auto r) {
+                Peanut::for_<col>([&] (auto c) {
                     mat_eval.elem(r.value, c.value) = DeleteRC<r.value, c.value>(x).eval().det();
                 });
             });
@@ -141,15 +153,15 @@ namespace Peanut {
             return mat_eval.elem(r, c);
         }
 
-        Matrix<Type, E::row(), E::col()> eval(){
+        static constexpr Index row = E::row;
+        static constexpr Index col = E::col;
+
+        inline Matrix<Type, row, col> eval() const{
             return mat_eval;
         }
 
-        [[nodiscard]] static constexpr Index row() {return E::row();}
-        [[nodiscard]] static constexpr Index col() {return E::col();}
-
-        Matrix<Type, row(), col()> mat_eval;
-        const Matrix<Type, row(), col()> &x;
+        Matrix<Type, row, col> mat_eval;
+        const Matrix<Type, row, col> &x;
     };
 
     template <Index row_ex, Index col_ex, typename E>
@@ -169,10 +181,15 @@ namespace Peanut {
         inline auto elem(Index r, Index c) const{
             return ((r+c)%2==0?1:-1) * x.elem(r, c);
         }
-        [[nodiscard]] static constexpr Index row() {return E::row();}
-        [[nodiscard]] static constexpr Index col() {return E::col();}
 
-        const Matrix<Type, row(), col()> &mat_minor;
+        static constexpr Index row = E::row;
+        static constexpr Index col = E::col;
+
+        inline Matrix<Type, row, col> eval() const{
+            return mat_minor;
+        }
+
+        Matrix<Type, row, col> mat_minor;
         const E &x;
     };
 
@@ -192,8 +209,13 @@ namespace Peanut {
         inline T elem(Index r, Index c) const{
             return static_cast<T>(x.elem(r, c));
         }
-        [[nodiscard]] static constexpr Index row() {return E::row();}
-        [[nodiscard]] static constexpr Index col() {return E::col();}
+
+        static constexpr Index row = E::row;
+        static constexpr Index col = E::col;
+
+        inline Matrix<Type, row, col> eval() const{
+            return Matrix<Type, row, col>(*this);
+        }
 
         const E &x;
     };

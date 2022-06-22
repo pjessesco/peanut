@@ -53,8 +53,12 @@ namespace Peanut {
             return x.elem(r, c) + y.elem(r, c);
         }
 
-        [[nodiscard]] static constexpr Index row() {return E1::row();}
-        [[nodiscard]] static constexpr Index col() {return E1::col();}
+        static constexpr Index row = E1::row;
+        static constexpr Index col = E1::col;
+
+        inline auto eval() const{
+            return Matrix<Type, row, col>(*this);
+        }
 
         const E1 &x;
         const E2 &y;
@@ -77,8 +81,12 @@ namespace Peanut {
             return x.elem(r, c) - y.elem(r, c);
         }
 
-        [[nodiscard]] static constexpr Index row() {return E1::row();}
-        [[nodiscard]] static constexpr Index col() {return E1::col();}
+        static constexpr Index row = E1::row;
+        static constexpr Index col = E1::col;
+
+        inline auto eval() const{
+            return Matrix<Type, row, col>(*this);
+        }
 
         const E1 &x;
         const E2 &y;
@@ -102,8 +110,13 @@ namespace Peanut {
         inline Type elem(Index r, Index c) const{
             return static_cast<Type>(x.elem(r, c)) * static_cast<Type>(y);
         }
-        [[nodiscard]] static constexpr Index row() {return E::row();}
-        [[nodiscard]] static constexpr Index col() {return E::col();}
+
+        static constexpr Index row = E::row;
+        static constexpr Index col = E::col;
+
+        inline auto eval() const{
+            return Matrix<Type, row, col>(*this);
+        }
 
         const E &x;
         T y;
@@ -121,7 +134,7 @@ namespace Peanut {
     
     // =========================================================================
 
-    template <typename E1, typename E2> requires (E1::col()==E2::row())
+    template <typename E1, typename E2> requires (E1::col==E2::row)
     struct MatrixMult : public MatrixExpr<MatrixMult<E1, E2>>{
         using Type = typename E1::Type;
         MatrixMult(const E1 &x, const E2 &y) : x{x}, y{y} {}
@@ -129,21 +142,26 @@ namespace Peanut {
         // Static polymorphism implementation of MatrixExpr
         inline auto elem(Index r, Index c) const{
             auto ret = x.elem(r, 0) * y.elem(0, c);
-            for(Index i=1;i<E1::col();i++){
+            for(Index i=1;i<E1::col;i++){
                 ret += x.elem(r, i) * y.elem(i, c);
             }
             return ret;
         }
-        [[nodiscard]] static constexpr Index row() {return E1::row();}
-        [[nodiscard]] static constexpr Index col() {return E2::col();}
+
+        static constexpr Index row = E1::row;
+        static constexpr Index col = E2::col;
+
+        inline auto eval() const{
+            return Matrix<Type, row, col>(*this);
+        }
 
         // Specify member type as Matrix for evaluation
-        const Matrix<Type, E1::row(), E1::col()> x;
-        const Matrix<Type, E2::row(), E2::col()> y;
+        const Matrix<Type, E1::row, E1::col> x;
+        const Matrix<Type, E2::row, E2::col> y;
     };
 
     // General implementation
-    template <typename E1, typename E2> requires (E1::col()==E2::row())
+    template <typename E1, typename E2> requires (E1::col==E2::row)
     MatrixMult<E1, E2> operator*(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y){
         return MatrixMult<E1, E2>(static_cast<const E1&>(x), static_cast<const E2&>(y));
     }
