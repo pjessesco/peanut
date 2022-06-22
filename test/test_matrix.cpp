@@ -48,7 +48,17 @@ TEST_CASE("Default constructor : zero matrix"){
 }
 
 TEST_CASE("Construct using initialize list"){
-    CHECK("TBD");
+    Peanut::Matrix<int, 2, 2> intmat{1,2,3,4};
+    CHECK(intmat.elem(0, 0) == 1);
+    CHECK(intmat.elem(0, 1) == 2);
+    CHECK(intmat.elem(1, 0) == 3);
+    CHECK(intmat.elem(1, 1) == 4);
+
+    Peanut::Matrix<float, 2, 2> fltmat{1.1f, 2.2f, 3.3f, 4.4f};
+    CHECK(fltmat.elem(0, 0) == 1.1f);
+    CHECK(fltmat.elem(0, 1) == 2.2f);
+    CHECK(fltmat.elem(1, 0) == 3.3f);
+    CHECK(fltmat.elem(1, 1) == 4.4f);
 }
 
 TEST_CASE("Construct using std::array"){
@@ -58,12 +68,6 @@ TEST_CASE("Construct using std::array"){
     CHECK(intmat.elem(0, 1) == 2);
     CHECK(intmat.elem(1, 0) == 3);
     CHECK(intmat.elem(1, 1) == 4);
-
-    Peanut::Matrix<int, 2, 2> intmat2(intarr);
-    CHECK(intmat2.elem(0, 0) == 1);
-    CHECK(intmat2.elem(0, 1) == 2);
-    CHECK(intmat2.elem(1, 0) == 3);
-    CHECK(intmat2.elem(1, 1) == 4);
 
     std::array<float, 4> fltarr{1.1f, 2.2f, 3.3f, 4.4f};
     Peanut::Matrix<float, 2, 2> fltmat{fltarr};

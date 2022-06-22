@@ -64,9 +64,10 @@ namespace Peanut {
     struct Matrix : public MatrixExpr<Matrix<T, Row, Col>>{
         using Type = T;
         Matrix() {m_data.fill(t_0);}
-        Matrix(const std::initializer_list<T> &il) {
-            std::copy(il.begin(), il.end(), m_data);
-        }
+        
+        template <typename ...TList> requires std::conjunction_v<std::is_same<T, TList>...>
+        Matrix(TList ... tlist) : m_data{std::forward<T>(tlist)...} {}
+        
         explicit Matrix(const std::array<T, Row * Col> &data) : m_data{data} {}
         explicit Matrix(const std::vector<T> &data) : m_data{data} {}
 
