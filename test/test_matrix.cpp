@@ -33,120 +33,117 @@
 #include "catch_amalgamated.hpp"
 
 
-TEST_CASE("Constructing Matrix"){
-    SECTION("Default constructor : zero matrix"){
-        Peanut::Matrix<int, 2, 2> zero_22_int_mat;
-        CHECK(zero_22_int_mat.elem(0, 0) == 0);
-        CHECK(zero_22_int_mat.elem(0, 1) == 0);
-        CHECK(zero_22_int_mat.elem(1, 0) == 0);
-        CHECK(zero_22_int_mat.elem(1, 1) == 0);
+TEST_CASE("Default constructor : zero matrix"){
+    Peanut::Matrix<int, 2, 2> zero_22_int_mat;
+    CHECK(zero_22_int_mat.elem(0, 0) == 0);
+    CHECK(zero_22_int_mat.elem(0, 1) == 0);
+    CHECK(zero_22_int_mat.elem(1, 0) == 0);
+    CHECK(zero_22_int_mat.elem(1, 1) == 0);
 
-        Peanut::Matrix<float, 2, 2> zero_22_float_mat;
-        CHECK(zero_22_float_mat.elem(0, 0) == Catch::Approx(0.0f));
-        CHECK(zero_22_float_mat.elem(0, 1) == Catch::Approx(0.0f));
-        CHECK(zero_22_float_mat.elem(1, 0) == Catch::Approx(0.0f));
-        CHECK(zero_22_float_mat.elem(1, 1) == Catch::Approx(0.0f));
-    }
-
-    SECTION("Construct using initialize list"){
-        CHECK("TBD");
-    }
-
-    SECTION("Construct using std::array"){
-        std::array<int, 4> intarr{1,2,3,4};
-        Peanut::Matrix<int, 2, 2> intmat{intarr};
-        CHECK(intmat.elem(0, 0) == 1);
-        CHECK(intmat.elem(0, 1) == 2);
-        CHECK(intmat.elem(1, 0) == 3);
-        CHECK(intmat.elem(1, 1) == 4);
-
-        Peanut::Matrix<int, 2, 2> intmat2(intarr);
-        CHECK(intmat2.elem(0, 0) == 1);
-        CHECK(intmat2.elem(0, 1) == 2);
-        CHECK(intmat2.elem(1, 0) == 3);
-        CHECK(intmat2.elem(1, 1) == 4);
-
-        std::array<float, 4> fltarr{1.1f, 2.2f, 3.3f, 4.4f};
-        Peanut::Matrix<float, 2, 2> fltmat{fltarr};
-        CHECK(fltmat.elem(0, 0) == 1.1f);
-        CHECK(fltmat.elem(0, 1) == 2.2f);
-        CHECK(fltmat.elem(1, 0) == 3.3f);
-        CHECK(fltmat.elem(1, 1) == 4.4f);
-    }
-
-    SECTION("Static constructors : zeros()"){
-        auto zero_22_int_mat = Peanut::Matrix<int, 2, 2>::zeros();
-        CHECK(zero_22_int_mat.elem(0, 0) == 0);
-        CHECK(zero_22_int_mat.elem(0, 1) == 0);
-        CHECK(zero_22_int_mat.elem(1, 0) == 0);
-        CHECK(zero_22_int_mat.elem(1, 1) == 0);
-
-        auto zero_22_float_mat = Peanut::Matrix<float, 2, 2>::zeros();
-        CHECK(zero_22_float_mat.elem(0, 0) == Catch::Approx(0.0f));
-        CHECK(zero_22_float_mat.elem(0, 1) == Catch::Approx(0.0f));
-        CHECK(zero_22_float_mat.elem(1, 0) == Catch::Approx(0.0f));
-        CHECK(zero_22_float_mat.elem(1, 1) == Catch::Approx(0.0f));
-    }
-
-    SECTION("Static constructors : identity()"){
-        auto ident_22_int_mat = Peanut::Matrix<int, 2, 2>::identity();
-        CHECK(ident_22_int_mat.elem(0, 0) == 1);
-        CHECK(ident_22_int_mat.elem(0, 1) == 0);
-        CHECK(ident_22_int_mat.elem(1, 0) == 0);
-        CHECK(ident_22_int_mat.elem(1, 1) == 1);
-
-        auto ident_22_float_mat = Peanut::Matrix<float, 2, 2>::identity();
-        CHECK(ident_22_float_mat.elem(0, 0) == Catch::Approx(1.0f));
-        CHECK(ident_22_float_mat.elem(0, 1) == Catch::Approx(0.0f));
-        CHECK(ident_22_float_mat.elem(1, 0) == Catch::Approx(0.0f));
-        CHECK(ident_22_float_mat.elem(1, 1) == Catch::Approx(1.0f));
-    }
+    Peanut::Matrix<float, 2, 2> zero_22_float_mat;
+    CHECK(zero_22_float_mat.elem(0, 0) == Catch::Approx(0.0f));
+    CHECK(zero_22_float_mat.elem(0, 1) == Catch::Approx(0.0f));
+    CHECK(zero_22_float_mat.elem(1, 0) == Catch::Approx(0.0f));
+    CHECK(zero_22_float_mat.elem(1, 1) == Catch::Approx(0.0f));
 }
 
-TEST_CASE("Matrix features"){
-    SECTION("elem() : Element getter/setter"){
-        auto intmat = Peanut::Matrix<int, 2, 2>::identity();
-        CHECK(intmat.elem(0, 0) == 1);
-        CHECK(intmat.elem(0, 1) == 0);
-        CHECK(intmat.elem(1, 0) == 0);
-        CHECK(intmat.elem(1, 1) == 1);
+TEST_CASE("Construct using initialize list"){
+    CHECK("TBD");
+}
 
-        intmat.elem(0, 0) = 5;
-        intmat.elem(0, 1) = 6;
-        intmat.elem(1, 0) = 7;
-        intmat.elem(1, 1) = 8;
+TEST_CASE("Construct using std::array"){
+    std::array<int, 4> intarr{1,2,3,4};
+    Peanut::Matrix<int, 2, 2> intmat{intarr};
+    CHECK(intmat.elem(0, 0) == 1);
+    CHECK(intmat.elem(0, 1) == 2);
+    CHECK(intmat.elem(1, 0) == 3);
+    CHECK(intmat.elem(1, 1) == 4);
 
-        CHECK(intmat.elem(0, 0) == 5);
-        CHECK(intmat.elem(0, 1) == 6);
-        CHECK(intmat.elem(1, 0) == 7);
-        CHECK(intmat.elem(1, 1) == 8);
-    }
+    Peanut::Matrix<int, 2, 2> intmat2(intarr);
+    CHECK(intmat2.elem(0, 0) == 1);
+    CHECK(intmat2.elem(0, 1) == 2);
+    CHECK(intmat2.elem(1, 0) == 3);
+    CHECK(intmat2.elem(1, 1) == 4);
 
-    SECTION("gaussian_elimination"){
-        CHECK("TBD");
-    }
+    std::array<float, 4> fltarr{1.1f, 2.2f, 3.3f, 4.4f};
+    Peanut::Matrix<float, 2, 2> fltmat{fltarr};
+    CHECK(fltmat.elem(0, 0) == 1.1f);
+    CHECK(fltmat.elem(0, 1) == 2.2f);
+    CHECK(fltmat.elem(1, 0) == 3.3f);
+    CHECK(fltmat.elem(1, 1) == 4.4f);
+}
 
-    SECTION("Determinant"){
-        std::array<int, 4> intarr{1,2,3,4};
-        Peanut::Matrix<int, 2, 2> int_22_mat{intarr};
-        CHECK(int_22_mat.det() == -2);
+TEST_CASE("Static constructors : zeros()"){
+    auto zero_22_int_mat = Peanut::Matrix<int, 2, 2>::zeros();
+    CHECK(zero_22_int_mat.elem(0, 0) == 0);
+    CHECK(zero_22_int_mat.elem(0, 1) == 0);
+    CHECK(zero_22_int_mat.elem(1, 0) == 0);
+    CHECK(zero_22_int_mat.elem(1, 1) == 0);
 
-        std::array<float, 9> fltarr1{1.1f, 5.5f, 4.4f, 2.2f, 7.7f, 6.6f, 9.9f, 8.8f, 3.3f};
-        Peanut::Matrix<float, 3, 3> flt_33_mat{fltarr1};
-        CHECK(flt_33_mat.det() == Catch::Approx(33.275f));
+    auto zero_22_float_mat = Peanut::Matrix<float, 2, 2>::zeros();
+    CHECK(zero_22_float_mat.elem(0, 0) == Catch::Approx(0.0f));
+    CHECK(zero_22_float_mat.elem(0, 1) == Catch::Approx(0.0f));
+    CHECK(zero_22_float_mat.elem(1, 0) == Catch::Approx(0.0f));
+    CHECK(zero_22_float_mat.elem(1, 1) == Catch::Approx(0.0f));
+}
 
-        std::array<float, 25> fltarr2{
-            10.10f, 9.9f, 24.24f, 5.5f, 23.23f,
-            18.18f, 6.6f, 17.17f, 12.12f, 20.20f,
-            4.4f, 25.25f, 8.8f, 19.19f, 3.3f,
-            21.21f, 15.15f, 14.14f, 7.7f, 11.11f,
-            16.16f, 1.1f, 22.22f, 13.13f, 2.2f
-        };
-        Peanut::Matrix<float, 5, 5> flt_55_mat{fltarr2};
+TEST_CASE("Static constructors : identity()"){
+    auto ident_22_int_mat = Peanut::Matrix<int, 2, 2>::identity();
+    CHECK(ident_22_int_mat.elem(0, 0) == 1);
+    CHECK(ident_22_int_mat.elem(0, 1) == 0);
+    CHECK(ident_22_int_mat.elem(1, 0) == 0);
+    CHECK(ident_22_int_mat.elem(1, 1) == 1);
+
+    auto ident_22_float_mat = Peanut::Matrix<float, 2, 2>::identity();
+    CHECK(ident_22_float_mat.elem(0, 0) == Catch::Approx(1.0f));
+    CHECK(ident_22_float_mat.elem(0, 1) == Catch::Approx(0.0f));
+    CHECK(ident_22_float_mat.elem(1, 0) == Catch::Approx(0.0f));
+    CHECK(ident_22_float_mat.elem(1, 1) == Catch::Approx(1.0f));
+}
+
+TEST_CASE("elem() : Element getter/setter"){
+    auto intmat = Peanut::Matrix<int, 2, 2>::identity();
+    CHECK(intmat.elem(0, 0) == 1);
+    CHECK(intmat.elem(0, 1) == 0);
+    CHECK(intmat.elem(1, 0) == 0);
+    CHECK(intmat.elem(1, 1) == 1);
+
+    intmat.elem(0, 0) = 5;
+    intmat.elem(0, 1) = 6;
+    intmat.elem(1, 0) = 7;
+    intmat.elem(1, 1) = 8;
+
+    CHECK(intmat.elem(0, 0) == 5);
+    CHECK(intmat.elem(0, 1) == 6);
+    CHECK(intmat.elem(1, 0) == 7);
+    CHECK(intmat.elem(1, 1) == 8);
+}
+
+TEST_CASE("gaussian_elimination"){
+    CHECK("TBD");
+}
+
+TEST_CASE("Determinant"){
+    std::array<int, 4> intarr{1,2,3,4};
+    Peanut::Matrix<int, 2, 2> int_22_mat{intarr};
+    CHECK(int_22_mat.det() == -2);
+
+    std::array<float, 9> fltarr1{1.1f, 5.5f, 4.4f, 2.2f, 7.7f, 6.6f, 9.9f, 8.8f, 3.3f};
+    Peanut::Matrix<float, 3, 3> flt_33_mat{fltarr1};
+    CHECK(flt_33_mat.det() == Catch::Approx(33.275f));
+
+    std::array<float, 25> fltarr2{
+        10.10f, 9.9f, 24.24f, 5.5f, 23.23f,
+        18.18f, 6.6f, 17.17f, 12.12f, 20.20f,
+        4.4f, 25.25f, 8.8f, 19.19f, 3.3f,
+        21.21f, 15.15f, 14.14f, 7.7f, 11.11f,
+        16.16f, 1.1f, 22.22f, 13.13f, 2.2f
+    };
+    Peanut::Matrix<float, 5, 5> flt_55_mat{fltarr2};
+    SECTION("Determinant using Gaussian elimination (det())"){
         CHECK(flt_55_mat.det() == Catch::Approx(2237986.3587442965f));
     }
-
-
-
-
+    SECTION("Determinant calculation recurslvely (det2())"){
+        CHECK(flt_55_mat.det2() == Catch::Approx(2237986.3587442965f));
+    }
 }
