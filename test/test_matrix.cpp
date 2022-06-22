@@ -128,26 +128,23 @@ TEST_CASE("gaussian_elimination"){
 }
 
 TEST_CASE("Determinant"){
-    std::array<int, 4> intarr{1,2,3,4};
-    Peanut::Matrix<int, 2, 2> int_22_mat{intarr};
-    CHECK(int_22_mat.det() == -2);
+    Peanut::Matrix<int, 2, 2> int_22_mat{1,2,3,4};
 
-    std::array<float, 9> fltarr1{1.1f, 5.5f, 4.4f, 2.2f, 7.7f, 6.6f, 9.9f, 8.8f, 3.3f};
-    Peanut::Matrix<float, 3, 3> flt_33_mat{fltarr1};
-    CHECK(flt_33_mat.det() == Catch::Approx(33.275f));
+    Peanut::Matrix<float, 3, 3> flt_33_mat{1.1f, 5.5f, 4.4f, 2.2f, 7.7f, 6.6f, 9.9f, 8.8f, 3.3f};
 
-    std::array<float, 25> fltarr2{
-        10.10f, 9.9f, 24.24f, 5.5f, 23.23f,
-        18.18f, 6.6f, 17.17f, 12.12f, 20.20f,
-        4.4f, 25.25f, 8.8f, 19.19f, 3.3f,
-        21.21f, 15.15f, 14.14f, 7.7f, 11.11f,
-        16.16f, 1.1f, 22.22f, 13.13f, 2.2f
-    };
-    Peanut::Matrix<float, 5, 5> flt_55_mat{fltarr2};
+    Peanut::Matrix<float, 5, 5> flt_55_mat{10.10f, 9.9f, 24.24f, 5.5f, 23.23f,
+                                           18.18f, 6.6f, 17.17f, 12.12f, 20.20f,
+                                           4.4f, 25.25f, 8.8f, 19.19f, 3.3f,
+                                           21.21f, 15.15f, 14.14f, 7.7f, 11.11f,
+                                           16.16f, 1.1f, 22.22f, 13.13f, 2.2f};
     SECTION("Determinant using Gaussian elimination (det())"){
+        CHECK(int_22_mat.det() == -2);
+        CHECK(flt_33_mat.det() == Catch::Approx(33.275f));
         CHECK(flt_55_mat.det() == Catch::Approx(2237986.3587442965f));
     }
     SECTION("Determinant calculation recurslvely (det2())"){
+        CHECK(int_22_mat.det2() == -2);
+        CHECK(flt_33_mat.det2() == Catch::Approx(33.275f));
         CHECK(flt_55_mat.det2() == Catch::Approx(2237986.3587442965f));
     }
 }
