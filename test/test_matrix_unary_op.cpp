@@ -128,42 +128,86 @@ TEST_CASE("Test unary operation : DeleteRC"){
 }
 
 TEST_CASE("Test unary operation : Minor"){
-    Peanut::Matrix<int, 3, 3> mat{1,2,3,
-                                  4,5,6,
-                                  7,8,9};
+    Peanut::Matrix<float, 5, 5> mat{6.5f, 8.1f, 7.6f, 2.5f, 3.8f,
+                                    7.1f, 6.2f, 5.3f, 8.7f, 1.6f,
+                                    2.5f, 3.7f, 1.8f, 2.5f, 3.8f,
+                                    1.2f, 5.3f, 1.6f, 7.2f, 3.5f,
+                                    1.5f, 3.1f, 7.6f, 2.3f, 1.7f};
 
     SECTION("Validation"){
         auto mmat = Peanut::Minor(mat).eval();
 
-        CHECK(mmat.elem(0, 0) == 5*9-6*8);
-        CHECK(mmat.elem(0, 1) == 4*9-6*7);
-        CHECK(mmat.elem(0, 2) == 4*8-5*7);
-        CHECK(mmat.elem(1, 0) == 2*9-3*8);
-        CHECK(mmat.elem(1, 1) == 1*9-3*7);
-        CHECK(mmat.elem(1, 2) == 1*8-2*7);
-        CHECK(mmat.elem(2, 0) == 2*6-3*5);
-        CHECK(mmat.elem(2, 1) == 1*6-3*4);
-        CHECK(mmat.elem(2, 2) == 1*5-2*4);
+        CHECK(mmat.elem(0, 0) == Catch::Approx(-128.631f));
+        CHECK(mmat.elem(0, 1) == Catch::Approx(-928.599f));
+        CHECK(mmat.elem(0, 2) == Catch::Approx(-122.544f));
+        CHECK(mmat.elem(0, 3) == Catch::Approx(389.175f));
+        CHECK(mmat.elem(0, 4) == Catch::Approx(-505.453f));
+
+        CHECK(mmat.elem(1, 0) == Catch::Approx(-450.856f));
+        CHECK(mmat.elem(1, 1) == Catch::Approx(-436.938f));
+        CHECK(mmat.elem(1, 2) == Catch::Approx(-20.5352));
+        CHECK(mmat.elem(1, 3) == Catch::Approx(270.564f));
+        CHECK(mmat.elem(1, 4) == Catch::Approx(58.9056f));
+
+        CHECK(mmat.elem(2, 0) == Catch::Approx(631.634f));
+        CHECK(mmat.elem(2, 1) == Catch::Approx(1261.89f));
+        CHECK(mmat.elem(2, 2) == Catch::Approx(28.4836f));
+        CHECK(mmat.elem(2, 3) == Catch::Approx(-92.0919f));
+        CHECK(mmat.elem(2, 4) == Catch::Approx(1491.83f));
+
+        CHECK(mmat.elem(3, 0) == Catch::Approx(656.451f));
+        CHECK(mmat.elem(3, 1) == Catch::Approx(801.415f));
+        CHECK(mmat.elem(3, 2) == Catch::Approx(155.246f));
+        CHECK(mmat.elem(3, 3) == Catch::Approx(124.839f));
+        CHECK(mmat.elem(3, 4) == Catch::Approx(357.043f));
+
+        CHECK(mmat.elem(4, 0) == Catch::Approx(-197.179f));
+        CHECK(mmat.elem(4, 1) == Catch::Approx(493.743f));
+        CHECK(mmat.elem(4, 2) == Catch::Approx(510.55f));
+        CHECK(mmat.elem(4, 3) == Catch::Approx(-152.399f));
+        CHECK(mmat.elem(4, 4) == Catch::Approx(268.371f));
     }
 }
 
 TEST_CASE("Test unary operation : Cofactor"){
-    Peanut::Matrix<int, 3, 3> mat{1,2,3,
-                                  4,5,6,
-                                  7,8,9};
+    Peanut::Matrix<float, 5, 5> mat{1.2f, 3.5f, 2.1f, 4.2f, 5.3f,
+                                    1.4f, 3.4f, 1.2f, 5.2f, 1.3f,
+                                    4.1f, 2.5f, 1.1f, 4.1f, 2.5f,
+                                    2.1f, 3.4f, 2.3f, 5.2f, 3.4f,
+                                    2.4f, 2.5f, 1.7f, 4.3f, 2.8f};
 
     SECTION("Validation"){
-        auto mmat = Peanut::Cofactor(mat).eval();
+        auto cmat = Peanut::Cofactor(mat).eval();
 
-        CHECK(mmat.elem(0, 0) == 5*9-6*8);
-        CHECK(mmat.elem(0, 1) == -(4*9-6*7));
-        CHECK(mmat.elem(0, 2) == 4*8-5*7);
-        CHECK(mmat.elem(1, 0) == -(2*9-3*8));
-        CHECK(mmat.elem(1, 1) == 1*9-3*7);
-        CHECK(mmat.elem(1, 2) == -(1*8-2*7));
-        CHECK(mmat.elem(2, 0) == 2*6-3*5);
-        CHECK(mmat.elem(2, 1) == -(1*6-3*4));
-        CHECK(mmat.elem(2, 2) == 1*5-2*4);
+        CHECK(cmat.elem(0, 0) == Catch::Approx(1.7184f));
+        CHECK(cmat.elem(0, 1) == Catch::Approx(-0.8481f));
+        CHECK(cmat.elem(0, 2) == Catch::Approx(7.203f));
+        CHECK(cmat.elem(0, 3) == Catch::Approx(-0.4839f));
+        CHECK(cmat.elem(0, 4) == Catch::Approx(-4.3458f));
+
+        CHECK(cmat.elem(1, 0) == Catch::Approx(2.5095f));
+        CHECK(cmat.elem(1, 1) == Catch::Approx(-0.3108f));
+        CHECK(cmat.elem(1, 2) == Catch::Approx(8.7393f));
+        CHECK(cmat.elem(1, 3) == Catch::Approx(-4.5123f));
+        CHECK(cmat.elem(1, 4) == Catch::Approx(-0.2499f));
+
+        CHECK(cmat.elem(2, 0) == Catch::Approx(-5.3391f));
+        CHECK(cmat.elem(2, 1) == Catch::Approx(-10.8645f));
+        CHECK(cmat.elem(2, 2) == Catch::Approx(-0.9093f).epsilon(0.00002));
+        CHECK(cmat.elem(2, 3) == Catch::Approx(8.187f));
+        CHECK(cmat.elem(2, 4) == Catch::Approx(2.256f));
+
+        CHECK(cmat.elem(3, 0) == Catch::Approx(-5.688f));
+        CHECK(cmat.elem(3, 1) == Catch::Approx(-22.7403f));
+        CHECK(cmat.elem(3, 2) == Catch::Approx(-28.6893f));
+        CHECK(cmat.elem(3, 3) == Catch::Approx(20.0808f));
+        CHECK(cmat.elem(3, 4) == Catch::Approx(11.7594f));
+
+        CHECK(cmat.elem(4, 0) == Catch::Approx(7.2561f));
+        CHECK(cmat.elem(4, 1) == Catch::Approx(39.0633f));
+        CHECK(cmat.elem(4, 2) == Catch::Approx(17.9571f));
+        CHECK(cmat.elem(4, 3) == Catch::Approx(-28.6827f));
+        CHECK(cmat.elem(4, 4) == Catch::Approx(-11.8248f));
     }
 }
 
