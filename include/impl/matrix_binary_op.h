@@ -31,6 +31,7 @@
 #include <initializer_list>
 #include <iostream>
 #include <type_traits>
+#include <stdexcept>
 
 // Peanut headers
 #include "common.h"
@@ -166,5 +167,35 @@ namespace Peanut {
         return MatrixMult<E1, E2>(static_cast<const E1&>(x), static_cast<const E2&>(y));
     }
 
+    // =========================================================================
+    
+    template <typename E, typename T> requires is_matrix_v<E> && std::is_arithmetic_v<T>
+    struct MatrixDivScalar : public MatrixExpr<MatrixDivScalar<E, T>>{
+        using Type = Float;
+        MatrixDivScalar(const E &x, T y) : x{x}, y{y} {
+            if(is_zero(y)){
+                throw std::invalid_argument("Divide by zero");
+            }
+        }
 
+        // Static polymorphism implementation of MatrixExpr
+        inline Float elem(Index r, Index c) const{
+            return static_cast<Type>(x.elem(r, c)) / static_cast<Float>(y);
+        }
+
+        static constexpr Index row = E::row;
+        static constexpr Index col = E::col;
+
+        inline auto eval() const{
+            return Matrix<Type, row, col>(*this);
+        }
+
+        const E &x;
+        T y;
+    };
+
+    template <typename E, typename T> requires is_matrix_v<E> && std::is_arithmetic_v<T>
+    MatrixDivScalar<E, T> operator/(const MatrixExpr<E> &x, const T &y){
+        return MatrixDivScalar<E, T>(static_cast<const E&>(x), y);
+    }
 }
