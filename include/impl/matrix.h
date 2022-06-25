@@ -25,13 +25,14 @@
 #pragma once
 
 // Standard headers
-#include <initializer_list>
-#include <type_traits>
-#include <array>
 #include <algorithm>
-#include <cstring>
+#include <array>
 #include <cassert>
+#include <cstring>
+#include <initializer_list>
 #include <iostream>
+#include <string>
+#include <type_traits>
 
 // Peanut headers
 #include "common.h"

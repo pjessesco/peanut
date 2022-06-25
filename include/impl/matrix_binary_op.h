@@ -30,8 +30,8 @@
 #include <cstring>
 #include <initializer_list>
 #include <iostream>
-#include <type_traits>
 #include <stdexcept>
+#include <type_traits>
 
 // Peanut headers
 #include "common.h"
@@ -138,13 +138,13 @@ namespace Peanut {
     template <typename E1, typename E2> requires (E1::col==E2::row)
     struct MatrixMult : public MatrixExpr<MatrixMult<E1, E2>>{
         using Type = typename E1::Type;
-        MatrixMult(const E1 &x, const E2 &y) : x{x}, y{y} {}
+        MatrixMult(const E1 &_x, const E2 &_y) : x_eval{_x}, y_eval{_y} {}
 
         // Static polymorphism implementation of MatrixExpr
         inline auto elem(Index r, Index c) const{
-            auto ret = x.elem(r, 0) * y.elem(0, c);
+            auto ret = x_eval.elem(r, 0) * y_eval.elem(0, c);
             for(Index i=1;i<E1::col;i++){
-                ret += x.elem(r, i) * y.elem(i, c);
+                ret += x_eval.elem(r, i) * y_eval.elem(i, c);
             }
             return ret;
         }
@@ -157,8 +157,8 @@ namespace Peanut {
         }
 
         // Specify member type as Matrix for evaluation
-        const Matrix<Type, E1::row, E1::col> x;
-        const Matrix<Type, E2::row, E2::col> y;
+        const Matrix<Type, E1::row, E1::col> x_eval;
+        const Matrix<Type, E2::row, E2::col> y_eval;
     };
 
     // General implementation
