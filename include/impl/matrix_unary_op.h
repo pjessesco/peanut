@@ -140,10 +140,10 @@ namespace Peanut {
     template <typename E> requires is_matrix_v<E> && is_square_v<E>
     struct MatrixMinor : public MatrixExpr<MatrixMinor<E>>{
         using Type = typename E::Type;
-        MatrixMinor(const E &x) : x{x} {
+        MatrixMinor(const E &_x) {
             Peanut::for_<row>([&] (auto r) {
                 Peanut::for_<col>([&] (auto c) {
-                    mat_eval.elem(r.value, c.value) = DeleteRC<r.value, c.value>(x).eval().det();
+                    mat_eval.elem(r.value, c.value) = DeleteRC<r.value, c.value>(_x).eval().det();
                 });
             });
         }
@@ -161,7 +161,6 @@ namespace Peanut {
         }
 
         Matrix<Type, row, col> mat_eval;
-        const Matrix<Type, row, col> &x;
     };
 
     template <typename E> requires is_matrix_v<E> && is_square_v<E>
