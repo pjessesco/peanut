@@ -147,3 +147,71 @@ TEST_CASE("Test unary operation : cast_to"){
         CHECK(std::is_same_v<decltype(intmat), Peanut::Matrix<int, 2, 2>>);
     }
 }
+
+TEST_CASE("Test unary operation : Combination of unary operations (1)"){
+    using namespace Peanut;
+
+    Peanut::Matrix<float, 5, 5> test{1.2f, 3.5f, 2.1f, 4.2f, 5.3f,
+                                     1.4f, 3.4f, 1.2f, 5.2f, 1.3f,
+                                     4.1f, 2.5f, 1.1f, 4.1f, 2.5f,
+                                     2.1f, 3.4f, 2.3f, 5.2f, 3.4f,
+                                     2.4f, 2.5f, 1.7f, 4.3f, 2.8f};
+
+    // T
+    // 1.2 1.4 4.1 2.1 2.4
+    // 3.5 3.4 2.5 3.4 2.5
+    // 2.1 1.2 1.1 2.3 1.7
+    // 4.2 5.2 4.1 5.2 4.3
+    // 5.3 1.3 2.5 3.4 2.8
+
+    //Block<0, 0, 4, 4>
+    // 1.2 1.4 4.1 2.1
+    // 3.5 3.4 2.5 3.4
+    // 2.1 1.2 1.1 2.3
+    // 4.2 5.2 4.1 5.2
+
+    // T
+    // 1.2 3.5 2.1 4.2
+    // 1.4 3.4 1.2 5.2
+    // 4.1 2.5 1.1 4.1
+    // 2.1 3.4 2.3 5.2
+
+    // DeleteRC<1, 2>
+    // 1.2 3.5 4.2
+    // 4.1 2.5 4.1
+    // 2.1 3.4 5.2
+
+    // Block<0, 0, 3, 3>
+    // 1.2 3.5 4.2
+    // 4.1 2.5 4.1
+    // 2.1 3.4 5.2
+
+    // T
+    // 1.2 4.1 2.1
+    // 3.5 2.5 3.4
+    // 4.2 4.1 5.2
+
+    SECTION("Validation"){
+        auto result1 = T(Block<0, 0, 3, 3>(DeleteRC<1, 2>(T(Block<0, 0, 4, 4>(T(test))))));
+        CHECK(result1.elem(0, 0) == Catch::Approx(1.2f));
+        CHECK(result1.elem(0, 1) == Catch::Approx(4.1f));
+        CHECK(result1.elem(0, 2) == Catch::Approx(2.1f));
+        CHECK(result1.elem(1, 0) == Catch::Approx(3.5f));
+        CHECK(result1.elem(1, 1) == Catch::Approx(2.5f));
+        CHECK(result1.elem(1, 2) == Catch::Approx(3.4f));
+        CHECK(result1.elem(2, 0) == Catch::Approx(4.2f));
+        CHECK(result1.elem(2, 1) == Catch::Approx(4.1f));
+        CHECK(result1.elem(2, 2) == Catch::Approx(5.2f));
+
+        auto result2 = T(Block<0, 0, 3, 3>(DeleteRC<1, 2>(T(Block<0, 0, 4, 4>(T(test)))))).eval();
+        CHECK(result2.elem(0, 0) == Catch::Approx(1.2f));
+        CHECK(result2.elem(0, 1) == Catch::Approx(4.1f));
+        CHECK(result2.elem(0, 2) == Catch::Approx(2.1f));
+        CHECK(result2.elem(1, 0) == Catch::Approx(3.5f));
+        CHECK(result2.elem(1, 1) == Catch::Approx(2.5f));
+        CHECK(result2.elem(1, 2) == Catch::Approx(3.4f));
+        CHECK(result2.elem(2, 0) == Catch::Approx(4.2f));
+        CHECK(result2.elem(2, 1) == Catch::Approx(4.1f));
+        CHECK(result2.elem(2, 2) == Catch::Approx(5.2f));
+    }
+}
