@@ -200,6 +200,79 @@ namespace Peanut{
     
     // =========================================================================
 
+    template <typename E> requires is_matrix_v<E> && is_square_v<E>
+    struct MatrixAdjugate : public MatrixExpr<MatrixAdjugate<E>>{
+        using Type = typename E::Type;
+        MatrixAdjugate(const E &_x) {
+            Peanut::for_<row>([&] (auto r) {
+                Peanut::for_<col>([&] (auto c) {
+                    constexpr Index rv = r.value;
+                    constexpr Index cv = c.value;
+                    const Type e = DeleteRC<rv, cv>(_x).eval().det();
+                    if constexpr((rv + cv) % 2 == 0){
+                        mat_eval.elem(cv, rv) = e;
+                    }
+                    else{
+                        mat_eval.elem(cv, rv) = -e;
+                    }
+                });
+            });
+        }
+        
+        // Static polymorphism implementation of MatrixExpr
+        inline auto elem(Index r, Index c) const{
+            return mat_eval.elem(r, c);
+        }
+        
+        static constexpr Index row = E::row;
+        static constexpr Index col = E::col;
+
+        inline Matrix<Type, row, col> eval() const{
+            return mat_eval;
+        }
+
+        Matrix<Type, row, col> mat_eval;
+    };
+
+    // =========================================================================
+
+    template <typename E> requires is_matrix_v<E> && is_square_v<E>
+    struct MatrixInverse : public MatrixExpr<MatrixInverse<E>>{
+        using Type = Float;
+        MatrixInverse(const E &_x) : x{_x} {
+            // Evaluate adjugate matrix
+            Peanut::for_<row>([&] (auto r) {
+                Peanut::for_<col>([&] (auto c) {
+                    constexpr Index rv = r.value;
+                    constexpr Index cv = c.value;
+                    const Float e = static_cast<Float>(DeleteRC<rv, cv>(_x).eval().det());
+                    if constexpr((rv + cv) % 2 == 0){
+                        mat_eval.elem(cv, rv) = e;
+                    }
+                    else{
+                        mat_eval.elem(cv, rv) = -e;
+                    }
+                });
+            });
+            invdet = static_cast<Float>(1) / _x.eval().det();
+        }
+        
+        // Static polymorphism implementation of MatrixExpr
+        inline Float elem(Index r, Index c) const{
+            return invdet * mat_eval.elem(r, c);
+        }
+
+        static constexpr Index row = E::row;
+        static constexpr Index col = E::col;
+
+        inline Matrix<Type, row, col> eval() const{
+            return Matrix<Type, row, col>(*this);
+        }
+
+        const E &x; // used for optimization
+        Matrix<Float, row, col> mat_eval;
+        Float invdet;
+    };
 }
 
 namespace Peanut{
@@ -214,6 +287,8 @@ namespace Peanut{
         return MatrixTranspose<E>(static_cast<const E&>(x));
     }
 
+    // =========================================================================
+
     template <Index row_start, Index col_start, Index row_size, Index col_size, typename E>
         requires is_matrix_v<E> && is_between_v<0, row_start, E::row> && is_between_v<0, col_start, E::col> &&
                  is_between_v<0, row_start+row_size, E::row+1> && is_between_v<0, col_start+col_size, E::col+1>
@@ -221,26 +296,51 @@ namespace Peanut{
         return MatrixBlock<row_start, col_start, row_size, col_size, E>(static_cast<const E&>(x));
     }
 
+    // =========================================================================
+
     template <Index row_ex, Index col_ex, typename E>
         requires is_matrix_v<E> && is_between_v<0, row_ex, E::row> && is_between_v<0, col_ex, E::col>
     MatrixDeleteRowCol<row_ex, col_ex, E> DeleteRC(const MatrixExpr<E> &x){
         return MatrixDeleteRowCol<row_ex, col_ex, E>(static_cast<const E&>(x));
     }
 
+    // =========================================================================
+
     template <typename T, typename E> requires std::is_arithmetic_v<T> && is_matrix_v<E>
     MatrixCastType<T, E> cast_to(const MatrixExpr<E> &x){
         return MatrixCastType<T, E>(static_cast<const E&>(x));
     }
+
+    // =========================================================================
 
     template <typename E> requires is_matrix_v<E> && is_square_v<E>
     MatrixMinor<E> Minor(const MatrixExpr<E> &x){
         return MatrixMinor<E>(static_cast<const E&>(x));
     }
 
+    // =========================================================================
+
     template <typename E> requires is_matrix_v<E> && is_square_v<E>
     MatrixCofactor<E> Cofactor(const MatrixExpr<E> &x){
         return MatrixCofactor<E>(static_cast<const E&>(x));
     }
 
+    // =========================================================================
     
+    template <typename E> requires is_matrix_v<E> && is_square_v<E>
+    MatrixAdjugate<E> Adjugate(const MatrixExpr<E> &x){
+        return MatrixAdjugate<E>(static_cast<const E&>(x));
+    }
+
+    // =========================================================================
+
+    template <typename E> requires is_matrix_v<E> && is_square_v<E>
+    MatrixInverse<E> Inverse(const MatrixExpr<E> &x){
+        return MatrixInverse<E>(static_cast<const E&>(x));
+    }
+
+    template <typename E> requires is_matrix_v<E> && is_square_v<E>
+    E Inverse(const MatrixInverse<E> &x){
+        return static_cast<const E&>(x.x);
+    }
 }
