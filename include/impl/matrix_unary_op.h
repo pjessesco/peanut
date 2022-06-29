@@ -38,7 +38,7 @@
 
 // Dependencies headers
 
-namespace Peanut {
+namespace Peanut{
 
     template<typename T, Index Row, Index Col> requires std::is_arithmetic_v<T> && (Row > 0) && (Col > 0)
     struct Matrix;
@@ -65,16 +65,6 @@ namespace Peanut {
         const E &x;
     };
 
-    template <typename E> requires is_matrix_v<E>
-    E T(const MatrixTranspose<E> &x){
-        return static_cast<const E&>(x.x);
-    }
-
-    template <typename E> requires is_matrix_v<E>
-    MatrixTranspose<E> T(const MatrixExpr<E> &x){
-        return MatrixTranspose<E>(static_cast<const E&>(x));
-    }
-
     // =========================================================================
 
     template <Index row_start, Index col_start, Index row_size, Index col_size, typename E>
@@ -99,13 +89,6 @@ namespace Peanut {
         const E &x;
     };
 
-    template <Index row_start, Index col_start, Index row_size, Index col_size, typename E>
-    requires is_matrix_v<E> && is_between_v<0, row_start, E::row> && is_between_v<0, col_start, E::col> &&
-             is_between_v<0, row_start+row_size, E::row+1> && is_between_v<0, col_start+col_size, E::col+1>
-    MatrixBlock<row_start, col_start, row_size, col_size, E> Block(const MatrixExpr<E> &x){
-        return MatrixBlock<row_start, col_start, row_size, col_size, E>(static_cast<const E&>(x));
-    }
-
     // =========================================================================
 
     template <Index row_ex, Index col_ex, typename E>
@@ -129,12 +112,6 @@ namespace Peanut {
         const E &x;
     };
 
-    template <Index row_ex, Index col_ex, typename E>
-    requires is_matrix_v<E> && is_between_v<0, row_ex, E::row> && is_between_v<0, col_ex, E::col>
-    MatrixDeleteRowCol<row_ex, col_ex, E> DeleteRC(const MatrixExpr<E> &x){
-        return MatrixDeleteRowCol<row_ex, col_ex, E>(static_cast<const E&>(x));
-    }
-
     // =========================================================================
 
     template <typename T, typename E> requires std::is_arithmetic_v<T> && is_matrix_v<E>
@@ -156,11 +133,6 @@ namespace Peanut {
 
         const E &x;
     };
-
-    template <typename T, typename E> requires std::is_arithmetic_v<T> && is_matrix_v<E>
-    MatrixCastType<T, E> cast_to(const MatrixExpr<E> &x){
-        return MatrixCastType<T, E>(static_cast<const E&>(x));
-    }
 
     // =========================================================================
 
@@ -190,11 +162,84 @@ namespace Peanut {
         Matrix<Type, row, col> mat_eval;
     };
 
+    // =========================================================================
+    
+    template <typename E> requires is_matrix_v<E> && is_square_v<E>
+    struct MatrixCofactor : public MatrixExpr<MatrixCofactor<E>>{
+        using Type = typename E::Type;
+        MatrixCofactor(const E &_x) {
+            Peanut::for_<row>([&] (auto r) {
+                Peanut::for_<col>([&] (auto c) {
+                    constexpr Index rv = r.value;
+                    constexpr Index cv = c.value;
+                    if constexpr((rv + cv) % 2 == 0){
+                        mat_eval.elem(rv, cv) = DeleteRC<rv, cv>(_x).eval().det();
+                    }
+                    else{
+                        mat_eval.elem(rv, cv) = -DeleteRC<rv, cv>(_x).eval().det();
+                    }
+                });
+            });
+        }
+        
+        // Static polymorphism implementation of MatrixExpr
+        inline auto elem(Index r, Index c) const{
+            return mat_eval.elem(r, c);
+        }
+
+        static constexpr Index row = E::row;
+        static constexpr Index col = E::col;
+
+        inline Matrix<Type, row, col> eval() const{
+            return mat_eval;
+        }
+
+        Matrix<Type, row, col> mat_eval;
+    };
+    
+    // =========================================================================
+
+}
+
+namespace Peanut{
+
+    template <typename E> requires is_matrix_v<E>
+    E T(const MatrixTranspose<E> &x){
+        return static_cast<const E&>(x.x);
+    }
+
+    template <typename E> requires is_matrix_v<E>
+    MatrixTranspose<E> T(const MatrixExpr<E> &x){
+        return MatrixTranspose<E>(static_cast<const E&>(x));
+    }
+
+    template <Index row_start, Index col_start, Index row_size, Index col_size, typename E>
+        requires is_matrix_v<E> && is_between_v<0, row_start, E::row> && is_between_v<0, col_start, E::col> &&
+                 is_between_v<0, row_start+row_size, E::row+1> && is_between_v<0, col_start+col_size, E::col+1>
+    MatrixBlock<row_start, col_start, row_size, col_size, E> Block(const MatrixExpr<E> &x){
+        return MatrixBlock<row_start, col_start, row_size, col_size, E>(static_cast<const E&>(x));
+    }
+
+    template <Index row_ex, Index col_ex, typename E>
+        requires is_matrix_v<E> && is_between_v<0, row_ex, E::row> && is_between_v<0, col_ex, E::col>
+    MatrixDeleteRowCol<row_ex, col_ex, E> DeleteRC(const MatrixExpr<E> &x){
+        return MatrixDeleteRowCol<row_ex, col_ex, E>(static_cast<const E&>(x));
+    }
+
+    template <typename T, typename E> requires std::is_arithmetic_v<T> && is_matrix_v<E>
+    MatrixCastType<T, E> cast_to(const MatrixExpr<E> &x){
+        return MatrixCastType<T, E>(static_cast<const E&>(x));
+    }
+
     template <typename E> requires is_matrix_v<E> && is_square_v<E>
     MatrixMinor<E> Minor(const MatrixExpr<E> &x){
         return MatrixMinor<E>(static_cast<const E&>(x));
     }
 
-    // =========================================================================
+    template <typename E> requires is_matrix_v<E> && is_square_v<E>
+    MatrixCofactor<E> Cofactor(const MatrixExpr<E> &x){
+        return MatrixCofactor<E>(static_cast<const E&>(x));
+    }
 
+    
 }
