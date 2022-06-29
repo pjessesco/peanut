@@ -464,4 +464,44 @@ TEST_CASE("Test unary operation : Cofactor"){
         CHECK(mmat2.elem(2, 2) == Catch::Approx(-1.56683e+06f));
     }
 
+    SECTION("Combination with other operations"){
+        using namespace Peanut;
+
+        // val
+        // 1.2f, 5.3f, 3.1f
+        // 6.5f, 8.1f, 0.2f
+        // 7.6f, 2.5f, 4.8f
+
+        // Cofactor
+        // 38.38 -29.68 -45.31
+        // -17.69 -17.8 37.28
+        // -24.05 19.91 -24.73
+
+        // DeleteRC<1, 1>
+        // 38.38 -45.31
+        // -24.05 -24.73
+
+        // Cofactor
+        // -24.73 24.05
+        // 45.31 38.38
+
+        // T
+        // -24.73 45.31
+        // 24.05 38.38
+
+        auto val = T(Cofactor(DeleteRC<1, 1>(Cofactor(mat2))));
+
+        CHECK(val.elem(0, 0) == Catch::Approx(-24.73f));
+        CHECK(val.elem(0, 1) == Catch::Approx(45.31f));
+        CHECK(val.elem(1, 0) == Catch::Approx(24.05f));
+        CHECK(val.elem(1, 1) == Catch::Approx(38.38f));
+
+        auto val2 = T(Cofactor(DeleteRC<1, 1>(Cofactor(mat2)))).eval();
+
+        CHECK(val2.elem(0, 0) == Catch::Approx(-24.73f));
+        CHECK(val2.elem(0, 1) == Catch::Approx(45.31f));
+        CHECK(val2.elem(1, 0) == Catch::Approx(24.05f));
+        CHECK(val2.elem(1, 1) == Catch::Approx(38.38f));
+    }
 }
+
