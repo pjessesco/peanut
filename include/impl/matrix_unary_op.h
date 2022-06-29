@@ -172,11 +172,12 @@ namespace Peanut{
                 Peanut::for_<col>([&] (auto c) {
                     constexpr Index rv = r.value;
                     constexpr Index cv = c.value;
+                    const Type e = DeleteRC<rv, cv>(_x).eval().det();
                     if constexpr((rv + cv) % 2 == 0){
-                        mat_eval.elem(rv, cv) = DeleteRC<rv, cv>(_x).eval().det();
+                        mat_eval.elem(rv, cv) = e;
                     }
                     else{
-                        mat_eval.elem(rv, cv) = -DeleteRC<rv, cv>(_x).eval().det();
+                        mat_eval.elem(rv, cv) = -e;
                     }
                 });
             });
