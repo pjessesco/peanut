@@ -160,7 +160,7 @@ namespace Peanut {
             }
             else{
                 T ret = static_cast<T>(0);
-                Peanut::for_<Col>([&] (auto c) {
+                for_<Col>([&] (auto c) {
                     ret += (c.value % 2 ? -1 : 1) * elem(0, c.value) * DeleteRC<0, c.value>(*this).eval().det();
                 });
                 return ret;

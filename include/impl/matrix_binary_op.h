@@ -65,11 +65,6 @@ namespace Peanut {
         const E2 &y;
     };
 
-    template <typename E1, typename E2> requires is_equal_size_mat_v<E1, E2>
-    MatrixSum<E1, E2> operator+(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y){
-        return MatrixSum<E1, E2>(static_cast<const E1&>(x), static_cast<const E2&>(y));
-    }
-
     // =========================================================================
 
     template <typename E1, typename E2> requires is_equal_size_mat_v<E1, E2>
@@ -92,11 +87,6 @@ namespace Peanut {
         const E1 &x;
         const E2 &y;
     };
-
-    template <typename E1, typename E2> requires is_equal_size_mat_v<E1, E2>
-    MatrixSub<E1, E2> operator-(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y){
-        return MatrixSub<E1, E2>(static_cast<const E1&>(x), static_cast<const E2&>(y));
-    }
 
     // =========================================================================
     
@@ -122,16 +112,6 @@ namespace Peanut {
         const E &x;
         T y;
     };
-
-    template <typename E, typename T> requires is_matrix_v<E> && std::is_arithmetic_v<T>
-    MatrixMultScalar<E, T> operator*(const MatrixExpr<E> &x, const T &y){
-        return MatrixMultScalar<E, T>(static_cast<const E&>(x), y);
-    }
-
-    template <typename E, typename T> requires is_matrix_v<E> && std::is_arithmetic_v<T>
-    MatrixMultScalar<E, T> operator*(const T x, const MatrixExpr<E> &y){
-        return MatrixMultScalar<E, T>(static_cast<const E&>(y), x);
-    }
     
     // =========================================================================
 
@@ -161,12 +141,6 @@ namespace Peanut {
         const Matrix<Type, E2::row, E2::col> y_eval;
     };
 
-    // General implementation
-    template <typename E1, typename E2> requires (E1::col==E2::row)
-    MatrixMult<E1, E2> operator*(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y){
-        return MatrixMult<E1, E2>(static_cast<const E1&>(x), static_cast<const E2&>(y));
-    }
-
     // =========================================================================
     
     template <typename E, typename T> requires is_matrix_v<E> && std::is_arithmetic_v<T>
@@ -193,6 +167,43 @@ namespace Peanut {
         const E &x;
         T y;
     };
+
+}
+
+namespace Peanut{
+    template <typename E1, typename E2> requires is_equal_size_mat_v<E1, E2>
+    MatrixSum<E1, E2> operator+(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y){
+        return MatrixSum<E1, E2>(static_cast<const E1&>(x), static_cast<const E2&>(y));
+    }
+
+    // =========================================================================
+
+    template <typename E1, typename E2> requires is_equal_size_mat_v<E1, E2>
+    MatrixSub<E1, E2> operator-(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y){
+        return MatrixSub<E1, E2>(static_cast<const E1&>(x), static_cast<const E2&>(y));
+    }
+
+    // =========================================================================
+
+    template <typename E, typename T> requires is_matrix_v<E> && std::is_arithmetic_v<T>
+    MatrixMultScalar<E, T> operator*(const MatrixExpr<E> &x, const T &y){
+        return MatrixMultScalar<E, T>(static_cast<const E&>(x), y);
+    }
+
+    template <typename E, typename T> requires is_matrix_v<E> && std::is_arithmetic_v<T>
+    MatrixMultScalar<E, T> operator*(const T x, const MatrixExpr<E> &y){
+        return MatrixMultScalar<E, T>(static_cast<const E&>(y), x);
+    }
+
+    // =========================================================================
+
+    // General implementation
+    template <typename E1, typename E2> requires (E1::col==E2::row)
+    MatrixMult<E1, E2> operator*(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y){
+        return MatrixMult<E1, E2>(static_cast<const E1&>(x), static_cast<const E2&>(y));
+    }
+
+    // =========================================================================
 
     template <typename E, typename T> requires is_matrix_v<E> && std::is_arithmetic_v<T>
     MatrixDivScalar<E, T> operator/(const MatrixExpr<E> &x, const T &y){

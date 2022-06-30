@@ -140,8 +140,8 @@ namespace Peanut{
     struct MatrixMinor : public MatrixExpr<MatrixMinor<E>>{
         using Type = typename E::Type;
         MatrixMinor(const E &_x) {
-            Peanut::for_<row>([&] (auto r) {
-                Peanut::for_<col>([&] (auto c) {
+            for_<row>([&] (auto r) {
+                for_<col>([&] (auto c) {
                     mat_eval.elem(r.value, c.value) = DeleteRC<r.value, c.value>(_x).eval().det();
                 });
             });
@@ -168,8 +168,8 @@ namespace Peanut{
     struct MatrixCofactor : public MatrixExpr<MatrixCofactor<E>>{
         using Type = typename E::Type;
         MatrixCofactor(const E &_x) {
-            Peanut::for_<row>([&] (auto r) {
-                Peanut::for_<col>([&] (auto c) {
+            for_<row>([&] (auto r) {
+                for_<col>([&] (auto c) {
                     constexpr Index rv = r.value;
                     constexpr Index cv = c.value;
                     const Type e = DeleteRC<rv, cv>(_x).eval().det();
@@ -204,8 +204,8 @@ namespace Peanut{
     struct MatrixAdjugate : public MatrixExpr<MatrixAdjugate<E>>{
         using Type = typename E::Type;
         MatrixAdjugate(const E &_x) {
-            Peanut::for_<row>([&] (auto r) {
-                Peanut::for_<col>([&] (auto c) {
+            for_<row>([&] (auto r) {
+                for_<col>([&] (auto c) {
                     constexpr Index rv = r.value;
                     constexpr Index cv = c.value;
                     const Type e = DeleteRC<rv, cv>(_x).eval().det();
@@ -241,8 +241,8 @@ namespace Peanut{
         using Type = Float;
         MatrixInverse(const E &_x) : x{_x} {
             // Evaluate adjugate matrix
-            Peanut::for_<row>([&] (auto r) {
-                Peanut::for_<col>([&] (auto c) {
+            for_<row>([&] (auto r) {
+                for_<col>([&] (auto c) {
                     constexpr Index rv = r.value;
                     constexpr Index cv = c.value;
                     const Float e = static_cast<Float>(DeleteRC<rv, cv>(_x).eval().det());
