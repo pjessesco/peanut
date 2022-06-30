@@ -86,6 +86,4 @@ namespace Peanut {
         for_(func, std::make_index_sequence<N>());
     }
 
-    // Usage
-
 }

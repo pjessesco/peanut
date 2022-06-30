@@ -8,4 +8,3 @@ if(TEST)
 endif()
 
 add_library(Peanut peanut.cpp)
-target_include_directories(Peanut PUBLIC include)

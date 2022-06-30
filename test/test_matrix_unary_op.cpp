@@ -83,14 +83,14 @@ TEST_CASE("Test unary operation : Block"){
     }
 }
 
-TEST_CASE("Test unary operation : DeleteRC"){
+TEST_CASE("Test unary operation : SubMat"){
     Peanut::Matrix<int, 4, 4> mat{1,2,3,4,
                                   5,6,7,8,
                                   9,10,11,12,
                                   13,14,15,16};
 
     SECTION("Validation"){
-        auto d1 = Peanut::DeleteRC<2, 1>(mat).eval();
+        auto d1 = Peanut::SubMat<2, 1>(mat).eval();
 
         CHECK(d1.elem(0, 0) == 1);
         CHECK(d1.elem(0, 1) == 3);
@@ -102,7 +102,7 @@ TEST_CASE("Test unary operation : DeleteRC"){
         CHECK(d1.elem(2, 1) == 15);
         CHECK(d1.elem(2, 2) == 16);
 
-        auto d2 = Peanut::DeleteRC<0, 0>(mat).eval();
+        auto d2 = Peanut::SubMat<0, 0>(mat).eval();
         CHECK(d2.elem(0, 0) == 6);
         CHECK(d2.elem(0, 1) == 7);
         CHECK(d2.elem(0, 2) == 8);
@@ -113,7 +113,7 @@ TEST_CASE("Test unary operation : DeleteRC"){
         CHECK(d2.elem(2, 1) == 15);
         CHECK(d2.elem(2, 2) == 16);
 
-        auto d3 = Peanut::DeleteRC<3, 3>(mat).eval();
+        auto d3 = Peanut::SubMat<3, 3>(mat).eval();
         CHECK(d3.elem(0, 0) == 1);
         CHECK(d3.elem(0, 1) == 2);
         CHECK(d3.elem(0, 2) == 3);
@@ -127,12 +127,12 @@ TEST_CASE("Test unary operation : DeleteRC"){
 
 }
 
-TEST_CASE("Test unary operation : cast_to"){
+TEST_CASE("Test unary operation : Cast"){
     Peanut::Matrix<float, 2, 2> mat{1.1f, 2.2f,
                                     3.3f, 4.4f};
 
     SECTION("Validation"){
-        auto intmat = Peanut::cast_to<int>(mat).eval();
+        auto intmat = Peanut::Cast<int>(mat).eval();
 
         CHECK(intmat.elem(0, 0) != Catch::Approx(1.1f));
         CHECK(intmat.elem(0, 1) != Catch::Approx(2.2f));
@@ -178,7 +178,7 @@ TEST_CASE("Test unary operation : Combination of unary operations (1)"){
         // 4.1 2.5 1.1 4.1
         // 2.1 3.4 2.3 5.2
 
-        // DeleteRC<1, 2>
+        // SubMat<1, 2>
         // 1.2 3.5 4.2
         // 4.1 2.5 4.1
         // 2.1 3.4 5.2
@@ -193,7 +193,7 @@ TEST_CASE("Test unary operation : Combination of unary operations (1)"){
         // 3.5 2.5 3.4
         // 4.2 4.1 5.2
 
-        auto result1 = T(Block<0, 0, 3, 3>(DeleteRC<1, 2>(T(Block<0, 0, 4, 4>(T(test))))));
+        auto result1 = T(Block<0, 0, 3, 3>(SubMat<1, 2>(T(Block<0, 0, 4, 4>(T(test))))));
         CHECK(result1.elem(0, 0) == Catch::Approx(1.2f));
         CHECK(result1.elem(0, 1) == Catch::Approx(4.1f));
         CHECK(result1.elem(0, 2) == Catch::Approx(2.1f));
@@ -204,7 +204,7 @@ TEST_CASE("Test unary operation : Combination of unary operations (1)"){
         CHECK(result1.elem(2, 1) == Catch::Approx(4.1f));
         CHECK(result1.elem(2, 2) == Catch::Approx(5.2f));
 
-        auto result2 = T(Block<0, 0, 3, 3>(DeleteRC<1, 2>(T(Block<0, 0, 4, 4>(T(test)))))).eval();
+        auto result2 = T(Block<0, 0, 3, 3>(SubMat<1, 2>(T(Block<0, 0, 4, 4>(T(test)))))).eval();
         CHECK(result2.elem(0, 0) == Catch::Approx(1.2f));
         CHECK(result2.elem(0, 1) == Catch::Approx(4.1f));
         CHECK(result2.elem(0, 2) == Catch::Approx(2.1f));
@@ -334,7 +334,7 @@ TEST_CASE("Test unary operation : Minor"){
         // 4.36 2.36 -1.61
         // 9.74 5.54 -2.14
 
-        // DeleteRC<1, 1>
+        // SubMat<1, 1>
         // -2.4 0.25
         // 9.74 -2.14
 
@@ -346,14 +346,14 @@ TEST_CASE("Test unary operation : Minor"){
         // -2.14 0.25
         // 9.74 -2.4
 
-        auto val = T(Minor(DeleteRC<1, 1>(Minor(Block<0, 0, 3, 3>(mat)))));
+        auto val = T(Minor(SubMat<1, 1>(Minor(Block<0, 0, 3, 3>(mat)))));
 
         CHECK(val.elem(0, 0) == Catch::Approx(-2.14f));
         CHECK(val.elem(0, 1) == Catch::Approx(0.25f));
         CHECK(val.elem(1, 0) == Catch::Approx(9.74f));
         CHECK(val.elem(1, 1) == Catch::Approx(-2.4f));
 
-        auto val2 = T(Minor(DeleteRC<1, 1>(Minor(Block<0, 0, 3, 3>(mat))))).eval();
+        auto val2 = T(Minor(SubMat<1, 1>(Minor(Block<0, 0, 3, 3>(mat))))).eval();
 
         CHECK(val2.elem(0, 0) == Catch::Approx(-2.14f));
         CHECK(val2.elem(0, 1) == Catch::Approx(0.25f));
@@ -477,7 +477,7 @@ TEST_CASE("Test unary operation : Cofactor"){
         // -17.69 -17.8 37.28
         // -24.05 19.91 -24.73
 
-        // DeleteRC<1, 1>
+        // SubMat<1, 1>
         // 38.38 -45.31
         // -24.05 -24.73
 
@@ -489,14 +489,14 @@ TEST_CASE("Test unary operation : Cofactor"){
         // -24.73 45.31
         // 24.05 38.38
 
-        auto val = T(Cofactor(DeleteRC<1, 1>(Cofactor(mat2))));
+        auto val = T(Cofactor(SubMat<1, 1>(Cofactor(mat2))));
 
         CHECK(val.elem(0, 0) == Catch::Approx(-24.73f));
         CHECK(val.elem(0, 1) == Catch::Approx(45.31f));
         CHECK(val.elem(1, 0) == Catch::Approx(24.05f));
         CHECK(val.elem(1, 1) == Catch::Approx(38.38f));
 
-        auto val2 = T(Cofactor(DeleteRC<1, 1>(Cofactor(mat2)))).eval();
+        auto val2 = T(Cofactor(SubMat<1, 1>(Cofactor(mat2)))).eval();
 
         CHECK(val2.elem(0, 0) == Catch::Approx(-24.73f));
         CHECK(val2.elem(0, 1) == Catch::Approx(45.31f));

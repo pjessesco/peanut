@@ -25,19 +25,15 @@
 #pragma once
 
 // Standard headers
-#include <algorithm>
 #include <array>
 #include <cassert>
-#include <cstring>
 #include <initializer_list>
 #include <iostream>
-#include <string>
 #include <type_traits>
 
 // Peanut headers
 #include "common.h"
 #include "matrix_type_traits.h"
-#include "matrix_unary_op.h"
 
 // Dependencies headers
 
@@ -122,7 +118,7 @@ namespace Peanut {
         }
 
         Matrix<Float, Row, Col> gaussian_elem() const{
-            Matrix<Float, Row, Col> ret = cast_to<Float>(*this);
+            Matrix<Float, Row, Col> ret = Cast<Float>(*this);
             for(int j=0;j<Row-1;j++){
                 const Float denom = static_cast<Float>(ret.elem(j,j));
                 if(is_zero(denom)){
@@ -161,7 +157,7 @@ namespace Peanut {
             else{
                 T ret = static_cast<T>(0);
                 for_<Col>([&] (auto c) {
-                    ret += (c.value % 2 ? -1 : 1) * elem(0, c.value) * DeleteRC<0, c.value>(*this).eval().det();
+                    ret += (c.value % 2 ? -1 : 1) * elem(0, c.value) * SubMat<0, c.value>(*this).eval().det();
                 });
                 return ret;
             }
