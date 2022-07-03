@@ -80,22 +80,22 @@ namespace Peanut {
     struct num { static const constexpr auto value = N; };
 
     /**
-    * @brief Function which imitates for loop with a compile-time variable.
-    * @param[in] func Callable object which will be called with loop variable.
-    * @tparam N Compile time loop variable value.
-    * @tparam F Arbitrary type, intended to be callable types (std::function, lambda, etc)
-    * @example
-    * ```
-    * for_<3>([&] (auto i) {
-    *     std::cout<<i.value<<std::endl;
-    * });
-    *
-    * // Output
-    * // 0
-    * // 1
-    * // 2
-    * ```
-    */
+     * @brief Function which imitates for loop with a compile-time variable.
+     * @param[in] func Callable object which will be called with loop variable.
+     * @tparam N Compile time loop variable value.
+     * @tparam F Arbitrary type, intended to be callable types (std::function, lambda, etc)
+     * @example
+     * ```
+     * for_<3>([&] (auto i) {
+     *     std::cout<<i.value<<std::endl;
+     * });
+     *
+     * // Output
+     * // 0
+     * // 1
+     * // 2
+     * ```
+     */
     template <class F, std::size_t... Is>
     void for_(F func, std::index_sequence<Is...>)
     {
