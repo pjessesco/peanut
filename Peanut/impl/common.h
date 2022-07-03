@@ -28,6 +28,7 @@
 #include <cmath>
 #include <limits>
 #include <utility>
+#include <iostream>
 
 // Peanut headers
 
@@ -37,12 +38,15 @@ namespace Peanut {
     using Index = unsigned int;
     using Float = float;
 
-    inline const Index rc_to_idx(Index Col, Index r, Index c) {
-        return Col*r + c;
-    }
-
+    /**
+     * @brief Check if given \pval is zero or not.
+     * @param[in] val Arithmetic type value which will be checked.
+     * @tparam T A arithmetic type of parameter \pval.
+     * @return If \pT is floating point type, returns true if \pval is close to zero, false if not.
+     *         If \pT is not a floating point type, returns true if \pval is zero, false if not.
+     */
     template<typename T>
-    bool is_zero(T val){
+    bool is_zero(T val) requires std::is_arithmetic_v<T>{
         if constexpr (std::is_floating_point_v<T>){
             return std::fabs(val-static_cast<T>(0)) <= std::numeric_limits<T>::epsilon() ||
                    std::fabs(val-static_cast<T>(0)) < std::numeric_limits<T>::min();
@@ -52,28 +56,46 @@ namespace Peanut {
         }
     }
 
+    /**
+     * @brief Compile-time checking structure if given constant is in range.
+     * @details constexpr `value` is true if \pstart <= \pvar < \pend, false otherwise.
+     * @tparam start Minimum value of the range.
+     * @tparam var Constant which will be checked whether in range.
+     */
     template <Index start, Index var, Index end>
     struct is_between{
         static constexpr bool value = (start<=var) && (var<end);
     };
 
+    /**
+     * @brief Helper variable template for \pis_between<start, var, end>.
+     */
     template <Index start, Index var, Index end>
     constexpr bool is_between_v = is_between<start, var, end>::value;
 
-    // Compile-time for loop, usage :
-    //
-    //    Peanut::for_<3>([&] (auto i) {
-    //        std::cout<<i.value<<std::endl;
-    //    });
-    //
-    // Output :
-    //   0
-    //   1
-    //   2
-    //
+    /**
+     * @brief Helper structure for \pfor_()
+     */
     template<std::size_t N>
     struct num { static const constexpr auto value = N; };
 
+    /**
+    * @brief Function which imitates for loop with a compile-time variable.
+    * @param[in] func Callable object which will be called with loop variable.
+    * @tparam N Compile time loop variable value.
+    * @tparam F Arbitrary type, intended to be callable types (std::function, lambda, etc)
+    * @example
+    * ```
+    * for_<3>([&] (auto i) {
+    *     std::cout<<i.value<<std::endl;
+    * });
+    *
+    * // Output
+    * // 0
+    * // 1
+    * // 2
+    * ```
+    */
     template <class F, std::size_t... Is>
     void for_(F func, std::index_sequence<Is...>)
     {
