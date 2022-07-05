@@ -43,8 +43,11 @@ namespace Peanut {
      * @brief Base class of every matrix expressions in Peanut.
      * @details Peanut implements matrix expression by following CRTP concept
      *          to achieve a static polymorphism. Every derived class should
-     *          follow its interface even they are not forced by the compiler.
-     *          Also they MUST provide their data type via `using Type = XXX`.
+     *          follow its interface even they are not forced by the compiler
+     *          (i.e., pure virtual method). Also they MUST provide their data
+     *          type via `using Type = XXX`, and implement `eval()` method for
+     *          matrix evaluation. See `Matrix<T, Row, Col>::eval()` for more
+     *          explanation.
      * @tparam E Derived class. `MatrixExpr`
      */
     template <typename E>
@@ -179,28 +182,58 @@ namespace Peanut {
             return m_data[Col*r+c];
         }
 
+        /**
+         * @brief Row size of the matrix.
+         */
         static constexpr Index row = Row;
+
+        /**
+         * @brief Column size of the matrix.
+         */
         static constexpr Index col = Col;
 
+        /**
+         * @brief Evaluation expressions and return as a `Matrix` instance.
+         *        Note that every matrix expression classes must implement this
+         *        method even though it is not a method of `MatrixExpr`.
+         * @return Evaluated matrix
+         */
         inline Matrix<Type, row, col> eval() const{
             return Matrix<Type, row, col>(*this);
         }
 
-        void print_mat() const {
-            for(int r=0;r<Row;r++){
-                for (int c = 0; c < Col; c++) {
-                    std::cout << elem(r, c) << " ";
-                }
-                std::cout<<"\n";
+        /**
+         * @brief An implementation of `operator<<`
+         * @return Given std::ostream
+         */
+        friend std::ostream &operator<<(std::ostream &os, const Matrix &matrix) {
+            for(int i=0;i<Row*Col;i++){
+                os << matrix.m_data[i]<<" ";
             }
+            return os;
         }
 
+        /**
+         * @brief Helper function for Gaussian elimination. It performs row
+         *        subtraction after multiplying given scalar to the row
+         *        (i.e., `r1 = r1 - (r2 * scalar)`).
+         * @param r1 Row index.
+         * @param r2 Row index.
+         * @param scalar Scalar which will be multiplied to \p r2 'th row.
+         */
         void subtract_row(Index r1, Index r2, T scalar){
             for(int i=0;i<Col;i++){
                 elem(r1, i) -= scalar * elem(r2, i);
             }
         }
 
+        /**
+         * @brief Perform brute-force Gaussian elimination, which elimiate
+         *        left-most element per row by repeating `subtract_row()`.
+         * @details Since it does not perform elimination efficiently, numerical
+         *          issue may exists with a extremely large/small numbers.
+         * @return Gaussian elimination-performed matrix.
+         */
         Matrix<Float, Row, Col> gaussian_elem() const{
             Matrix<Float, Row, Col> ret = Cast<Float>(*this);
             for(int j=0;j<Row-1;j++){
@@ -216,22 +249,12 @@ namespace Peanut {
             return ret;
         }
 
+        /**
+         * @brief Calculate a determinant by recursively calculate determinants
+         *        of submatrices.
+         * @return Determinant of the matrix.
+         */
         constexpr T det() const requires is_square_v<Matrix>{
-            if constexpr(Col==1){
-                return elem(0, 0);
-            }
-            else if constexpr (Col==2){
-                return elem(0, 0) * elem(1, 1) - elem(0, 1) * elem(1, 0);
-            }
-            auto upper_triangular = gaussian_elem();
-            Float det = upper_triangular.elem(0, 0);
-            for(int i=1;i<Row;i++){
-                det *= upper_triangular.elem(i, i);
-            }
-            return det;
-        }
-
-        constexpr T det2() const requires is_square_v<Matrix>{
             if constexpr(Col==1){
                 return elem(0, 0);
             }
@@ -245,6 +268,27 @@ namespace Peanut {
                 });
                 return ret;
             }
+        }
+
+        /**
+         * @brief Calculate a determinant by performing `gaussian_elem()` and
+         *        multiplying diagonal terms. It is equivalent to `det()`
+         *        theoretically, but numerical issue may exists.
+         * @return Determinant of the matrix.
+         */
+        constexpr T det2() const requires is_square_v<Matrix>{
+            if constexpr(Col==1){
+                return elem(0, 0);
+            }
+            else if constexpr (Col==2){
+                return elem(0, 0) * elem(1, 1) - elem(0, 1) * elem(1, 0);
+            }
+            auto upper_triangular = gaussian_elem();
+            Float det = upper_triangular.elem(0, 0);
+            for(int i=1;i<Row;i++){
+                det *= upper_triangular.elem(i, i);
+            }
+            return det;
         }
 
     private:
