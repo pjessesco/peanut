@@ -1,0 +1,38 @@
+name: Deploy doxygen documents
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  deploy:
+
+    runs-on: macos-12
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Install Doxygen
+      run: brew install doxygen
+
+    - name: Install pip3 packages
+      run: pip3 install Sphinx sphinx-rtd-theme breathe
+
+    - name: Configure CMake with DOCS
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DDOCS=ON
+
+    - name : Build docs
+      run : cmake --build ${{github.workspace}}/build --target Sphinx
+
+    - name: Deploy
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        BRANCH: gh-pages
+        FOLDER: ${{github.workspace}}/build/docs/sphinx
