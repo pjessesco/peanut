@@ -31,37 +31,34 @@
 
 // Dependencies headers
 
-namespace Peanut{
+namespace Peanut::Impl {
 
-    template<typename T, Index Row, Index Col> requires std::is_arithmetic_v<T> && (Row > 0) && (Col > 0)
-    struct Matrix;
-
-    template <Index row_ex, Index col_ex, typename E>
+    template<Index row_ex, Index col_ex, typename E>
         requires is_matrix_v<E> && is_between_v<0, row_ex, E::row> && is_between_v<0, col_ex, E::col>
-    struct MatrixSub : public MatrixExpr<MatrixSub<row_ex, col_ex, E>>{
+    struct MatrixSub : public MatrixExpr<MatrixSub<row_ex, col_ex, E>> {
         using Type = typename E::Type;
         MatrixSub(const E &x) : x{x} {}
 
         // Static polymorphism implementation of MatrixExpr
-        inline auto elem(Index r, Index c) const{
-            return x.elem(r<row_ex?r:r+1, c<col_ex?c:c+1);
+        inline auto elem(Index r, Index c) const {
+            return x.elem(r < row_ex ? r : r + 1, c < col_ex ? c : c + 1);
         }
 
         static constexpr Index row = E::row - 1;
         static constexpr Index col = E::col - 1;
 
-        inline Matrix<Type, row, col> eval() const{
+        inline Matrix<Type, row, col> eval() const {
             return Matrix<Type, row, col>(*this);
         }
 
         const E &x;
     };
+}
 
-
-    template <Index row_ex, Index col_ex, typename E>
+namespace Peanut {
+    template<Index row_ex, Index col_ex, typename E>
         requires is_matrix_v<E> && is_between_v<0, row_ex, E::row> && is_between_v<0, col_ex, E::col>
-    MatrixSub<row_ex, col_ex, E> SubMat(const MatrixExpr<E> &x){
-        return MatrixSub<row_ex, col_ex, E>(static_cast<const E&>(x));
+    Impl::MatrixSub<row_ex, col_ex, E> SubMat(const MatrixExpr<E> &x) {
+        return Impl::MatrixSub<row_ex, col_ex, E>(static_cast<const E &>(x));
     }
-
 }

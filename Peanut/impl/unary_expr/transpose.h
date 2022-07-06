@@ -31,40 +31,40 @@
 
 // Dependencies headers
 
-namespace Peanut{
+namespace Peanut::Impl {
 
-    template<typename T, Index Row, Index Col> requires std::is_arithmetic_v<T> && (Row > 0) && (Col > 0)
-    struct Matrix;
-
-    template <typename E> requires is_matrix_v<E>
-    struct MatrixTranspose : public MatrixExpr<MatrixTranspose<E>>{
+    template<typename E>
+        requires is_matrix_v<E>
+    struct MatrixTranspose : public MatrixExpr<MatrixTranspose<E>> {
         using Type = typename E::Type;
         MatrixTranspose(const E &x) : x{x} {}
 
         // Static polymorphism implementation of MatrixExpr
-        inline auto elem(Index r, Index c) const{
+        inline auto elem(Index r, Index c) const {
             return x.elem(c, r);
         }
 
         static constexpr Index row = E::col;
         static constexpr Index col = E::row;
 
-        inline Matrix<Type, row, col> eval() const{
+        inline Matrix<Type, row, col> eval() const {
             return Matrix<Type, row, col>(*this);
         }
 
         const E &x;
     };
+}
 
-
-    template <typename E> requires is_matrix_v<E>
-    E T(const MatrixTranspose<E> &x){
-        return static_cast<const E&>(x.x);
+namespace Peanut{
+    template<typename E>
+        requires is_matrix_v<E>
+    E T(const Impl::MatrixTranspose<E> &x) {
+        return static_cast<const E &>(x.x);
     }
 
-    template <typename E> requires is_matrix_v<E>
-    MatrixTranspose<E> T(const MatrixExpr<E> &x){
-        return MatrixTranspose<E>(static_cast<const E&>(x));
+    template<typename E>
+        requires is_matrix_v<E>
+    Impl::MatrixTranspose<E> T(const MatrixExpr<E> &x) {
+        return Impl::MatrixTranspose<E>(static_cast<const E &>(x));
     }
-
 }

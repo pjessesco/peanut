@@ -51,12 +51,12 @@ namespace Peanut::Impl {
         static constexpr Index col = E2::col;
 
         inline auto eval() const {
-            return Peanut::Matrix<Type, row, col>(*this);
+            return Matrix<Type, row, col>(*this);
         }
 
         // Specify member type as Matrix for evaluation
-        const Peanut::Matrix<Type, E1::row, E1::col> x_eval;
-        const Peanut::Matrix<Type, E2::row, E2::col> y_eval;
+        const Matrix<Type, E1::row, E1::col> x_eval;
+        const Matrix<Type, E2::row, E2::col> y_eval;
     };
 
 }

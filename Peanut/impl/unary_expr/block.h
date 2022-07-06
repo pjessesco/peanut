@@ -31,39 +31,35 @@
 
 // Dependencies headers
 
-namespace Peanut{
-
-    template<typename T, Index Row, Index Col> requires std::is_arithmetic_v<T> && (Row > 0) && (Col > 0)
-    struct Matrix;
-
-    template <Index row_start, Index col_start, Index row_size, Index col_size, typename E>
+namespace Peanut::Impl {
+    template<Index row_start, Index col_start, Index row_size, Index col_size, typename E>
         requires is_matrix_v<E> && is_between_v<0, row_start, E::row> && is_between_v<0, col_start, E::col> &&
-                 is_between_v<0, row_start+row_size, E::row+1> && is_between_v<0, col_start+col_size, E::col+1>
-    struct MatrixBlock : public MatrixExpr<MatrixBlock<row_start, col_start, row_size, col_size, E>>{
+                 is_between_v<0, row_start + row_size, E::row + 1> && is_between_v<0, col_start + col_size, E::col + 1>
+    struct MatrixBlock : public MatrixExpr<MatrixBlock<row_start, col_start, row_size, col_size, E>> {
         using Type = typename E::Type;
         MatrixBlock(const E &x) : x{x} {}
 
         // Static polymorphism implementation of MatrixExpr
-        inline auto elem(Index r, Index c) const{
-            return x.elem(row_start+r, col_start+c);
+        inline auto elem(Index r, Index c) const {
+            return x.elem(row_start + r, col_start + c);
         }
 
         static constexpr Index row = row_size;
         static constexpr Index col = col_size;
 
-        inline Matrix<Type, row, col> eval() const{
+        inline Matrix<Type, row, col> eval() const {
             return Matrix<Type, row, col>(*this);
         }
 
         const E &x;
     };
+}
 
-
-    template <Index row_start, Index col_start, Index row_size, Index col_size, typename E>
+namespace Peanut {
+    template<Index row_start, Index col_start, Index row_size, Index col_size, typename E>
         requires is_matrix_v<E> && is_between_v<0, row_start, E::row> && is_between_v<0, col_start, E::col> &&
-                 is_between_v<0, row_start+row_size, E::row+1> && is_between_v<0, col_start+col_size, E::col+1>
-    MatrixBlock<row_start, col_start, row_size, col_size, E> Block(const MatrixExpr<E> &x){
-        return MatrixBlock<row_start, col_start, row_size, col_size, E>(static_cast<const E&>(x));
+                 is_between_v<0, row_start + row_size, E::row + 1> && is_between_v<0, col_start + col_size, E::col + 1>
+    Impl::MatrixBlock<row_start, col_start, row_size, col_size, E> Block(const MatrixExpr<E> &x) {
+        return Impl::MatrixBlock<row_start, col_start, row_size, col_size, E>(static_cast<const E &>(x));
     }
-
 }

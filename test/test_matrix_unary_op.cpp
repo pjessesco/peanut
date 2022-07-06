@@ -51,7 +51,6 @@ TEST_CASE("Test unary operation : T"){
     }
 
     SECTION("Optimization"){
-        CHECK(std::is_same_v<decltype(T(mat)), Peanut::MatrixTranspose<Peanut::Matrix<int, 2, 3>>>);
         CHECK(std::is_same_v<decltype(T(T(mat))), Peanut::Matrix<int, 2, 3>>);
     }
 }

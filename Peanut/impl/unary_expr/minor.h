@@ -31,41 +31,39 @@
 
 // Dependencies headers
 
-namespace Peanut{
-
-    template<typename T, Index Row, Index Col> requires std::is_arithmetic_v<T> && (Row > 0) && (Col > 0)
-    struct Matrix;
-
-    template <typename E> requires is_matrix_v<E> && is_square_v<E>
-    struct MatrixMinor : public MatrixExpr<MatrixMinor<E>>{
+namespace Peanut::Impl {
+    template<typename E>
+        requires is_matrix_v<E> && is_square_v<E>
+    struct MatrixMinor : public MatrixExpr<MatrixMinor<E>> {
         using Type = typename E::Type;
         MatrixMinor(const E &_x) {
-            for_<row>([&] (auto r) {
-                for_<col>([&] (auto c) {
+            for_<row>([&](auto r) {
+                for_<col>([&](auto c) {
                     mat_eval.elem(r.value, c.value) = SubMat<r.value, c.value>(_x).eval().det();
                 });
             });
         }
 
         // Static polymorphism implementation of MatrixExpr
-        inline auto elem(Index r, Index c) const{
+        inline auto elem(Index r, Index c) const {
             return mat_eval.elem(r, c);
         }
 
         static constexpr Index row = E::row;
         static constexpr Index col = E::col;
 
-        inline Matrix<Type, row, col> eval() const{
+        inline Matrix<Type, row, col> eval() const {
             return mat_eval;
         }
 
         Matrix<Type, row, col> mat_eval;
     };
+}
 
-
-    template <typename E> requires is_matrix_v<E> && is_square_v<E>
-    MatrixMinor<E> Minor(const MatrixExpr<E> &x){
-        return MatrixMinor<E>(static_cast<const E&>(x));
+namespace Peanut {
+    template<typename E>
+        requires is_matrix_v<E> && is_square_v<E>
+    Impl::MatrixMinor<E> Minor(const MatrixExpr<E> &x) {
+        return Impl::MatrixMinor<E>(static_cast<const E &>(x));
     }
-
 }

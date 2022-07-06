@@ -31,24 +31,20 @@
 
 // Dependencies headers
 
-namespace Peanut{
-
-    template<typename T, Index Row, Index Col> requires std::is_arithmetic_v<T> && (Row > 0) && (Col > 0)
-    struct Matrix;
-
-    template <typename E> requires is_matrix_v<E> && is_square_v<E>
-    struct MatrixAdjugate : public MatrixExpr<MatrixAdjugate<E>>{
+namespace Peanut::Impl {
+    template<typename E>
+        requires is_matrix_v<E> && is_square_v<E>
+    struct MatrixAdjugate : public MatrixExpr<MatrixAdjugate<E>> {
         using Type = typename E::Type;
         MatrixAdjugate(const E &_x) {
-            for_<row>([&] (auto r) {
-                for_<col>([&] (auto c) {
+            for_<row>([&](auto r) {
+                for_<col>([&](auto c) {
                     constexpr Index rv = r.value;
                     constexpr Index cv = c.value;
                     const Type e = SubMat<rv, cv>(_x).eval().det();
-                    if constexpr((rv + cv) % 2 == 0){
+                    if constexpr ((rv + cv) % 2 == 0) {
                         mat_eval.elem(cv, rv) = e;
-                    }
-                    else{
+                    } else {
                         mat_eval.elem(cv, rv) = -e;
                     }
                 });
@@ -56,24 +52,25 @@ namespace Peanut{
         }
 
         // Static polymorphism implementation of MatrixExpr
-        inline auto elem(Index r, Index c) const{
+        inline auto elem(Index r, Index c) const {
             return mat_eval.elem(r, c);
         }
 
         static constexpr Index row = E::row;
         static constexpr Index col = E::col;
 
-        inline Matrix<Type, row, col> eval() const{
+        inline Matrix<Type, row, col> eval() const {
             return mat_eval;
         }
 
         Matrix<Type, row, col> mat_eval;
     };
+}
 
-
-    template <typename E> requires is_matrix_v<E> && is_square_v<E>
-    MatrixAdjugate<E> Adjugate(const MatrixExpr<E> &x){
-        return MatrixAdjugate<E>(static_cast<const E&>(x));
+namespace Peanut {
+    template<typename E>
+        requires is_matrix_v<E> && is_square_v<E>
+    Impl::MatrixAdjugate<E> Adjugate(const MatrixExpr<E> &x) {
+        return Impl::MatrixAdjugate<E>(static_cast<const E &>(x));
     }
-
 }

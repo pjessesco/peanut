@@ -31,25 +31,22 @@
 
 // Dependencies headers
 
-namespace Peanut{
+namespace Peanut::Impl {
 
-    template<typename T, Index Row, Index Col> requires std::is_arithmetic_v<T> && (Row > 0) && (Col > 0)
-    struct Matrix;
-
-    template <typename E> requires is_matrix_v<E> && is_square_v<E>
-    struct MatrixInverse : public MatrixExpr<MatrixInverse<E>>{
+    template<typename E>
+        requires is_matrix_v<E> && is_square_v<E>
+    struct MatrixInverse : public MatrixExpr<MatrixInverse<E>> {
         using Type = Float;
         MatrixInverse(const E &_x) : x{_x} {
             // Evaluate adjugate matrix
-            for_<row>([&] (auto r) {
-                for_<col>([&] (auto c) {
+            for_<row>([&](auto r) {
+                for_<col>([&](auto c) {
                     constexpr Index rv = r.value;
                     constexpr Index cv = c.value;
                     const Float e = static_cast<Float>(SubMat<rv, cv>(_x).eval().det());
-                    if constexpr((rv + cv) % 2 == 0){
+                    if constexpr ((rv + cv) % 2 == 0) {
                         mat_eval.elem(cv, rv) = e;
-                    }
-                    else{
+                    } else {
                         mat_eval.elem(cv, rv) = -e;
                     }
                 });
@@ -58,31 +55,33 @@ namespace Peanut{
         }
 
         // Static polymorphism implementation of MatrixExpr
-        inline Float elem(Index r, Index c) const{
+        inline Float elem(Index r, Index c) const {
             return invdet * mat_eval.elem(r, c);
         }
 
         static constexpr Index row = E::row;
         static constexpr Index col = E::col;
 
-        inline Matrix<Type, row, col> eval() const{
+        inline Matrix<Type, row, col> eval() const {
             return Matrix<Type, row, col>(*this);
         }
 
-        const E &x; // used for optimization
+        const E &x;// used for optimization
         Matrix<Float, row, col> mat_eval;
         Float invdet;
     };
+}
 
-
-    template <typename E> requires is_matrix_v<E> && is_square_v<E>
-    MatrixInverse<E> Inverse(const MatrixExpr<E> &x){
-        return MatrixInverse<E>(static_cast<const E&>(x));
+namespace Peanut {
+    template<typename E>
+        requires is_matrix_v<E> && is_square_v<E>
+    Impl::MatrixInverse<E> Inverse(const MatrixExpr<E> &x) {
+        return Impl::MatrixInverse<E>(static_cast<const E &>(x));
     }
 
-    template <typename E> requires is_matrix_v<E> && is_square_v<E>
-    E Inverse(const MatrixInverse<E> &x){
-        return static_cast<const E&>(x.x);
+    template<typename E>
+        requires is_matrix_v<E> && is_square_v<E>
+    E Inverse(const Impl::MatrixInverse<E> &x) {
+        return static_cast<const E &>(x.x);
     }
-
 }

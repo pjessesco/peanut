@@ -31,35 +31,33 @@
 
 // Dependencies headers
 
-namespace Peanut{
-
-    template<typename T, Index Row, Index Col> requires std::is_arithmetic_v<T> && (Row > 0) && (Col > 0)
-    struct Matrix;
-
-    template <typename T, typename E> requires std::is_arithmetic_v<T> && is_matrix_v<E>
-    struct MatrixCastType : public MatrixExpr<MatrixCastType<T, E>>{
+namespace Peanut::Impl {
+    template<typename T, typename E>
+        requires std::is_arithmetic_v<T> && is_matrix_v<E>
+    struct MatrixCastType : public MatrixExpr<MatrixCastType<T, E>> {
         using Type = T;
         MatrixCastType(const E &x) : x{x} {}
 
         // Static polymorphism implementation of MatrixExpr
-        inline T elem(Index r, Index c) const{
+        inline T elem(Index r, Index c) const {
             return static_cast<T>(x.elem(r, c));
         }
 
         static constexpr Index row = E::row;
         static constexpr Index col = E::col;
 
-        inline Matrix<Type, row, col> eval() const{
+        inline Matrix<Type, row, col> eval() const {
             return Matrix<Type, row, col>(*this);
         }
 
         const E &x;
     };
+}
 
-
-    template <typename T, typename E> requires std::is_arithmetic_v<T> && is_matrix_v<E>
-    MatrixCastType<T, E> Cast(const MatrixExpr<E> &x){
-        return MatrixCastType<T, E>(static_cast<const E&>(x));
+namespace Peanut {
+    template<typename T, typename E>
+        requires std::is_arithmetic_v<T> && is_matrix_v<E>
+    Impl::MatrixCastType<T, E> Cast(const MatrixExpr<E> &x) {
+        return Impl::MatrixCastType<T, E>(static_cast<const E &>(x));
     }
-
 }
