@@ -7,7 +7,11 @@
 - Unit test (ongoing)
 
 ### Usage
-Copy `include` directory to your project, and include as below :
+Copy `Peanut` directory to your project, and add and its path to the include path. If you're using CMake, add :
+
+    include_directories(Peanut)
+
+Then include as below :
 
     #include "Matrix.h"
 
