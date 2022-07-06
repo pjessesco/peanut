@@ -6,7 +6,7 @@
 .. mdinclude:: ../README.md
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
 Indices and tables
@@ -16,10 +16,18 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
-Docs
+Public Interface
 ====
 
 .. doxygennamespace:: Peanut
+   :project: Peanut
+   :content-only:
+   :members:
+
+Details
+====
+
+.. doxygennamespace:: Peanut::Impl
    :project: Peanut
    :content-only:
    :members:
