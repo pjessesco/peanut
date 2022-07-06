@@ -85,7 +85,11 @@
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading"></a></h2>
-<p>Copy <code class="docutils literal notranslate"><span class="pre">include</span></code> directory to your project, and include as below :</p>
+<p>Copy <code class="docutils literal notranslate"><span class="pre">Peanut</span></code> directory to your project, and add and its path to the include path. If you’re using CMake, add :</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">include_directories</span><span class="p">(</span><span class="n">Peanut</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Then include as below :</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;Matrix.h&quot;</span>
 </pre></div>
 </div>
