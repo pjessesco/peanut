@@ -6,6 +6,9 @@ set(CMAKE_CXX_STANDARD 20)
 add_library(Peanut peanut.cpp)
 target_include_directories(Peanut PUBLIC peanut)
 
+add_subdirectory(eigen)
+add_subdirectory(armadillo-code)
+
 if(TEST)
     add_subdirectory(test)
 endif()
