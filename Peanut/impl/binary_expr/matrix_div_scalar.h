@@ -32,39 +32,38 @@
 
 // Dependencies headers
 
-namespace Peanut{
-
-    template<typename T, Index Row, Index Col> requires std::is_arithmetic_v<T> && (Row > 0) && (Col > 0)
-    struct Matrix;
-
-    template <typename E, typename T> requires is_matrix_v<E> && std::is_arithmetic_v<T>
-    struct MatrixDivScalar : public MatrixExpr<MatrixDivScalar<E, T>>{
+namespace Peanut::Impl {
+    template<typename E, typename T>
+        requires is_matrix_v<E> && std::is_arithmetic_v<T>
+    struct MatrixDivScalar : public MatrixExpr<MatrixDivScalar<E, T>> {
         using Type = Float;
         MatrixDivScalar(const E &x, T y) : x{x}, y{y} {
-            if(is_zero(y)){
+            if (is_zero(y)) {
                 throw std::invalid_argument("Divide by zero");
             }
         }
 
         // Static polymorphism implementation of MatrixExpr
-        inline Float elem(Index r, Index c) const{
+        inline Float elem(Index r, Index c) const {
             return static_cast<Type>(x.elem(r, c)) / static_cast<Float>(y);
         }
 
         static constexpr Index row = E::row;
         static constexpr Index col = E::col;
 
-        inline auto eval() const{
+        inline auto eval() const {
             return Matrix<Type, row, col>(*this);
         }
 
         const E &x;
         T y;
     };
+}
 
-    template <typename E, typename T> requires is_matrix_v<E> && std::is_arithmetic_v<T>
-    MatrixDivScalar<E, T> operator/(const MatrixExpr<E> &x, const T &y){
-        return MatrixDivScalar<E, T>(static_cast<const E&>(x), y);
+namespace Peanut {
+    template<typename E, typename T>
+        requires is_matrix_v<E> && std::is_arithmetic_v<T>
+    Impl::MatrixDivScalar<E, T> operator/(const MatrixExpr<E> &x, const T &y) {
+        return Impl::MatrixDivScalar<E, T>(static_cast<const E &>(x), y);
     }
-
 }

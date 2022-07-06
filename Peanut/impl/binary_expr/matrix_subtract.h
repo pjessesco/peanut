@@ -31,35 +31,34 @@
 
 // Dependencies headers
 
-namespace Peanut{
-
-    template<typename T, Index Row, Index Col> requires std::is_arithmetic_v<T> && (Row > 0) && (Col > 0)
-    struct Matrix;
-
-    template <typename E1, typename E2> requires is_equal_size_mat_v<E1, E2>
-    struct MatrixSubtract : public MatrixExpr<MatrixSubtract<E1, E2>>{
+namespace Peanut::Impl {
+    template<typename E1, typename E2>
+        requires is_equal_size_mat_v<E1, E2>
+    struct MatrixSubtract : public MatrixExpr<MatrixSubtract<E1, E2>> {
         using Type = typename E1::Type;
         MatrixSubtract(const E1 &x, const E2 &y) : x{x}, y{y} {}
 
         // Static polymorphism implementation of MatrixExpr
-        inline auto elem(Index r, Index c) const{
+        inline auto elem(Index r, Index c) const {
             return x.elem(r, c) - y.elem(r, c);
         }
 
         static constexpr Index row = E1::row;
         static constexpr Index col = E1::col;
 
-        inline auto eval() const{
+        inline auto eval() const {
             return Matrix<Type, row, col>(*this);
         }
 
         const E1 &x;
         const E2 &y;
     };
+}
 
-    template <typename E1, typename E2> requires is_equal_size_mat_v<E1, E2>
-    MatrixSubtract<E1, E2> operator-(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y){
-        return MatrixSubtract<E1, E2>(static_cast<const E1&>(x), static_cast<const E2&>(y));
+namespace Peanut {
+    template<typename E1, typename E2>
+        requires is_equal_size_mat_v<E1, E2>
+    Impl::MatrixSubtract<E1, E2> operator-(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y) {
+        return Impl::MatrixSubtract<E1, E2>(static_cast<const E1 &>(x), static_cast<const E2 &>(y));
     }
-
 }
