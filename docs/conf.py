@@ -27,7 +27,7 @@ author = 'Jino Park'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["breathe", "sphinx.ext.githubpages"]
+extensions = ["breathe", "sphinx.ext.githubpages", "sphinx_mdinclude"]
 
 breathe_default_project = "Peanut"
 

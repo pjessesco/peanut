@@ -11,7 +11,3 @@ Copy `include` directory to your project, and include as below :
 
     #include "Matrix.h"
 
-### Docs
-
-Refer a project [wiki page](https://github.com/pjessesco/peanut/wiki).
-

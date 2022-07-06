@@ -39,11 +39,11 @@ namespace Peanut {
     using Float = float;
 
     /**
-     * @brief Check if given \pval is zero or not.
+     * @brief Check if given \p val is zero or not.
      * @param[in] val Arithmetic type value which will be checked.
-     * @tparam T A arithmetic type of parameter \pval.
-     * @return If \pT is floating point type, returns true if \pval is close to zero, false if not.
-     *         If \pT is not a floating point type, returns true if \pval is zero, false if not.
+     * @tparam T A arithmetic type of parameter \p val.
+     * @return If \p T is floating point type, returns true if \p val is close to zero, false if not.
+     *         If \p T is not a floating point type, returns true if \p val is zero, false if not.
      */
     template<typename T>
     bool is_zero(T val) requires std::is_arithmetic_v<T>{
@@ -58,7 +58,7 @@ namespace Peanut {
 
     /**
      * @brief Compile-time checking structure if given constant is in range.
-     * @details constexpr `value` is true if \pstart <= \pvar < \pend, false otherwise.
+     * @details constexpr `value` is true if \p start <= \p var < \p end, false otherwise.
      * @tparam start Minimum value of the range.
      * @tparam var Constant which will be checked whether in range.
      */
@@ -68,13 +68,13 @@ namespace Peanut {
     };
 
     /**
-     * @brief Helper variable template for \pis_between<start, var, end>.
+     * @brief Helper variable template for `is_between<start, var, end>`.
      */
     template <Index start, Index var, Index end>
     constexpr bool is_between_v = is_between<start, var, end>::value;
 
     /**
-     * @brief Helper structure for \pfor_()
+     * @brief Helper structure for `for_()`
      */
     template<std::size_t N>
     struct num { static const constexpr auto value = N; };
