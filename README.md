@@ -7,17 +7,17 @@ Matrix<int, 4, 4> mat1{1,2,3,4,
                        1,2,3,4,
                        1,2,3,4};
 
-    Matrix<int, 3, 5> mat2{1,2,3,4,5,
-                           1,2,3,4,5,
-                           1,2,3,4,5};
+Matrix<int, 3, 5> mat2{1,2,3,4,5,
+                       1,2,3,4,5,
+                       1,2,3,4,5};
 
-    // Build expression tree first.
-    // `result` type is `MatrixMult<MatrixSubtract<MatrixSum<Matrix<int, 4, 4>, MatrixInverse<Matrix<int, 4, 4>>>, MatrixMinor<Matrix<int, 4, 4>>>, MatrixSub<2, 1, MatrixMult<MatrixTranspose<Matrix<int, 3, 5>>, Matrix<int, 3, 5>>>>`.
-    auto result = (mat1 + Inverse(mat1) - Minor(mat1)) * SubMat<2, 1>(T(mat2) * mat2);
+// Peanut first build expression tree,
+// `result` type is `MatrixMult<MatrixSubtract<MatrixSum<Matrix<int, 4, 4>, MatrixInverse<Matrix<int, 4, 4>>>, MatrixMinor<Matrix<int, 4, 4>>>, MatrixSub<2, 1, MatrixMult<MatrixTranspose<Matrix<int, 3, 5>>, Matrix<int, 3, 5>>>>`.
+auto result = (mat1 + Inverse(mat1) - Minor(mat1)) * SubMat<2, 1>(T(mat2) * mat2);
 
-    // Expression will be evaluated when `eval()` is called or assigned to `Matrix` type variable.
-    /* Matrix<int, 4, 4> */ auto e1 = result.eval();
-    Matrix<int, 4, 4> e2 = result;
+// then evaluate it when `eval()` is called or assigned to `Matrix` type variable.
+/* Matrix<int, 4, 4> */ auto e1 = result.eval();
+Matrix<int, 4, 4> e2 = result;
 ```
 
 ### Features
