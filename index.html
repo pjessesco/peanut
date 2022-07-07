@@ -75,6 +75,24 @@
   <section id="peanut">
 <h1>Peanut<a class="headerlink" href="#peanut" title="Permalink to this heading"></a></h1>
 <p><strong>Peanut</strong> is a header-only matrix library using C++20 without any external dependencies, (except unit test), following a <code class="docutils literal notranslate"><span class="pre">expression</span> <span class="pre">templates</span></code> concept. It first constructs matrix expression as a user provides, and evaluates it using an automatically generated code in a compile-time.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Matrix&lt;int, 4, 4&gt; mat1{1,2,3,4,
+                       1,2,3,4,
+                       1,2,3,4,
+                       1,2,3,4};
+
+    Matrix&lt;int, 3, 5&gt; mat2{1,2,3,4,5,
+                           1,2,3,4,5,
+                           1,2,3,4,5};
+
+    // Build expression tree first.
+    // `result` type is `MatrixMult&lt;MatrixSubtract&lt;MatrixSum&lt;Matrix&lt;int, 4, 4&gt;, MatrixInverse&lt;Matrix&lt;int, 4, 4&gt;&gt;&gt;, MatrixMinor&lt;Matrix&lt;int, 4, 4&gt;&gt;&gt;, MatrixSub&lt;2, 1, MatrixMult&lt;MatrixTranspose&lt;Matrix&lt;int, 3, 5&gt;&gt;, Matrix&lt;int, 3, 5&gt;&gt;&gt;&gt;`.
+    auto result = (mat1 + Inverse(mat1) - Minor(mat1)) * SubMat&lt;2, 1&gt;(T(mat2) * mat2);
+
+    // Expression will be evaluated when `eval()` is called or assigned to `Matrix` type variable.
+    /* Matrix&lt;int, 4, 4&gt; */ auto e1 = result.eval();
+    Matrix&lt;int, 4, 4&gt; e2 = result;
+</pre></div>
+</div>
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Permalink to this heading"></a></h2>
 <ul class="simple">
