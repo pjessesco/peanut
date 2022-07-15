@@ -37,44 +37,56 @@
                   1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30, \
                   1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30
 
+
+#define SUM_STR mat1+mat1+mat1+mat1+mat1+mat1+mat1+mat1
+
 int main() {
 
+    int iter = 100000;
     // Peanut benchmarking
     {
         Peanut::Matrix<int, 30, 30> mat1{NUMS30X30};
+        Peanut::Matrix<int, 30, 30> mat;
 
         auto time1 = std::chrono::system_clock::now();
-        for(int i=0;i<100000;i++){
-            auto mat = (mat1+mat1+mat1+mat1+mat1+mat1+mat1).eval();
+        for(int i=0;i<iter;i++){
+            mat = (SUM_STR).eval();
         }
         auto time2 = std::chrono::system_clock::now();
-        std::cout<<"Peanut : "<<std::chrono::duration_cast<std::chrono::microseconds>(time2 - time1).count() << " [micro-s]"<<std::endl;
 
+        std::cout<<"Peanut : "<<std::chrono::duration_cast<std::chrono::microseconds>(time2 - time1).count() << " [micro-s]"<<std::endl;
+        std::cout<<mat.elem(0, 0)<<std::endl;
     }
 
     // Eigen benchmarking
     {
         Eigen::Matrix<int, 30, 30> mat1;
+        Eigen::Matrix<int, 30, 30> mat;
         mat1<< NUMS30X30;
 
         auto time1 = std::chrono::system_clock::now();
-        for(int i=0;i<100000;i++){
-            auto mat = (mat1+mat1+mat1+mat1+mat1+mat1+mat1).eval();
+        for(int i=0;i<iter;i++){
+            mat = (SUM_STR).eval();
         }
         auto time2 = std::chrono::system_clock::now();
+
         std::cout<<"Eigen : "<<std::chrono::duration_cast<std::chrono::microseconds>(time2 - time1).count() << " [micro-s]"<<std::endl;
+        std::cout<<mat.coeff(0, 0)<<std::endl;
     }
 
     // Armadillo benchmarking
     {
         arma::Mat<int>::fixed<30, 30> mat1{NUMS30X30};
+        arma::Mat<int>::fixed<30, 30> mat;
 
         auto time1 = std::chrono::system_clock::now();
-        for(int i=0;i<100000;i++){
-            auto mat = (mat1+mat1+mat1+mat1+mat1+mat1+mat1).eval();
+        for(int i=0;i<iter;i++){
+            mat = (SUM_STR).eval();
         }
         auto time2 = std::chrono::system_clock::now();
+
         std::cout<<"Armadillo : "<<std::chrono::duration_cast<std::chrono::microseconds>(time2 - time1).count() << " [micro-s]"<<std::endl;
+        std::cout<<mat(0, 0)<<std::endl;
     }
 
     // Naive matrix benchmarking without expression template
@@ -82,8 +94,8 @@ int main() {
         MatrixBT<int, 30, 30> mat1{NUMS30X30};
 
         auto time1 = std::chrono::system_clock::now();
-        for(int i=0;i<100000;i++){
-            auto mat = mat1+mat1+mat1+mat1+mat1+mat1+mat1;
+        for(int i=0;i<iter;i++){
+            auto mat = SUM_STR;
         }
         auto time2 = std::chrono::system_clock::now();
         std::cout<<"Naive : "<<std::chrono::duration_cast<std::chrono::microseconds>(time2 - time1).count() << " [micro-s]"<<std::endl;
