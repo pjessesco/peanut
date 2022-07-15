@@ -28,6 +28,8 @@
 // Peanut headers
 #include "impl/common.h"
 #include "impl/matrix_type_traits.h"
+#include "impl/unary_expr/transpose.h"
+#include "impl/unary_expr/cofactor.h"
 
 // Dependencies headers
 
@@ -39,32 +41,19 @@ namespace Peanut::Impl {
      *          internally during construction to avoid duplicated calculation.
      * @tparam E Matrix expression type.
      */
-    // TODO : This struct can be deleted, since the inverse of matrix is equivalent
-    //        to the transpose of the cofactor (i.e., Inv(x) == T(Cofactor(x))).
     template<typename E>
         requires is_matrix_v<E> && is_square_v<E>
     struct MatrixInverse : public MatrixExpr<MatrixInverse<E>> {
         using Type = Float;
         MatrixInverse(const E &_x) : x{_x} {
-            // Evaluate adjugate matrix
-            for_<row>([&](auto r) {
-                for_<col>([&](auto c) {
-                    constexpr Index rv = r.value;
-                    constexpr Index cv = c.value;
-                    const Float e = static_cast<Float>(SubMat<rv, cv>(_x).eval().det());
-                    if constexpr ((rv + cv) % 2 == 0) {
-                        mat_eval.elem(cv, rv) = e;
-                    } else {
-                        mat_eval.elem(cv, rv) = -e;
-                    }
-                });
-            });
-            invdet = static_cast<Float>(1) / _x.eval().det();
+            Matrix<Float, E::row, E::col> x_eval = Cast<Float>(x);
+            cofactor_eval = Cofactor(x_eval);
+            invdet = static_cast<Float>(1) / x_eval.det();
         }
 
         // Static polymorphism implementation of MatrixExpr
         inline Float elem(Index r, Index c) const {
-            return invdet * mat_eval.elem(r, c);
+            return invdet * cofactor_eval.elem(c, r);
         }
 
         static constexpr Index row = E::row;
@@ -75,7 +64,7 @@ namespace Peanut::Impl {
         }
 
         const E &x;// used for optimization
-        Matrix<Float, row, col> mat_eval;
+        Matrix<Float, row, col> cofactor_eval;
         Float invdet;
     };
 }
