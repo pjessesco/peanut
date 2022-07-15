@@ -90,7 +90,7 @@ namespace Peanut {
     };
 
     /**
-     * @brief Helper variable template for `is_square_v<E>`.
+     * @brief Helper variable template for `is_square<E>`.
      */
     template <typename E>
     constexpr bool is_square_v = is_square<E>::value;

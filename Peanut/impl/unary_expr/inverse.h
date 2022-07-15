@@ -33,6 +33,14 @@
 
 namespace Peanut::Impl {
 
+    /**
+     * @brief Expression class which represents an inverse matrix.
+     * @details Note that `MatrixInverse` evaluates its input expression
+     *          internally during construction to avoid duplicated calculation.
+     * @tparam E Matrix expression type.
+     */
+    // TODO : This struct can be deleted, since the inverse of matrix is equivalent
+    //        to the transpose of the cofactor (i.e., Inv(x) == T(Cofactor(x))).
     template<typename E>
         requires is_matrix_v<E> && is_square_v<E>
     struct MatrixInverse : public MatrixExpr<MatrixInverse<E>> {
@@ -73,12 +81,27 @@ namespace Peanut::Impl {
 }
 
 namespace Peanut {
+    /**
+     * @brief Inverse operation of matrix. See `Impl::MatrixInverse`
+     *        and https://en.wikipedia.org/wiki/Invertible_matrix for details.
+     * @tparam E Matrix expression type.
+     * @return Constructed `Impl::MatrixInverse` instance
+     */
     template<typename E>
         requires is_matrix_v<E> && is_square_v<E>
     Impl::MatrixInverse<E> Inverse(const MatrixExpr<E> &x) {
         return Impl::MatrixInverse<E>(static_cast<const E &>(x));
     }
 
+    /**
+     * @brief Template specialization of `Inverse()` which represents an
+     *        inverse of an inverse of a matrix. It is equivalent to
+     *        a input of the given parameter (i.e., Inv(Inv(x)) = x), so
+     *        it does not construct a `MatrixInverse` instance.
+     * @tparam E Matrix expression type.
+     * @param x `MatrixInverse<E>` type matrix expression.
+     * @return Input of the given parameter `x`
+     */
     template<typename E>
         requires is_matrix_v<E> && is_square_v<E>
     E Inverse(const Impl::MatrixInverse<E> &x) {

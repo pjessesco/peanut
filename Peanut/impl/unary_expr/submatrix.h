@@ -33,6 +33,13 @@
 
 namespace Peanut::Impl {
 
+    /**
+     * @brief Expression class which represents a submatrix by excluding
+     *        given row and column.
+     * @tparam row_ex Row index which will be excluded.
+     * @tparam col_ex Column index which will be excluded.
+     * @tparam E Matrix expression type.
+     */
     template<Index row_ex, Index col_ex, typename E>
         requires is_matrix_v<E> && is_between_v<0, row_ex, E::row> && is_between_v<0, col_ex, E::col>
     struct MatrixSub : public MatrixExpr<MatrixSub<row_ex, col_ex, E>> {
@@ -56,6 +63,25 @@ namespace Peanut::Impl {
 }
 
 namespace Peanut {
+    /**
+     * @brief Get a submatrix matrix by excluding given row and column.
+     *        See `Impl::MatrixSub`
+     * @tparam row_ex Row index which will be excluded.
+     * @tparam col_ex Column index which will be excluded.
+     * @tparam E Matrix expression type.
+     * @return Constructed `Impl::MatrixSub` instance
+     *
+     *     Matrix<int, 4, 4> mat{1,2,3,4,
+     *                           5,6,7,8,
+     *                           9,0,1,2,
+     *                           3,4,5,6};
+     *
+     *     Matrix<int, 3, 3> ev = SubMat<1,2>(mat11);
+     *     // 1 2 4
+     *     // 9 0 2
+     *     // 3 4 6
+     *
+     */
     template<Index row_ex, Index col_ex, typename E>
         requires is_matrix_v<E> && is_between_v<0, row_ex, E::row> && is_between_v<0, col_ex, E::col>
     Impl::MatrixSub<row_ex, col_ex, E> SubMat(const MatrixExpr<E> &x) {

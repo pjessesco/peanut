@@ -32,6 +32,11 @@
 // Dependencies headers
 
 namespace Peanut::Impl {
+    /**
+     * @brief Expression class which represents a matrix type casting.
+     * @tparam T Target data type
+     * @tparam E Matrix expression type.
+     */
     template<typename T, typename E>
         requires std::is_arithmetic_v<T> && is_matrix_v<E>
     struct MatrixCastType : public MatrixExpr<MatrixCastType<T, E>> {
@@ -55,6 +60,18 @@ namespace Peanut::Impl {
 }
 
 namespace Peanut {
+    /**
+     * @brief Type casting of a matrix expression.
+     * @tparam T Target data type.
+     * @tparam E Matrix expression type.
+     * @return Constructed `Impl::MatrixCastType` instance.
+     *
+     *     Matrix<int, 2, 2> mat{1,2,
+     *                           3,4};
+     *
+     *     Matrix<float, 2, 2> ev = Cast<float>(mat);
+     *
+     */
     template<typename T, typename E>
         requires std::is_arithmetic_v<T> && is_matrix_v<E>
     Impl::MatrixCastType<T, E> Cast(const MatrixExpr<E> &x) {

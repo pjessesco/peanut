@@ -33,6 +33,12 @@
 
 namespace Peanut::Impl {
 
+    /**
+     * @brief Expression class which represents a cofactor matrix.
+     * @details Note that `MatrixCofactor` evaluates its input expression
+     *          internally during construction to avoid duplicated calculation.
+     * @tparam E Matrix expression type.
+     */
     template<typename E>
         requires is_matrix_v<E> && is_square_v<E>
     struct MatrixCofactor : public MatrixExpr<MatrixCofactor<E>> {
@@ -69,6 +75,12 @@ namespace Peanut::Impl {
 }
 
 namespace Peanut{
+    /**
+     * @brief Cofactor operation (i.e., signed minor) of a matrix.
+     *        See `Impl::MatrixCofactor` and https://en.wikipedia.org/wiki/Cofactor_(linear_algebra)
+     * @tparam E Matrix expression type.
+     * @return Constructed `Impl::MatrixCofactor` instance
+     */
     template <typename E> requires is_matrix_v<E> && is_square_v<E>
     Impl::MatrixCofactor<E> Cofactor(const MatrixExpr<E> &x){
         return Impl::MatrixCofactor<E>(static_cast<const E&>(x));

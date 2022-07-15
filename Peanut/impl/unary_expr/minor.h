@@ -32,6 +32,12 @@
 // Dependencies headers
 
 namespace Peanut::Impl {
+    /**
+     * @brief Expression class which represents a minor matrix.
+     * @details Note that `MatrixMinor` evaluates its input expression
+     *          internally during construction to avoid duplicated calculation.
+     * @tparam E Matrix expression type.
+     */
     template<typename E>
         requires is_matrix_v<E> && is_square_v<E>
     struct MatrixMinor : public MatrixExpr<MatrixMinor<E>> {
@@ -61,6 +67,12 @@ namespace Peanut::Impl {
 }
 
 namespace Peanut {
+    /**
+     * @brief Minor operation of a matrix.
+     *        See `Impl::MatrixMinor` and https://en.wikipedia.org/wiki/Minor_(linear_algebra).
+     * @tparam E Matrix expression type.
+     * @return Constructed `Impl::MatrixMinor` instance
+     */
     template<typename E>
         requires is_matrix_v<E> && is_square_v<E>
     Impl::MatrixMinor<E> Minor(const MatrixExpr<E> &x) {

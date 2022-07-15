@@ -32,6 +32,14 @@
 // Dependencies headers
 
 namespace Peanut::Impl {
+    /**
+     * @brief Expression class which represents a block submatrix.
+     * @tparam row_start Lower row index of the block
+     * @tparam col_start Lower column index of the block
+     * @tparam row_size Row size of the block
+     * @tparam col_size Column size of the block
+     * @tparam E Matrix expression type.
+     */
     template<Index row_start, Index col_start, Index row_size, Index col_size, typename E>
         requires is_matrix_v<E> && is_between_v<0, row_start, E::row> && is_between_v<0, col_start, E::col> &&
                  is_between_v<0, row_start + row_size, E::row + 1> && is_between_v<0, col_start + col_size, E::col + 1>
@@ -56,6 +64,26 @@ namespace Peanut::Impl {
 }
 
 namespace Peanut {
+    /**
+     * @brief Get a submatrix matrix. See `Impl::MatrixBlock`
+     * @tparam row_start Lower row index of the block
+     * @tparam col_start Lower column index of the block
+     * @tparam row_size Row size of the block
+     * @tparam col_size Column size of the block
+     * @tparam E Matrix expression type.
+     * @return Constructed `Impl::MatrixBlock` instance
+     *
+     *     Matrix<int, 4, 4> mat{1,2,3,4,
+     *                           5,6,7,8,
+     *                           9,0,1,2,
+     *                           3,4,5,6};
+     *
+     *     Matrix<int, 3, 2> ev = Block<0, 1, 3, 2>(mat11);
+     *     // 2 3
+     *     // 6 7
+     *     // 0 1
+     *
+     */
     template<Index row_start, Index col_start, Index row_size, Index col_size, typename E>
         requires is_matrix_v<E> && is_between_v<0, row_start, E::row> && is_between_v<0, col_start, E::col> &&
                  is_between_v<0, row_start + row_size, E::row + 1> && is_between_v<0, col_start + col_size, E::col + 1>

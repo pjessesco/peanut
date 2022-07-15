@@ -32,6 +32,12 @@
 // Dependencies headers
 
 namespace Peanut::Impl {
+
+    /**
+     * @brief Expression class which represents `operator*()`.
+     * @tparam E Matrix expression type operand.
+     * @tparam T Scalar type operand.
+     */
     template<typename E, typename T>
         requires is_matrix_v<E> && std::is_arithmetic_v<T>
     struct MatrixMultScalar : public MatrixExpr<MatrixMultScalar<E, T>> {
@@ -58,12 +64,25 @@ namespace Peanut::Impl {
 }
 
 namespace Peanut {
+
+    /**
+     * @brief Element-wise multiplication of matrix and scalar. See `Impl::MatrixMultScalar`.
+     * @tparam E Left hand side matrix expression type.
+     * @tparam T Right hand side scalar type.
+     * @return Constructed `Impl::MatrixMultScalar` instance
+     */
     template<typename E, typename T>
         requires is_matrix_v<E> && std::is_arithmetic_v<T>
     Impl::MatrixMultScalar<E, T> operator*(const MatrixExpr<E> &x, const T &y) {
         return Impl::MatrixMultScalar<E, T>(static_cast<const E &>(x), y);
     }
 
+    /**
+     * @brief Element-wise multiplication of matrix and scalar. See `Impl::MatrixMultScalar`.
+     * @tparam T Left hand side scalar type.
+     * @tparam E Right hand side matrix expression type.
+     * @return Constructed `Impl::MatrixMultScalar` instance
+     */
     template<typename E, typename T>
         requires is_matrix_v<E> && std::is_arithmetic_v<T>
     Impl::MatrixMultScalar<E, T> operator*(const T x, const MatrixExpr<E> &y) {

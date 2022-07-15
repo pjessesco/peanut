@@ -32,6 +32,12 @@
 // Dependencies headers
 
 namespace Peanut::Impl {
+
+    /**
+     * @brief Expression class which represents `operator+()`.
+     * @tparam E1 Left hand side matrix expression type.
+     * @tparam E2 Right hand side matrix expression type.
+     */
     template<typename E1, typename E2>
         requires is_equal_size_mat_v<E1, E2>
     struct MatrixSum : public MatrixExpr<MatrixSum<E1, E2>> {
@@ -56,6 +62,12 @@ namespace Peanut::Impl {
 }
 
 namespace Peanut {
+    /**
+     * @brief Addition operation of matrix. See `Impl::MatrixSum`
+     * @tparam E1 Left hand side matrix expression type.
+     * @tparam E2 Right hand side matrix expression type.
+     * @return Constructed `Impl::MatrixSum` instance
+     */
     template<typename E1, typename E2>
         requires is_equal_size_mat_v<E1, E2>
     Impl::MatrixSum<E1, E2> operator+(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y) {

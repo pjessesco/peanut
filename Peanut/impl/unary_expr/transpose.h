@@ -33,6 +33,10 @@
 
 namespace Peanut::Impl {
 
+    /**
+     * @brief Expression class which represents a transpose matrix.
+     * @tparam E Matrix expression type.
+     */
     template<typename E>
         requires is_matrix_v<E>
     struct MatrixTranspose : public MatrixExpr<MatrixTranspose<E>> {
@@ -56,12 +60,26 @@ namespace Peanut::Impl {
 }
 
 namespace Peanut{
+    /**
+     * @brief Transpose operation of matrix. See `Impl::MatrixTranspose`
+     *        and https://en.wikipedia.org/wiki/Transpose for details.
+     * @tparam E Matrix expression type.
+     * @return Constructed `Impl::MatrixTranspose` instance
+     */
     template<typename E>
         requires is_matrix_v<E>
     E T(const Impl::MatrixTranspose<E> &x) {
         return static_cast<const E &>(x.x);
     }
 
+    /**
+     * @brief Template specialization of `T()` which represents a
+     *        transpose of a transpose of a matrix. It is equivalent to
+     *        a input of the given parameter (i.e., T(T(x)) = x).
+     * @tparam E Matrix expression type.
+     * @param x `MatrixTranspose<E>` type matrix expression.
+     * @return Input of the given parameter `x`
+     */
     template<typename E>
         requires is_matrix_v<E>
     Impl::MatrixTranspose<E> T(const MatrixExpr<E> &x) {

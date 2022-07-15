@@ -33,6 +33,13 @@
 // Dependencies headers
 
 namespace Peanut::Impl {
+
+    /**
+     * @brief Expression class which represents `operator/()`. It represents
+     *        `Float` type matrix while evaluation always.
+     * @tparam E Left hand side matrix expression type.
+     * @tparam T Right hand side scalar type.
+     */
     template<typename E, typename T>
         requires is_matrix_v<E> && std::is_arithmetic_v<T>
     struct MatrixDivScalar : public MatrixExpr<MatrixDivScalar<E, T>> {
@@ -61,6 +68,13 @@ namespace Peanut::Impl {
 }
 
 namespace Peanut {
+
+    /**
+     * @brief Element-wise division of matrix and scalar. See `Impl::MatrixDivScalar`.
+     * @tparam E Left hand side matrix expression type.
+     * @tparam T Right hand side scalar type.
+     * @return Constructed `Impl::MatrixDivScalar` instance
+     */
     template<typename E, typename T>
         requires is_matrix_v<E> && std::is_arithmetic_v<T>
     Impl::MatrixDivScalar<E, T> operator/(const MatrixExpr<E> &x, const T &y) {

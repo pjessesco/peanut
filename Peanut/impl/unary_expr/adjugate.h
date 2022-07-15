@@ -32,6 +32,12 @@
 // Dependencies headers
 
 namespace Peanut::Impl {
+    /**
+     * @brief Expression class which represents an adjugate matrix.
+     * @details Note that `MatrixAdjugate` evaluates its input expression
+     *          internally during construction to avoid duplicated calculation.
+     * @tparam E Matrix expression type.
+     */
     template<typename E>
         requires is_matrix_v<E> && is_square_v<E>
     struct MatrixAdjugate : public MatrixExpr<MatrixAdjugate<E>> {
@@ -68,6 +74,12 @@ namespace Peanut::Impl {
 }
 
 namespace Peanut {
+    /**
+     * @brief Adjugate operation of matrix. See `Impl::MatrixAdjugate`
+     *        and https://en.wikipedia.org/wiki/Adjugate_matrix for details.
+     * @tparam E Matrix expression type.
+     * @return Constructed `Impl::MatrixAdjugate` instance
+     */
     template<typename E>
         requires is_matrix_v<E> && is_square_v<E>
     Impl::MatrixAdjugate<E> Adjugate(const MatrixExpr<E> &x) {
