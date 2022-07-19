@@ -1,6 +1,8 @@
 #include <iostream>
 #include <chrono>
 
+#define EIGEN_DONT_VECTORIZE
+
 #include "Matrix.h"
 #include "eigen/Eigen/Core"
 #include "armadillo-code/include/armadillo"
@@ -8,7 +10,7 @@
 
 #include "longmatstr.h"
 
-#define SUM_STR mat1+mat1+mat1+mat1+mat1+mat1+mat1+mat1+mat1+mat1
+#define SUM_STR ((mat1+mat1)*mat1*(mat1*mat1))+mat1+(mat1*mat1)
 #define MAT_STR NUMSTR_10000
 
 int main() {
