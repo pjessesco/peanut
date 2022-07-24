@@ -105,7 +105,7 @@ namespace Peanut {
         /**
          * @brief Constructor without any parameters initialize to zero matrix.
          */
-        Matrix() {m_data.fill(t_0);}
+        Matrix() {m_data.d1.fill(t_0);}
 
         /**
          * @brief Constructor with initializer list.
@@ -153,9 +153,9 @@ namespace Peanut {
          */
         static Matrix identity() requires is_square_v<Matrix> {
             Matrix a;
-            a.m_data.fill(t_0);
-            for (Index i = 0; i < Row * Col; i += (Row + 1)) {
-                a.m_data[i] = t_1;
+            a.m_data.d1.fill(t_0);
+            for (Index i = 0; i < Row; i++) {
+                a.m_data.d2[i][i] = t_1;
             }
             return a;
         }
@@ -168,7 +168,7 @@ namespace Peanut {
          */
         inline T elem(Index r, Index c) const{
             assert((0<=r) && (r < Row) && (0<=c) && (c < Col));
-            return m_data[Col*r+c];
+            return m_data.d2[r][c];
         }
 
         /**
@@ -181,7 +181,7 @@ namespace Peanut {
          */
         inline T& elem(Index r, Index c) {
             assert((0<=r) && (r < Row) && (0<=c) && (c < Col));
-            return m_data[Col*r+c];
+            return m_data.d2[r][c];
         }
 
         /**
@@ -200,10 +200,14 @@ namespace Peanut {
          */
         friend std::ostream &operator<<(std::ostream &os, const Matrix &matrix) {
             for(int i=0;i<Row*Col;i++){
-                os << matrix.m_data[i]<<" ";
+                os << matrix.m_data.d1[i]<<" ";
             }
             return os;
         }
+
+//        Matrix<T, 1, col> row(Index r) const{
+//
+//        }
 
         /**
          * @brief Helper function for Gaussian elimination. It performs row
@@ -286,6 +290,10 @@ namespace Peanut {
     private:
         static constexpr T t_1 = static_cast<T>(1);
         static constexpr T t_0 = static_cast<T>(0);
-        std::array<T, Row*Col> m_data;
+        union {
+            std::array<T, Row*Col> d1;
+            T d2[Row][Col];
+        } m_data;
+
     };
 }

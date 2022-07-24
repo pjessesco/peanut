@@ -106,21 +106,30 @@ TEST_CASE("Static constructors : identity()"){
 }
 
 TEST_CASE("elem() : Element getter/setter"){
-    auto intmat = Peanut::Matrix<int, 2, 2>::identity();
-    CHECK(intmat.elem(0, 0) == 1);
-    CHECK(intmat.elem(0, 1) == 0);
-    CHECK(intmat.elem(1, 0) == 0);
-    CHECK(intmat.elem(1, 1) == 1);
+    SECTION("Square matrix"){
+        auto intmat = Peanut::Matrix<int, 2, 2>::identity();
+        CHECK(intmat.elem(0, 0) == 1);
+        CHECK(intmat.elem(0, 1) == 0);
+        CHECK(intmat.elem(1, 0) == 0);
+        CHECK(intmat.elem(1, 1) == 1);
 
-    intmat.elem(0, 0) = 5;
-    intmat.elem(0, 1) = 6;
-    intmat.elem(1, 0) = 7;
-    intmat.elem(1, 1) = 8;
+        intmat.elem(0, 0) = 5;
+        intmat.elem(0, 1) = 6;
+        intmat.elem(1, 0) = 7;
+        intmat.elem(1, 1) = 8;
 
-    CHECK(intmat.elem(0, 0) == 5);
-    CHECK(intmat.elem(0, 1) == 6);
-    CHECK(intmat.elem(1, 0) == 7);
-    CHECK(intmat.elem(1, 1) == 8);
+        CHECK(intmat.elem(0, 0) == 5);
+        CHECK(intmat.elem(0, 1) == 6);
+        CHECK(intmat.elem(1, 0) == 7);
+        CHECK(intmat.elem(1, 1) == 8);
+    }
+    SECTION("Non-square matrix"){
+        Peanut::Matrix<int, 4, 1> intmat{1,2,3,4};
+        CHECK(intmat.elem(0, 0) == 1);
+        CHECK(intmat.elem(1, 0) == 2);
+        CHECK(intmat.elem(2, 0) == 3);
+        CHECK(intmat.elem(3, 0) == 4);
+    }
 }
 
 TEST_CASE("gaussian_elimination"){
