@@ -68,16 +68,6 @@ namespace Peanut {
         }
 
         /**
-         * @brief Get a reference of element in \p r 'th row and \p c 'th column.
-         * @param r Row index.
-         * @param c Col index.
-         * @return Reference of an element in \p r 'th row and \p c 'th column.
-         */
-        inline auto& elem(Index r, Index c) {
-            return static_cast<const E&>(*this).elem(r, c);
-        }
-
-        /**
          * @brief Row size of the expression \p E.
          */
         static constexpr Index row = E::row;
@@ -101,6 +91,16 @@ namespace Peanut {
          * @brief Data type. See the detailed description of \p MatrixExpr.
          */
         using Type = T;
+
+        /**
+         * @brief Row size of the matrix.
+         */
+        static constexpr Index row = Row;
+
+        /**
+         * @brief Column size of the matrix.
+         */
+        static constexpr Index col = Col;
 
         /**
          * @brief Constructor without any parameters initialize to zero matrix.
@@ -172,7 +172,9 @@ namespace Peanut {
         }
 
         /**
-         * @brief Implementation of `MatrixExpr::elem()` which returns a reference.
+         * @brief Get a reference of element in \p r 'th row and \p c 'th column.
+         *        Note that `Peanut` allows to access lvalue for an evaluated
+         *        matrix only.
          * @param r Row index.
          * @param c Col index.
          * @return Reference of an element in \p r 'th row and \p c 'th column.
@@ -181,16 +183,6 @@ namespace Peanut {
             assert((0<=r) && (r < Row) && (0<=c) && (c < Col));
             return m_data[Col*r+c];
         }
-
-        /**
-         * @brief Row size of the matrix.
-         */
-        static constexpr Index row = Row;
-
-        /**
-         * @brief Column size of the matrix.
-         */
-        static constexpr Index col = Col;
 
         /**
          * @brief Evaluation expressions and return as a `Matrix` instance.
