@@ -27,7 +27,7 @@
 #include <vector>
 
 // Peanut headers
-#include <Matrix.h>
+#include <Peanut.h>
 
 // Dependencies headers
 #include "catch_amalgamated.hpp"

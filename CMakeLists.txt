@@ -3,7 +3,7 @@ project(Peanut)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_library(Peanut peanut.cpp)
+add_library(Peanut Peanut.cpp)
 target_include_directories(Peanut PUBLIC peanut)
 
 if(TEST)
