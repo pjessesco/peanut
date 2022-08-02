@@ -26,63 +26,55 @@
 // Standard headers
 
 // Peanut headers
-#include "impl/common.h"
-#include "impl/matrix_type_traits.h"
+#include <Peanut/impl/common.h>
+#include <Peanut/impl/matrix_type_traits.h>
 
 // Dependencies headers
 
 namespace Peanut::Impl {
-
     /**
-     * @brief Expression class which represents a cofactor matrix.
-     * @details Note that `MatrixCofactor` evaluates its input expression
-     *          internally during construction to avoid duplicated calculation.
+     * @brief Expression class which represents a matrix type casting.
+     * @tparam T Target data type
      * @tparam E Matrix expression type.
      */
-    template<typename E>
-        requires is_matrix_v<E> && is_square_v<E>
-    struct MatrixCofactor : public MatrixExpr<MatrixCofactor<E>> {
-        using Type = typename E::Type;
-        MatrixCofactor(const E &_x) {
-            for_<row>([&](auto r) {
-                for_<col>([&](auto c) {
-                    constexpr Index rv = r.value;
-                    constexpr Index cv = c.value;
-                    const Type e = SubMat<rv, cv>(_x).eval().det();
-                    if constexpr ((rv + cv) % 2 == 0) {
-                        mat_eval.elem(rv, cv) = e;
-                    } else {
-                        mat_eval.elem(rv, cv) = -e;
-                    }
-                });
-            });
-        }
+    template<typename T, typename E>
+        requires std::is_arithmetic_v<T> && is_matrix_v<E>
+    struct MatrixCastType : public MatrixExpr<MatrixCastType<T, E>> {
+        using Type = T;
+        MatrixCastType(const E &x) : x{x} {}
 
         // Static polymorphism implementation of MatrixExpr
-        inline auto elem(Index r, Index c) const {
-            return mat_eval.elem(r, c);
+        inline T elem(Index r, Index c) const {
+            return static_cast<T>(x.elem(r, c));
         }
 
         static constexpr Index row = E::row;
         static constexpr Index col = E::col;
 
         inline Matrix<Type, row, col> eval() const {
-            return mat_eval;
+            return Matrix<Type, row, col>(*this);
         }
 
-        Peanut::Matrix<Type, row, col> mat_eval;
+        const E &x;
     };
 }
 
-namespace Peanut{
+namespace Peanut {
     /**
-     * @brief Cofactor operation (i.e., signed minor) of a matrix.
-     *        See `Impl::MatrixCofactor` and https://en.wikipedia.org/wiki/Cofactor_(linear_algebra)
+     * @brief Type casting of a matrix expression.
+     * @tparam T Target data type.
      * @tparam E Matrix expression type.
-     * @return Constructed `Impl::MatrixCofactor` instance
+     * @return Constructed `Impl::MatrixCastType` instance.
+     *
+     *     Matrix<int, 2, 2> mat{1,2,
+     *                           3,4};
+     *
+     *     Matrix<float, 2, 2> ev = Cast<float>(mat);
+     *
      */
-    template <typename E> requires is_matrix_v<E> && is_square_v<E>
-    Impl::MatrixCofactor<E> Cofactor(const MatrixExpr<E> &x){
-        return Impl::MatrixCofactor<E>(static_cast<const E&>(x));
+    template<typename T, typename E>
+        requires std::is_arithmetic_v<T> && is_matrix_v<E>
+    Impl::MatrixCastType<T, E> Cast(const MatrixExpr<E> &x) {
+        return Impl::MatrixCastType<T, E>(static_cast<const E &>(x));
     }
 }

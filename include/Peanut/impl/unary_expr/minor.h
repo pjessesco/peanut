@@ -26,74 +26,56 @@
 // Standard headers
 
 // Peanut headers
-#include "impl/common.h"
-#include "impl/matrix_type_traits.h"
-#include "impl/unary_expr/transpose.h"
-#include "impl/unary_expr/cofactor.h"
+#include <Peanut/impl/common.h>
+#include <Peanut/impl/matrix_type_traits.h>
 
 // Dependencies headers
 
 namespace Peanut::Impl {
-
     /**
-     * @brief Expression class which represents an inverse matrix.
-     * @details Note that `MatrixInverse` evaluates its input expression
+     * @brief Expression class which represents a minor matrix.
+     * @details Note that `MatrixMinor` evaluates its input expression
      *          internally during construction to avoid duplicated calculation.
      * @tparam E Matrix expression type.
      */
     template<typename E>
         requires is_matrix_v<E> && is_square_v<E>
-    struct MatrixInverse : public MatrixExpr<MatrixInverse<E>> {
-        using Type = Float;
-        MatrixInverse(const E &_x) : x{_x} {
-            Matrix<Float, E::row, E::col> x_eval = Cast<Float>(x);
-            cofactor_eval = Cofactor(x_eval);
-            invdet = static_cast<Float>(1) / x_eval.det();
+    struct MatrixMinor : public MatrixExpr<MatrixMinor<E>> {
+        using Type = typename E::Type;
+        MatrixMinor(const E &_x) {
+            for_<row>([&](auto r) {
+                for_<col>([&](auto c) {
+                    mat_eval.elem(r.value, c.value) = SubMat<r.value, c.value>(_x).eval().det();
+                });
+            });
         }
 
         // Static polymorphism implementation of MatrixExpr
-        inline Float elem(Index r, Index c) const {
-            return invdet * cofactor_eval.elem(c, r);
+        inline auto elem(Index r, Index c) const {
+            return mat_eval.elem(r, c);
         }
 
         static constexpr Index row = E::row;
         static constexpr Index col = E::col;
 
         inline Matrix<Type, row, col> eval() const {
-            return Matrix<Type, row, col>(*this);
+            return mat_eval;
         }
 
-        const E &x;// used for optimization
-        Matrix<Float, row, col> cofactor_eval;
-        Float invdet;
+        Matrix<Type, row, col> mat_eval;
     };
 }
 
 namespace Peanut {
     /**
-     * @brief Inverse operation of matrix. See `Impl::MatrixInverse`
-     *        and https://en.wikipedia.org/wiki/Invertible_matrix for details.
+     * @brief Minor operation of a matrix.
+     *        See `Impl::MatrixMinor` and https://en.wikipedia.org/wiki/Minor_(linear_algebra).
      * @tparam E Matrix expression type.
-     * @return Constructed `Impl::MatrixInverse` instance
+     * @return Constructed `Impl::MatrixMinor` instance
      */
     template<typename E>
         requires is_matrix_v<E> && is_square_v<E>
-    Impl::MatrixInverse<E> Inverse(const MatrixExpr<E> &x) {
-        return Impl::MatrixInverse<E>(static_cast<const E &>(x));
-    }
-
-    /**
-     * @brief Template specialization of `Inverse()` which represents an
-     *        inverse of an inverse of a matrix. It is equivalent to
-     *        a input of the given parameter (i.e., Inv(Inv(x)) = x), so
-     *        it does not construct a `MatrixInverse` instance.
-     * @tparam E Matrix expression type.
-     * @param x `MatrixInverse<E>` type matrix expression.
-     * @return Input of the given parameter `x`
-     */
-    template<typename E>
-        requires is_matrix_v<E> && is_square_v<E>
-    E Inverse(const Impl::MatrixInverse<E> &x) {
-        return static_cast<const E &>(x.x);
+    Impl::MatrixMinor<E> Minor(const MatrixExpr<E> &x) {
+        return Impl::MatrixMinor<E>(static_cast<const E &>(x));
     }
 }

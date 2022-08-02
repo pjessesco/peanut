@@ -27,10 +27,10 @@
 // Standard headers
 
 // Peanut headers
-#include "impl/common.h"
-#include "impl/matrix.h"
-#include "impl/matrix_binary_op.h"
-#include "impl/matrix_type_traits.h"
-#include "impl/matrix_unary_op.h"
+#include <Peanut/impl/common.h>
+#include <Peanut/impl/matrix.h>
+#include <Peanut/impl/matrix_binary_op.h>
+#include <Peanut/impl/matrix_type_traits.h>
+#include <Peanut/impl/matrix_unary_op.h>
 
 // Dependencies headers

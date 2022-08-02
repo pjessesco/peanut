@@ -24,58 +24,60 @@
 #pragma once
 
 // Standard headers
+#include <stdexcept>
 
 // Peanut headers
-#include "impl/common.h"
-#include "impl/matrix_type_traits.h"
+#include <Peanut/impl/common.h>
+#include <Peanut/impl/matrix_type_traits.h>
 
 // Dependencies headers
 
 namespace Peanut::Impl {
+
     /**
-     * @brief Expression class which represents a minor matrix.
-     * @details Note that `MatrixMinor` evaluates its input expression
-     *          internally during construction to avoid duplicated calculation.
-     * @tparam E Matrix expression type.
+     * @brief Expression class which represents `operator/()`. It represents
+     *        `Float` type matrix while evaluation always.
+     * @tparam E Left hand side matrix expression type.
+     * @tparam T Right hand side scalar type.
      */
-    template<typename E>
-        requires is_matrix_v<E> && is_square_v<E>
-    struct MatrixMinor : public MatrixExpr<MatrixMinor<E>> {
-        using Type = typename E::Type;
-        MatrixMinor(const E &_x) {
-            for_<row>([&](auto r) {
-                for_<col>([&](auto c) {
-                    mat_eval.elem(r.value, c.value) = SubMat<r.value, c.value>(_x).eval().det();
-                });
-            });
+    template<typename E, typename T>
+        requires is_matrix_v<E> && std::is_arithmetic_v<T>
+    struct MatrixDivScalar : public MatrixExpr<MatrixDivScalar<E, T>> {
+        using Type = Float;
+        MatrixDivScalar(const E &x, T y) : x{x}, y{y} {
+            if (is_zero(y)) {
+                throw std::invalid_argument("Divide by zero");
+            }
         }
 
         // Static polymorphism implementation of MatrixExpr
-        inline auto elem(Index r, Index c) const {
-            return mat_eval.elem(r, c);
+        inline Float elem(Index r, Index c) const {
+            return static_cast<Type>(x.elem(r, c)) / static_cast<Float>(y);
         }
 
         static constexpr Index row = E::row;
         static constexpr Index col = E::col;
 
-        inline Matrix<Type, row, col> eval() const {
-            return mat_eval;
+        inline auto eval() const {
+            return Matrix<Type, row, col>(*this);
         }
 
-        Matrix<Type, row, col> mat_eval;
+        const E &x;
+        T y;
     };
 }
 
 namespace Peanut {
+
     /**
-     * @brief Minor operation of a matrix.
-     *        See `Impl::MatrixMinor` and https://en.wikipedia.org/wiki/Minor_(linear_algebra).
-     * @tparam E Matrix expression type.
-     * @return Constructed `Impl::MatrixMinor` instance
+     * @brief Element-wise division of matrix and scalar. See `Impl::MatrixDivScalar`.
+     * @tparam E Left hand side matrix expression type.
+     * @tparam T Right hand side scalar type.
+     * @return Constructed `Impl::MatrixDivScalar` instance
      */
-    template<typename E>
-        requires is_matrix_v<E> && is_square_v<E>
-    Impl::MatrixMinor<E> Minor(const MatrixExpr<E> &x) {
-        return Impl::MatrixMinor<E>(static_cast<const E &>(x));
+    template<typename E, typename T>
+        requires is_matrix_v<E> && std::is_arithmetic_v<T>
+    Impl::MatrixDivScalar<E, T> operator/(const MatrixExpr<E> &x, const T &y) {
+        return Impl::MatrixDivScalar<E, T>(static_cast<const E &>(x), y);
     }
 }

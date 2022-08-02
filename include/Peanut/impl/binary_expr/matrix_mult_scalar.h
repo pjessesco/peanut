@@ -24,35 +24,31 @@
 #pragma once
 
 // Standard headers
-#include <stdexcept>
 
 // Peanut headers
-#include "impl/common.h"
-#include "impl/matrix_type_traits.h"
+#include <Peanut/impl/common.h>
+#include <Peanut/impl/matrix_type_traits.h>
 
 // Dependencies headers
 
 namespace Peanut::Impl {
 
     /**
-     * @brief Expression class which represents `operator/()`. It represents
-     *        `Float` type matrix while evaluation always.
-     * @tparam E Left hand side matrix expression type.
-     * @tparam T Right hand side scalar type.
+     * @brief Expression class which represents `operator*()`.
+     * @tparam E Matrix expression type operand.
+     * @tparam T Scalar type operand.
      */
     template<typename E, typename T>
         requires is_matrix_v<E> && std::is_arithmetic_v<T>
-    struct MatrixDivScalar : public MatrixExpr<MatrixDivScalar<E, T>> {
-        using Type = Float;
-        MatrixDivScalar(const E &x, T y) : x{x}, y{y} {
-            if (is_zero(y)) {
-                throw std::invalid_argument("Divide by zero");
-            }
-        }
+    struct MatrixMultScalar : public MatrixExpr<MatrixMultScalar<E, T>> {
+        using Type = typename std::conditional<
+                std::is_floating_point_v<typename E::Type> || std::is_floating_point_v<T>,
+                Float, T>::type;
+        MatrixMultScalar(const E &x, T y) : x{x}, y{y} {}
 
         // Static polymorphism implementation of MatrixExpr
-        inline Float elem(Index r, Index c) const {
-            return static_cast<Type>(x.elem(r, c)) / static_cast<Float>(y);
+        inline Type elem(Index r, Index c) const {
+            return static_cast<Type>(x.elem(r, c)) * static_cast<Type>(y);
         }
 
         static constexpr Index row = E::row;
@@ -70,14 +66,26 @@ namespace Peanut::Impl {
 namespace Peanut {
 
     /**
-     * @brief Element-wise division of matrix and scalar. See `Impl::MatrixDivScalar`.
+     * @brief Element-wise multiplication of matrix and scalar. See `Impl::MatrixMultScalar`.
      * @tparam E Left hand side matrix expression type.
      * @tparam T Right hand side scalar type.
-     * @return Constructed `Impl::MatrixDivScalar` instance
+     * @return Constructed `Impl::MatrixMultScalar` instance
      */
     template<typename E, typename T>
         requires is_matrix_v<E> && std::is_arithmetic_v<T>
-    Impl::MatrixDivScalar<E, T> operator/(const MatrixExpr<E> &x, const T &y) {
-        return Impl::MatrixDivScalar<E, T>(static_cast<const E &>(x), y);
+    Impl::MatrixMultScalar<E, T> operator*(const MatrixExpr<E> &x, const T &y) {
+        return Impl::MatrixMultScalar<E, T>(static_cast<const E &>(x), y);
+    }
+
+    /**
+     * @brief Element-wise multiplication of matrix and scalar. See `Impl::MatrixMultScalar`.
+     * @tparam T Left hand side scalar type.
+     * @tparam E Right hand side matrix expression type.
+     * @return Constructed `Impl::MatrixMultScalar` instance
+     */
+    template<typename E, typename T>
+        requires is_matrix_v<E> && std::is_arithmetic_v<T>
+    Impl::MatrixMultScalar<E, T> operator*(const T x, const MatrixExpr<E> &y) {
+        return Impl::MatrixMultScalar<E, T>(static_cast<const E &>(y), x);
     }
 }

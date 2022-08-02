@@ -32,8 +32,8 @@
 #include <type_traits>
 
 // Peanut headers
-#include "common.h"
-#include "matrix_type_traits.h"
+#include <Peanut/impl/common.h>
+#include <Peanut/impl/matrix_type_traits.h>
 
 // Dependencies headers
 

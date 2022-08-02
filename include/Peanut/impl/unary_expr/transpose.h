@@ -26,63 +26,64 @@
 // Standard headers
 
 // Peanut headers
-#include "impl/common.h"
-#include "impl/matrix_type_traits.h"
+#include <Peanut/impl/common.h>
+#include <Peanut/impl/matrix_type_traits.h>
 
 // Dependencies headers
 
 namespace Peanut::Impl {
+
     /**
-     * @brief Expression class which represents an adjugate matrix.
-     * @details Note that `MatrixAdjugate` evaluates its input expression
-     *          internally during construction to avoid duplicated calculation.
+     * @brief Expression class which represents a transpose matrix.
      * @tparam E Matrix expression type.
      */
     template<typename E>
-        requires is_matrix_v<E> && is_square_v<E>
-    struct MatrixAdjugate : public MatrixExpr<MatrixAdjugate<E>> {
+        requires is_matrix_v<E>
+    struct MatrixTranspose : public MatrixExpr<MatrixTranspose<E>> {
         using Type = typename E::Type;
-        MatrixAdjugate(const E &_x) {
-            for_<row>([&](auto r) {
-                for_<col>([&](auto c) {
-                    constexpr Index rv = r.value;
-                    constexpr Index cv = c.value;
-                    const Type e = SubMat<rv, cv>(_x).eval().det();
-                    if constexpr ((rv + cv) % 2 == 0) {
-                        mat_eval.elem(cv, rv) = e;
-                    } else {
-                        mat_eval.elem(cv, rv) = -e;
-                    }
-                });
-            });
-        }
+        MatrixTranspose(const E &x) : x{x} {}
 
         // Static polymorphism implementation of MatrixExpr
         inline auto elem(Index r, Index c) const {
-            return mat_eval.elem(r, c);
+            return x.elem(c, r);
         }
 
-        static constexpr Index row = E::row;
-        static constexpr Index col = E::col;
+        static constexpr Index row = E::col;
+        static constexpr Index col = E::row;
 
         inline Matrix<Type, row, col> eval() const {
-            return mat_eval;
+            return Matrix<Type, row, col>(*this);
         }
 
-        Matrix<Type, row, col> mat_eval;
+        const E &x;
     };
 }
 
-namespace Peanut {
+namespace Peanut{
     /**
-     * @brief Adjugate operation of matrix. See `Impl::MatrixAdjugate`
-     *        and https://en.wikipedia.org/wiki/Adjugate_matrix for details.
+     * @brief Transpose operation of matrix. See `Impl::MatrixTranspose`
+     *        and https://en.wikipedia.org/wiki/Transpose for details.
      * @tparam E Matrix expression type.
-     * @return Constructed `Impl::MatrixAdjugate` instance
+     * @return Constructed `Impl::MatrixTranspose` instance
      */
     template<typename E>
-        requires is_matrix_v<E> && is_square_v<E>
-    Impl::MatrixAdjugate<E> Adjugate(const MatrixExpr<E> &x) {
-        return Impl::MatrixAdjugate<E>(static_cast<const E &>(x));
+        requires is_matrix_v<E>
+    Impl::MatrixTranspose<E> T(const MatrixExpr<E> &x) {
+        return Impl::MatrixTranspose<E>(static_cast<const E &>(x));
     }
+
+    /**
+     * @brief Template specialization of `T()` which represents a
+     *        transpose of a transpose of a matrix. It is equivalent to
+     *        a input of the given parameter (i.e., T(T(x)) = x).
+     * @tparam E Matrix expression type.
+     * @param x `MatrixTranspose<E>` type matrix expression.
+     * @return Input of the given parameter `x`
+     */
+    template<typename E>
+        requires is_matrix_v<E>
+    E T(const Impl::MatrixTranspose<E> &x) {
+        return static_cast<const E &>(x.x);
+    }
+
 }

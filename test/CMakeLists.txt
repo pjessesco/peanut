@@ -7,4 +7,4 @@ add_executable(PeanutTest
     test_matrix_unary_op.cpp
 )
 
-target_include_directories(PeanutTest PUBLIC ../Peanut)
+target_include_directories(PeanutTest PUBLIC ../include/Peanut)

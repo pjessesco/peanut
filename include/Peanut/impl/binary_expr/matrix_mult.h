@@ -26,8 +26,8 @@
 // Standard headers
 
 // Peanut headers
-#include "impl/common.h"
-#include "impl/matrix_type_traits.h"
+#include <Peanut/impl/common.h>
+#include <Peanut/impl/matrix_type_traits.h>
 
 // Dependencies headers
 

@@ -27,11 +27,11 @@
 // Standard headers
 
 // Peanut headers
-#include "binary_expr/matrix_div_scalar.h"
-#include "binary_expr/matrix_mult.h"
-#include "binary_expr/matrix_mult_scalar.h"
-#include "binary_expr/matrix_subtract.h"
-#include "binary_expr/matrix_sum.h"
+#include <Peanut/impl/binary_expr/matrix_div_scalar.h>
+#include <Peanut/impl/binary_expr/matrix_mult.h>
+#include <Peanut/impl/binary_expr/matrix_mult_scalar.h>
+#include <Peanut/impl/binary_expr/matrix_subtract.h>
+#include <Peanut/impl/binary_expr/matrix_sum.h>
 
 // Dependencies headers
 
