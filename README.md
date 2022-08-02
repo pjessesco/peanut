@@ -28,13 +28,14 @@ Matrix<int, 4, 4> e2 = result;
 - Lazy evaluation
 - Unit test
 
-### Usage (Ongoing)
+### Usage
 Copy `Peanut` directory to your project, and add and its path to the include path. If you're using CMake, add :
 
-    include_directories(Peanut)
+    add_subdirectory(ext/peanut)
+    include_directories(ext/peanut/include)
 
 Then include as below :
 
-    #include "Peanut.h"
+    #include <Peanut/Peanut.h>
 
 Refer [documentation](https://pjessesco.github.io/peanut/) for more information.
