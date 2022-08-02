@@ -106,11 +106,12 @@ Matrix&lt;int, 4, 4&gt; e2 = result;
 <section id="usage-ongoing">
 <h2>Usage (Ongoing)<a class="headerlink" href="#usage-ongoing" title="Permalink to this heading"></a></h2>
 <p>Copy <code class="docutils literal notranslate"><span class="pre">Peanut</span></code> directory to your project, and add and its path to the include path. If you’re using CMake, add :</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">include_directories</span><span class="p">(</span><span class="n">Peanut</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">add_subdirectory</span><span class="p">(</span><span class="n">ext</span><span class="o">/</span><span class="n">peanut</span><span class="p">)</span>
+<span class="n">include_directories</span><span class="p">(</span><span class="n">ext</span><span class="o">/</span><span class="n">peanut</span><span class="o">/</span><span class="n">include</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Then include as below :</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;Peanut.h&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &lt;Peanut/Peanut.h&gt;</span>
 </pre></div>
 </div>
 <p>Refer <a class="reference external" href="https://pjessesco.github.io/peanut/">documentation</a> for more information.</p>
