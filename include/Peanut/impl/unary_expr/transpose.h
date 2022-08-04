@@ -48,11 +48,11 @@ namespace Peanut::Impl {
             return x.elem(c, r);
         }
 
-        static constexpr Index row = E::col;
-        static constexpr Index col = E::row;
+        static constexpr Index Row = E::Col;
+        static constexpr Index Col = E::Row;
 
-        inline Matrix<Type, row, col> eval() const {
-            return Matrix<Type, row, col>(*this);
+        inline Matrix<Type, Row, Col> eval() const {
+            return Matrix<Type, Row, Col>(*this);
         }
 
         const E &x;

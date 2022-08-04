@@ -43,8 +43,8 @@ namespace Peanut::Impl {
     struct MatrixMinor : public MatrixExpr<MatrixMinor<E>> {
         using Type = typename E::Type;
         MatrixMinor(const E &_x) {
-            for_<row>([&](auto r) {
-                for_<col>([&](auto c) {
+            for_<Row>([&](auto r) {
+                for_<Col>([&](auto c) {
                     mat_eval.elem(r.value, c.value) = SubMat<r.value, c.value>(_x).eval().det();
                 });
             });
@@ -55,14 +55,14 @@ namespace Peanut::Impl {
             return mat_eval.elem(r, c);
         }
 
-        static constexpr Index row = E::row;
-        static constexpr Index col = E::col;
+        static constexpr Index Row = E::Row;
+        static constexpr Index Col = E::Col;
 
-        inline Matrix<Type, row, col> eval() const {
+        inline Matrix<Type, Row, Col> eval() const {
             return mat_eval;
         }
 
-        Matrix<Type, row, col> mat_eval;
+        Matrix<Type, Row, Col> mat_eval;
     };
 }
 

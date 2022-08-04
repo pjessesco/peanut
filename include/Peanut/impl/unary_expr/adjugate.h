@@ -42,9 +42,10 @@ namespace Peanut::Impl {
         requires is_matrix_v<E> && is_square_v<E>
     struct MatrixAdjugate : public MatrixExpr<MatrixAdjugate<E>> {
         using Type = typename E::Type;
+
         MatrixAdjugate(const E &_x) {
-            for_<row>([&](auto r) {
-                for_<col>([&](auto c) {
+            for_<Row>([&](auto r) {
+                for_<Col>([&](auto c) {
                     constexpr Index rv = r.value;
                     constexpr Index cv = c.value;
                     const Type e = SubMat<rv, cv>(_x).eval().det();
@@ -62,14 +63,14 @@ namespace Peanut::Impl {
             return mat_eval.elem(r, c);
         }
 
-        static constexpr Index row = E::row;
-        static constexpr Index col = E::col;
+        static constexpr Index Row = E::Row;
+        static constexpr Index Col = E::Col;
 
-        inline Matrix<Type, row, col> eval() const {
+        inline Matrix<Type, Row, Col> eval() const {
             return mat_eval;
         }
 
-        Matrix<Type, row, col> mat_eval;
+        Matrix<Type, Row, Col> mat_eval;
     };
 }
 

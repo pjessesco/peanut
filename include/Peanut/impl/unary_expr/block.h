@@ -41,8 +41,8 @@ namespace Peanut::Impl {
      * @tparam E Matrix expression type.
      */
     template<Index row_start, Index col_start, Index row_size, Index col_size, typename E>
-        requires is_matrix_v<E> && is_between_v<0, row_start, E::row> && is_between_v<0, col_start, E::col> &&
-                 is_between_v<0, row_start + row_size, E::row + 1> && is_between_v<0, col_start + col_size, E::col + 1>
+        requires is_matrix_v<E> && is_between_v<0, row_start, E::Row> && is_between_v<0, col_start, E::Col> &&
+                 is_between_v<0, row_start + row_size, E::Row + 1> && is_between_v<0, col_start + col_size, E::Col + 1>
     struct MatrixBlock : public MatrixExpr<MatrixBlock<row_start, col_start, row_size, col_size, E>> {
         using Type = typename E::Type;
         MatrixBlock(const E &x) : x{x} {}
@@ -52,11 +52,11 @@ namespace Peanut::Impl {
             return x.elem(row_start + r, col_start + c);
         }
 
-        static constexpr Index row = row_size;
-        static constexpr Index col = col_size;
+        static constexpr Index Row = row_size;
+        static constexpr Index Col = col_size;
 
-        inline Matrix<Type, row, col> eval() const {
-            return Matrix<Type, row, col>(*this);
+        inline Matrix<Type, Row, Col> eval() const {
+            return Matrix<Type, Row, Col>(*this);
         }
 
         const E &x;
@@ -85,8 +85,8 @@ namespace Peanut {
      *
      */
     template<Index row_start, Index col_start, Index row_size, Index col_size, typename E>
-        requires is_matrix_v<E> && is_between_v<0, row_start, E::row> && is_between_v<0, col_start, E::col> &&
-                 is_between_v<0, row_start + row_size, E::row + 1> && is_between_v<0, col_start + col_size, E::col + 1>
+        requires is_matrix_v<E> && is_between_v<0, row_start, E::Row> && is_between_v<0, col_start, E::Col> &&
+                 is_between_v<0, row_start + row_size, E::Row + 1> && is_between_v<0, col_start + col_size, E::Col + 1>
     Impl::MatrixBlock<row_start, col_start, row_size, col_size, E> Block(const MatrixExpr<E> &x) {
         return Impl::MatrixBlock<row_start, col_start, row_size, col_size, E>(static_cast<const E &>(x));
     }

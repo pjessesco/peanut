@@ -46,8 +46,8 @@ TEST_CASE("Test unary operation : T"){
         CHECK(tmat.elem(2, 0) == 3);
         CHECK(tmat.elem(2, 1) == 6);
 
-        CHECK(tmat.row == 3);
-        CHECK(tmat.col == 2);
+        CHECK(tmat.Row == 3);
+        CHECK(tmat.Col == 2);
     }
 
     SECTION("Optimization"){

@@ -49,11 +49,11 @@ namespace Peanut::Impl {
             return x.elem(r, c) - y.elem(r, c);
         }
 
-        static constexpr Index row = E1::row;
-        static constexpr Index col = E1::col;
+        static constexpr Index Row = E1::Row;
+        static constexpr Index Col = E1::Col;
 
         inline auto eval() const {
-            return Matrix<Type, row, col>(*this);
+            return Matrix<Type, Row, Col>(*this);
         }
 
         const E1 &x;

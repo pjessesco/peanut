@@ -55,11 +55,11 @@ namespace Peanut::Impl {
             return static_cast<Type>(x.elem(r, c)) / static_cast<Float>(y);
         }
 
-        static constexpr Index row = E::row;
-        static constexpr Index col = E::col;
+        static constexpr Index Row = E::Row;
+        static constexpr Index Col = E::Col;
 
         inline auto eval() const {
-            return Matrix<Type, row, col>(*this);
+            return Matrix<Type, Row, Col>(*this);
         }
 
         const E &x;

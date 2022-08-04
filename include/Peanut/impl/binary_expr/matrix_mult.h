@@ -41,7 +41,7 @@ namespace Peanut::Impl {
      * @tparam E2 Right hand side matrix expression type.
      */
     template<typename E1, typename E2>
-        requires(E1::col == E2::row)
+        requires(E1::Col == E2::Row)
     struct MatrixMult : public MatrixExpr<MatrixMult<E1, E2>> {
         using Type = typename E1::Type;
         MatrixMult(const E1 &_x, const E2 &_y) : x_eval{_x}, y_eval{_y} {}
@@ -49,22 +49,22 @@ namespace Peanut::Impl {
         // Static polymorphism implementation of MatrixExpr
         inline auto elem(Index r, Index c) const {
             auto ret = x_eval.elem(r, 0) * y_eval.elem(0, c);
-            for (Index i = 1; i < E1::col; i++) {
+            for (Index i = 1; i < E1::Col; i++) {
                 ret += x_eval.elem(r, i) * y_eval.elem(i, c);
             }
             return ret;
         }
 
-        static constexpr Index row = E1::row;
-        static constexpr Index col = E2::col;
+        static constexpr Index Row = E1::Row;
+        static constexpr Index Col = E2::Col;
 
         inline auto eval() const {
-            return Matrix<Type, row, col>(*this);
+            return Matrix<Type, Row, Col>(*this);
         }
 
         // Specify member type as Matrix for evaluation
-        const Matrix<Type, E1::row, E1::col> x_eval;
-        const Matrix<Type, E2::row, E2::col> y_eval;
+        const Matrix<Type, E1::Row, E1::Col> x_eval;
+        const Matrix<Type, E2::Row, E2::Col> y_eval;
     };
 
 }
@@ -78,7 +78,7 @@ namespace Peanut {
      * @return Constructed `Impl::MatrixMult` instance
      */
     template<typename E1, typename E2>
-        requires(E1::col == E2::row)
+        requires(E1::Col == E2::Row)
     Impl::MatrixMult<E1, E2> operator*(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y) {
         return Impl::MatrixMult<E1, E2>(static_cast<const E1 &>(x), static_cast<const E2 &>(y));
     }

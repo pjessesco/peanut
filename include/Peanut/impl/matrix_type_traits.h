@@ -66,7 +66,7 @@ namespace Peanut {
         /**
          * @brief True if rows and cols of \p E1 and \p E2 are equal.
          */
-        static constexpr bool value = (E1::row == E2::row && E1::col == E2::col);
+        static constexpr bool value = (E1::Row == E2::Row && E1::Col == E2::Col);
     };
 
     /**
@@ -84,9 +84,9 @@ namespace Peanut {
     template <typename E> requires is_matrix_v<E>
     struct is_square{
         /**
-         * @brief True if \p E 's row equals to its col.
+         * @brief True if \p E 's row size equals to its column size.
          */
-        static constexpr bool value = E::row == E::col;
+        static constexpr bool value = E::Row == E::Col;
     };
 
     /**

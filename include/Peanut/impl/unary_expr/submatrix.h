@@ -34,14 +34,14 @@
 namespace Peanut::Impl {
 
     /**
-     * @brief Expression class which represents a submatrix by excluding
-     *        given row and column.
-     * @tparam row_ex Row index which will be excluded.
+     * @brief Get a submatrix matrix by excluding row and column in given
+     *        indices.
+     * @tparam row_ex R index which will be excluded.
      * @tparam col_ex Column index which will be excluded.
      * @tparam E Matrix expression type.
      */
     template<Index row_ex, Index col_ex, typename E>
-        requires is_matrix_v<E> && is_between_v<0, row_ex, E::row> && is_between_v<0, col_ex, E::col>
+        requires is_matrix_v<E> && is_between_v<0, row_ex, E::Row> && is_between_v<0, col_ex, E::Col>
     struct MatrixSub : public MatrixExpr<MatrixSub<row_ex, col_ex, E>> {
         using Type = typename E::Type;
         MatrixSub(const E &x) : x{x} {}
@@ -51,11 +51,11 @@ namespace Peanut::Impl {
             return x.elem(r < row_ex ? r : r + 1, c < col_ex ? c : c + 1);
         }
 
-        static constexpr Index row = E::row - 1;
-        static constexpr Index col = E::col - 1;
+        static constexpr Index Row = E::Row - 1;
+        static constexpr Index Col = E::Col - 1;
 
-        inline Matrix<Type, row, col> eval() const {
-            return Matrix<Type, row, col>(*this);
+        inline Matrix<Type, Row, Col> eval() const {
+            return Matrix<Type, Row, Col>(*this);
         }
 
         const E &x;
@@ -64,9 +64,9 @@ namespace Peanut::Impl {
 
 namespace Peanut {
     /**
-     * @brief Get a submatrix matrix by excluding given row and column.
-     *        See `Impl::MatrixSub`
-     * @tparam row_ex Row index which will be excluded.
+     * @brief Get a submatrix matrix by excluding row and column in given
+     *        indices. See `Impl::MatrixSub`.
+     * @tparam row_ex R index which will be excluded.
      * @tparam col_ex Column index which will be excluded.
      * @tparam E Matrix expression type.
      * @return Constructed `Impl::MatrixSub` instance
@@ -83,7 +83,7 @@ namespace Peanut {
      *
      */
     template<Index row_ex, Index col_ex, typename E>
-        requires is_matrix_v<E> && is_between_v<0, row_ex, E::row> && is_between_v<0, col_ex, E::col>
+        requires is_matrix_v<E> && is_between_v<0, row_ex, E::Row> && is_between_v<0, col_ex, E::Col>
     Impl::MatrixSub<row_ex, col_ex, E> SubMat(const MatrixExpr<E> &x) {
         return Impl::MatrixSub<row_ex, col_ex, E>(static_cast<const E &>(x));
     }
