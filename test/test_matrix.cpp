@@ -132,6 +132,77 @@ TEST_CASE("elem() : Element getter/setter"){
     }
 }
 
+TEST_CASE("Row getter/setter"){
+
+    SECTION("Integer matrix"){
+        Peanut::Matrix<int, 4, 2> int_42_mat{1,2,3,4,5,6,7,8};
+
+        SECTION("Row getter"){
+            auto r0 = int_42_mat.get_row(0);
+            auto r1 = int_42_mat.get_row(1);
+            auto r2 = int_42_mat.get_row(2);
+            auto r3 = int_42_mat.get_row(3);
+            CHECK(r0.elem(0, 0) == 1);
+            CHECK(r0.elem(0, 1) == 2);
+            CHECK(r1.elem(0, 0) == 3);
+            CHECK(r1.elem(0, 1) == 4);
+            CHECK(r2.elem(0, 0) == 5);
+            CHECK(r2.elem(0, 1) == 6);
+            CHECK(r3.elem(0, 0) == 7);
+            CHECK(r3.elem(0, 1) == 8);
+        }
+
+        SECTION("Row setter"){
+            int_42_mat.set_row(2, {10, 11});
+            auto r0 = int_42_mat.get_row(0);
+            auto r1 = int_42_mat.get_row(1);
+            auto r2 = int_42_mat.get_row(2);
+            auto r3 = int_42_mat.get_row(3);
+            CHECK(r0.elem(0, 0) == 1);
+            CHECK(r0.elem(0, 1) == 2);
+            CHECK(r1.elem(0, 0) == 3);
+            CHECK(r1.elem(0, 1) == 4);
+            CHECK(r2.elem(0, 0) == 10);
+            CHECK(r2.elem(0, 1) == 11);
+            CHECK(r3.elem(0, 0) == 7);
+            CHECK(r3.elem(0, 1) == 8);
+        }
+    }
+
+    SECTION("Float matrix"){
+        Peanut::Matrix<float, 2, 4> flt_24_mat{1.1f, 5.5f, 4.4f, 2.2f, 7.7f, 6.6f, 9.9f, 8.8f};
+
+        SECTION("Row getter"){
+            auto r0 = flt_24_mat.get_row(0);
+            auto r1 = flt_24_mat.get_row(1);
+            CHECK(r0.elem(0, 0) == Catch::Approx(1.1f));
+            CHECK(r0.elem(0, 1) == Catch::Approx(5.5f));
+            CHECK(r0.elem(0, 2) == Catch::Approx(4.4f));
+            CHECK(r0.elem(0, 3) == Catch::Approx(2.2f));
+            CHECK(r1.elem(0, 0) == Catch::Approx(7.7f));
+            CHECK(r1.elem(0, 1) == Catch::Approx(6.6f));
+            CHECK(r1.elem(0, 2) == Catch::Approx(9.9f));
+            CHECK(r1.elem(0, 3) == Catch::Approx(8.8f));
+        }
+
+        SECTION("Row setter"){
+            flt_24_mat.set_row(0, {0.1f, 0.2f, 0.3f, 0.4f});
+            auto r0 = flt_24_mat.get_row(0);
+            auto r1 = flt_24_mat.get_row(1);
+            CHECK(r0.elem(0, 0) == Catch::Approx(0.1f));
+            CHECK(r0.elem(0, 1) == Catch::Approx(0.2f));
+            CHECK(r0.elem(0, 2) == Catch::Approx(0.3f));
+            CHECK(r0.elem(0, 3) == Catch::Approx(0.4f));
+            CHECK(r1.elem(0, 0) == Catch::Approx(7.7f));
+            CHECK(r1.elem(0, 1) == Catch::Approx(6.6f));
+            CHECK(r1.elem(0, 2) == Catch::Approx(9.9f));
+            CHECK(r1.elem(0, 3) == Catch::Approx(8.8f));
+        }
+    }
+
+
+}
+
 TEST_CASE("gaussian_elimination"){
     CHECK("TBD");
 }

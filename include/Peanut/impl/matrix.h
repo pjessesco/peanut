@@ -185,6 +185,35 @@ namespace Peanut {
         }
 
         /**
+         * @brief Get a \p r 'th row as a `Matrix<Type, 1, Col>` type.
+         * @param idx Row index.
+         * @return `Matrix<Type, 1, Col>` instance.
+         */
+        Matrix<Type, 1, Col> get_row(Index idx) const{
+            Matrix<Type, 1, Col> ret;
+            memcpy(ret.m_data.d2, m_data.d2[idx], sizeof(Type)*Col);
+            return ret;
+        }
+
+        /**
+         * @brief Set a \p r 'th row as a given argument \p row .
+         * @param idx Row index.
+         * @param row Row matrix which will be assigned to the r'th row of the matrix.
+         */
+        void set_row(Index idx, const Matrix<Type, 1, Col> &row){
+            memcpy(m_data.d2[idx], row.m_data.d2, sizeof(Type)*Col);
+        }
+
+        // TBD
+        // Matrix<Type, Row, 1> get_col(Index r) const{
+        //
+        // }
+        //
+        // void set_col(const Matrix<Type, Row, 1> &col){
+        //
+        // }
+
+        /**
          * @brief Evaluation expressions and return as a `Matrix` instance.
          *        Note that every matrix expression classes must implement this
          *        method even though it is not a method of `MatrixExpr`.
@@ -283,13 +312,14 @@ namespace Peanut {
             return det;
         }
 
-    private:
-        static constexpr T t_1 = static_cast<T>(1);
-        static constexpr T t_0 = static_cast<T>(0);
+        // Matrix data
         union {
             std::array<T, R * C> d1;
             T d2[R][C];
         } m_data;
 
+    private:
+        static constexpr T t_1 = static_cast<T>(1);
+        static constexpr T t_0 = static_cast<T>(0);
     };
 }
