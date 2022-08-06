@@ -27,7 +27,6 @@
 // Standard headers
 #include <array>
 #include <cassert>
-#include <initializer_list>
 #include <iostream>
 #include <type_traits>
 
@@ -108,8 +107,15 @@ namespace Peanut {
         Matrix() {m_data.d1.fill(t_0);}
 
         /**
-         * @brief Constructor with initializer list.
-         * @param tlist Initializer list with \p T types.
+         * @brief Constructor with row-major elements.
+         * @param tlist Parameter pack with \p T types.
+         *
+         *     // {} is also available
+         *     Matrix<int, 4, 4> mat1(1,2,3,4,
+         *                            5,6,7,8,
+         *                            9,0,1,2,
+         *                            3,4,5,6);
+         *
          */
         template <typename ...TList>
             requires std::conjunction_v<std::is_same<T, TList>...> &&
@@ -160,6 +166,66 @@ namespace Peanut {
                 a.m_data.d2[i][i] = t_1;
             }
             return a;
+        }
+
+        /**
+         * @brief Construct a matrix using given rows (i.e., `Matrix<Type, 1, Col>`)
+         * @param tlist Parameter pack with `Matrix<Type, 1, Col>` types.
+         * @return Constructed matrix
+         *
+         *     Peanut::Matrix<int, 1, 4> a{1,2,3,4};
+         *     Peanut::Matrix<int, 1, 4> b{5,6,7,8};
+         *     Peanut::Matrix<int, 1, 4> c{9,10,11,12};
+         *
+         *     auto mat = Peanut::Matrix<int, 3, 4>::from_rows(a, b, c);
+         *     // 1  2  3  4
+         *     // 5  6  7  8
+         *     // 9 10 11 12
+         *
+         */
+        template <typename ...RList>
+            requires std::conjunction_v<std::is_same<Matrix<Type, 1, Col>, RList>...> &&
+                     (sizeof...(RList) == Row)
+        static Matrix from_rows(RList ... rlist){
+            Matrix ret;
+            int idx = 0;
+            constexpr size_t copy_byte = sizeof(Type) * Col;
+            for(const Matrix<Type, 1, Col> p : {rlist...}){
+                memcpy(ret.m_data.d2[idx], p.m_data.d2, copy_byte);
+                idx++;
+            }
+            return ret;
+        }
+
+        /**
+         * @brief Construct a matrix using given columns (i.e., `Matrix<Type, Row, 1>`)
+         * @param tlist Parameter pack with `Matrix<Type, Row, 1>` types.
+         * @return Constructed matrix
+         *
+         *     Peanut::Matrix<int, 4, 1> a{1,2,3,4};
+         *     Peanut::Matrix<int, 4, 1> b{5,6,7,8};
+         *     Peanut::Matrix<int, 4, 1> c{9,10,11,12};
+         *
+         *     auto introwmat = Peanut::Matrix<int, 4, 3>::from_cols(a, b, c);
+         *     // 1 5 9
+         *     // 2 6 10
+         *     // 3 7 11
+         *     // 4 8 12
+         *
+         */
+        template <typename ...CList>
+            requires std::conjunction_v<std::is_same<Matrix<Type, Row, 1>, CList>...> &&
+                     (sizeof...(CList) == Col)
+        static Matrix from_cols(CList ... clist){
+            Matrix<Type, Row, Col> ret;
+            int c = 0;
+            for(const Matrix<Type, Row, 1> p : {clist...}){
+                for(int r=0;r<Row;r++){
+                    ret.m_data.d2[r][c] = p.m_data.d1[r];
+                }
+                c++;
+            }
+            return ret;
         }
 
         /**

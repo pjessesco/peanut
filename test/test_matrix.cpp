@@ -47,8 +47,8 @@ TEST_CASE("Default constructor : zero matrix"){
     CHECK(zero_22_float_mat.elem(1, 1) == Catch::Approx(0.0f));
 }
 
-TEST_CASE("Construct using initialize list"){
-    Peanut::Matrix<int, 2, 2> intmat{1,2,3,4};
+TEST_CASE("Construct using parameter pack"){
+    Peanut::Matrix<int, 2, 2> intmat(1,2,3,4);
     CHECK(intmat.elem(0, 0) == 1);
     CHECK(intmat.elem(0, 1) == 2);
     CHECK(intmat.elem(1, 0) == 3);
@@ -103,6 +103,102 @@ TEST_CASE("Static constructors : identity()"){
     CHECK(ident_22_float_mat.elem(0, 1) == Catch::Approx(0.0f));
     CHECK(ident_22_float_mat.elem(1, 0) == Catch::Approx(0.0f));
     CHECK(ident_22_float_mat.elem(1, 1) == Catch::Approx(1.0f));
+}
+
+TEST_CASE("Static constructors : from_rows()"){
+    SECTION("int matrix"){
+        Peanut::Matrix<int, 1, 4> a{1,2,3,4};
+        Peanut::Matrix<int, 1, 4> b{5,6,7,8};
+        Peanut::Matrix<int, 1, 4> c{9,10,11,12};
+
+        auto introwmat = Peanut::Matrix<int, 3, 4>::from_rows(a, b, c);
+        CHECK(introwmat.elem(0, 0) == 1);
+        CHECK(introwmat.elem(0, 1) == 2);
+        CHECK(introwmat.elem(0, 2) == 3);
+        CHECK(introwmat.elem(0, 3) == 4);
+
+        CHECK(introwmat.elem(1, 0) == 5);
+        CHECK(introwmat.elem(1, 1) == 6);
+        CHECK(introwmat.elem(1, 2) == 7);
+        CHECK(introwmat.elem(1, 3) == 8);
+
+        CHECK(introwmat.elem(2, 0) == 9);
+        CHECK(introwmat.elem(2, 1) == 10);
+        CHECK(introwmat.elem(2, 2) == 11);
+        CHECK(introwmat.elem(2, 3) == 12);
+    }
+
+    SECTION("float matrix"){
+        Peanut::Matrix<float, 1, 3> a{0.1f, 0.2f, 0.3f};
+        Peanut::Matrix<float, 1, 3> b{0.4f, 0.5f, 0.6f};
+        Peanut::Matrix<float, 1, 3> c{0.7f, 0.8f, 0.9f};
+        Peanut::Matrix<float, 1, 3> d{1.0f, 1.1f, 1.2f};
+
+        auto floatrowmat = Peanut::Matrix<float, 4, 3>::from_rows(a,b,c,d);
+        CHECK(floatrowmat.elem(0, 0) == Catch::Approx(0.1f));
+        CHECK(floatrowmat.elem(0, 1) == Catch::Approx(0.2f));
+        CHECK(floatrowmat.elem(0, 2) == Catch::Approx(0.3f));
+
+        CHECK(floatrowmat.elem(1, 0) == Catch::Approx(0.4f));
+        CHECK(floatrowmat.elem(1, 1) == Catch::Approx(0.5f));
+        CHECK(floatrowmat.elem(1, 2) == Catch::Approx(0.6f));
+
+        CHECK(floatrowmat.elem(2, 0) == Catch::Approx(0.7f));
+        CHECK(floatrowmat.elem(2, 1) == Catch::Approx(0.8f));
+        CHECK(floatrowmat.elem(2, 2) == Catch::Approx(0.9f));
+
+        CHECK(floatrowmat.elem(3, 0) == Catch::Approx(1.0f));
+        CHECK(floatrowmat.elem(3, 1) == Catch::Approx(1.1f));
+        CHECK(floatrowmat.elem(3, 2) == Catch::Approx(1.2f));
+    }
+}
+
+TEST_CASE("Static constructors : from_cols()"){
+    SECTION("int matrix"){
+        Peanut::Matrix<int, 4, 1> a{1,2,3,4};
+        Peanut::Matrix<int, 4, 1> b{5,6,7,8};
+        Peanut::Matrix<int, 4, 1> c{9,10,11,12};
+
+        auto introwmat = Peanut::Matrix<int, 4, 3>::from_cols(a, b, c);
+        CHECK(introwmat.elem(0, 0) == 1);
+        CHECK(introwmat.elem(0, 1) == 5);
+        CHECK(introwmat.elem(0, 2) == 9);
+
+        CHECK(introwmat.elem(1, 0) == 2);
+        CHECK(introwmat.elem(1, 1) == 6);
+        CHECK(introwmat.elem(1, 2) == 10);
+
+        CHECK(introwmat.elem(2, 0) == 3);
+        CHECK(introwmat.elem(2, 1) == 7);
+        CHECK(introwmat.elem(2, 2) == 11);
+
+        CHECK(introwmat.elem(3, 0) == 4);
+        CHECK(introwmat.elem(3, 1) == 8);
+        CHECK(introwmat.elem(3, 2) == 12);
+    }
+
+    SECTION("float matrix"){
+        Peanut::Matrix<float, 3, 1> a{0.1f, 0.2f, 0.3f};
+        Peanut::Matrix<float, 3, 1> b{0.4f, 0.5f, 0.6f};
+        Peanut::Matrix<float, 3, 1> c{0.7f, 0.8f, 0.9f};
+        Peanut::Matrix<float, 3, 1> d{1.0f, 1.1f, 1.2f};
+
+        auto floatrowmat = Peanut::Matrix<float, 3, 4>::from_cols(a,b,c,d);
+        CHECK(floatrowmat.elem(0, 0) == Catch::Approx(0.1f));
+        CHECK(floatrowmat.elem(0, 1) == Catch::Approx(0.4f));
+        CHECK(floatrowmat.elem(0, 2) == Catch::Approx(0.7f));
+        CHECK(floatrowmat.elem(0, 3) == Catch::Approx(1.0f));
+
+        CHECK(floatrowmat.elem(1, 0) == Catch::Approx(0.2f));
+        CHECK(floatrowmat.elem(1, 1) == Catch::Approx(0.5f));
+        CHECK(floatrowmat.elem(1, 2) == Catch::Approx(0.8f));
+        CHECK(floatrowmat.elem(1, 3) == Catch::Approx(1.1f));
+
+        CHECK(floatrowmat.elem(2, 0) == Catch::Approx(0.3f));
+        CHECK(floatrowmat.elem(2, 1) == Catch::Approx(0.6f));
+        CHECK(floatrowmat.elem(2, 2) == Catch::Approx(0.9f));
+        CHECK(floatrowmat.elem(2, 3) == Catch::Approx(1.2f));
+    }
 }
 
 TEST_CASE("elem() : Element getter/setter"){
