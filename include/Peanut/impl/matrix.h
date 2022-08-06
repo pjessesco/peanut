@@ -111,7 +111,9 @@ namespace Peanut {
          * @brief Constructor with initializer list.
          * @param tlist Initializer list with \p T types.
          */
-        template <typename ...TList> requires std::conjunction_v<std::is_same<T, TList>...>
+        template <typename ...TList>
+            requires std::conjunction_v<std::is_same<T, TList>...> &&
+                     (sizeof...(TList) == Row*Col)
         Matrix(TList ... tlist) : m_data{std::forward<T>(tlist)...} {}
 
         /**
