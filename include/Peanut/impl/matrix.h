@@ -136,7 +136,7 @@ namespace Peanut {
         Matrix(const MatrixExpr<E> &expr) requires is_equal_type_size_v<E, Matrix>{
             for(Index r=0;r< R;r++){
                 for(Index c=0;c< C;c++){
-                    elem(r, c) = expr.elem(r, c);
+                    m_data.d2[r][c] = expr.elem(r, c);
                 }
             }
         }
@@ -185,33 +185,52 @@ namespace Peanut {
         }
 
         /**
-         * @brief Get a \p r 'th row as a `Matrix<Type, 1, Col>` type.
+         * @brief Get a \p idx 'th row as a `Matrix<Type, 1, Col>` type.
          * @param idx Row index.
          * @return `Matrix<Type, 1, Col>` instance.
          */
         Matrix<Type, 1, Col> get_row(Index idx) const{
+            assert((0<=idx) && (idx < Row));
             Matrix<Type, 1, Col> ret;
             memcpy(ret.m_data.d2, m_data.d2[idx], sizeof(Type)*Col);
             return ret;
         }
 
         /**
-         * @brief Set a \p r 'th row as a given argument \p row .
+         * @brief Set a \p idx 'th row as a given argument \p row .
          * @param idx Row index.
          * @param row Row matrix which will be assigned to the r'th row of the matrix.
          */
         void set_row(Index idx, const Matrix<Type, 1, Col> &row){
+            assert((0<=idx) && (idx < R));
             memcpy(m_data.d2[idx], row.m_data.d2, sizeof(Type)*Col);
         }
 
-        // TBD
-        // Matrix<Type, Row, 1> get_col(Index r) const{
-        //
-        // }
-        //
-        // void set_col(const Matrix<Type, Row, 1> &col){
-        //
-        // }
+        /**
+         * @brief Get a \p idx 'th column as a `Matrix<Type, Row, 1>` type.
+         * @param idx Column index.
+         * @return `Matrix<Type, Row, 1>` instance.
+         */
+        Matrix<Type, Row, 1> get_col(Index idx) const{
+            assert((0<=idx) && (idx < Col));
+            Matrix<Type, Row, 1> ret;
+            for(int i=0;i<Row;i++){
+                ret.m_data.d1[i] = m_data.d2[i][idx];
+            }
+            return ret;
+        }
+
+        /**
+         * @brief Set a \p idx 'th column as a given argument \p col .
+         * @param idx Column index.
+         * @param row Column matrix which will be assigned to the idx'th column of the matrix.
+         */
+        void set_col(Index idx, const Matrix<Type, Row, 1> &col){
+            assert((0<=idx) && (idx < Col));
+            for(int i=0;i<Row;i++){
+                m_data.d2[i][idx] = col.m_data.d1[i];
+            }
+        }
 
         /**
          * @brief Evaluation expressions and return as a `Matrix` instance.
@@ -277,15 +296,15 @@ namespace Peanut {
          */
         constexpr T det() const requires is_square_v<Matrix>{
             if constexpr(C ==1){
-                return elem(0, 0);
+                return m_data.d2[0][0];
             }
             else if constexpr (C ==2){
-                return elem(0, 0) * elem(1, 1) - elem(0, 1) * elem(1, 0);
+                return m_data.d2[0][0] * m_data.d2[1][1] - m_data.d2[0][1] * m_data.d2[1][0];
             }
             else{
                 T ret = static_cast<T>(0);
                 for_<C>([&] (auto c) {
-                    ret += (c.value % 2 ? -1 : 1) * elem(0, c.value) * SubMat<0, c.value>(*this).eval().det();
+                    ret += (c.value % 2 ? -1 : 1) * m_data.d2[0][c.value] * SubMat<0, c.value>(*this).eval().det();
                 });
                 return ret;
             }
@@ -299,7 +318,7 @@ namespace Peanut {
          */
         constexpr T det2() const requires is_square_v<Matrix>{
             if constexpr(C ==1){
-                return elem(0, 0);
+                return m_data.d2[0][0];
             }
             else if constexpr (C ==2){
                 return elem(0, 0) * elem(1, 1) - elem(0, 1) * elem(1, 0);

@@ -133,7 +133,6 @@ TEST_CASE("elem() : Element getter/setter"){
 }
 
 TEST_CASE("Row getter/setter"){
-
     SECTION("Integer matrix"){
         Peanut::Matrix<int, 4, 2> int_42_mat{1,2,3,4,5,6,7,8};
 
@@ -168,7 +167,6 @@ TEST_CASE("Row getter/setter"){
             CHECK(r3.elem(0, 1) == 8);
         }
     }
-
     SECTION("Float matrix"){
         Peanut::Matrix<float, 2, 4> flt_24_mat{1.1f, 5.5f, 4.4f, 2.2f, 7.7f, 6.6f, 9.9f, 8.8f};
 
@@ -199,8 +197,80 @@ TEST_CASE("Row getter/setter"){
             CHECK(r1.elem(0, 3) == Catch::Approx(8.8f));
         }
     }
+}
 
+TEST_CASE("Col getter/setter"){
+    SECTION("Integer matrix"){
+        Peanut::Matrix<int, 4, 2> int_42_mat{1,2,
+                                             3,4,
+                                             5,6,
+                                             7,8};
 
+        SECTION("Col getter"){
+            auto c0 = int_42_mat.get_col(0);
+            auto c1 = int_42_mat.get_col(1);
+            CHECK(c0.elem(0, 0) == 1);
+            CHECK(c0.elem(1, 0) == 3);
+            CHECK(c0.elem(2, 0) == 5);
+            CHECK(c0.elem(3, 0) == 7);
+
+            CHECK(c1.elem(0, 0) == 2);
+            CHECK(c1.elem(1, 0) == 4);
+            CHECK(c1.elem(2, 0) == 6);
+            CHECK(c1.elem(3, 0) == 8);
+        }
+
+        SECTION("Col setter"){
+            int_42_mat.set_col(1, {10, 11, 12, 13});
+            auto c0 = int_42_mat.get_col(0);
+            auto c1 = int_42_mat.get_col(1);
+            CHECK(c0.elem(0, 0) == 1);
+            CHECK(c0.elem(1, 0) == 3);
+            CHECK(c0.elem(2, 0) == 5);
+            CHECK(c0.elem(3, 0) == 7);
+
+            CHECK(c1.elem(0, 0) == 10);
+            CHECK(c1.elem(1, 0) == 11);
+            CHECK(c1.elem(2, 0) == 12);
+            CHECK(c1.elem(3, 0) == 13);
+        }
+    }
+    SECTION("Float matrix"){
+        Peanut::Matrix<float, 2, 4> flt_24_mat{1.1f, 5.5f, 4.4f, 2.2f,
+                                               7.7f, 6.6f, 9.9f, 8.8f};
+
+        SECTION("Col getter"){
+            auto c0 = flt_24_mat.get_col(0);
+            auto c1 = flt_24_mat.get_col(1);
+            auto c2 = flt_24_mat.get_col(2);
+            auto c3 = flt_24_mat.get_col(3);
+            CHECK(c0.elem(0, 0) == Catch::Approx(1.1f));
+            CHECK(c0.elem(1, 0) == Catch::Approx(7.7f));
+
+            CHECK(c1.elem(0, 0) == Catch::Approx(5.5f));
+            CHECK(c1.elem(1, 0) == Catch::Approx(6.6f));
+
+            CHECK(c2.elem(0, 0) == Catch::Approx(4.4f));
+            CHECK(c2.elem(1, 0) == Catch::Approx(9.9f));
+
+            CHECK(c3.elem(0, 0) == Catch::Approx(2.2f));
+            CHECK(c3.elem(1, 0) == Catch::Approx(8.8f));
+        }
+
+        SECTION("Col setter"){
+            flt_24_mat.set_col(1, {0.1f, 0.2f});
+            auto r0 = flt_24_mat.get_row(0);
+            auto r1 = flt_24_mat.get_row(1);
+            CHECK(r0.elem(0, 0) == Catch::Approx(1.1f));
+            CHECK(r0.elem(0, 1) == Catch::Approx(0.1f));
+            CHECK(r0.elem(0, 2) == Catch::Approx(4.4f));
+            CHECK(r0.elem(0, 3) == Catch::Approx(2.2f));
+            CHECK(r1.elem(0, 0) == Catch::Approx(7.7f));
+            CHECK(r1.elem(0, 1) == Catch::Approx(0.2f));
+            CHECK(r1.elem(0, 2) == Catch::Approx(9.9f));
+            CHECK(r1.elem(0, 3) == Catch::Approx(8.8f));
+        }
+    }
 }
 
 TEST_CASE("gaussian_elimination"){
@@ -222,7 +292,7 @@ TEST_CASE("Determinant"){
         CHECK(flt_33_mat.det() == Catch::Approx(33.275f));
         CHECK(flt_55_mat.det() == Catch::Approx(2237986.3587442965f));
     }
-    SECTION("Determinant calculation recurslvely (det2())"){
+    SECTION("Determinant calculation recursively (det2())"){
         CHECK(int_22_mat.det2() == -2);
         CHECK(flt_33_mat.det2() == Catch::Approx(33.275f));
         CHECK(flt_55_mat.det2() == Catch::Approx(2237986.3587442965f));
