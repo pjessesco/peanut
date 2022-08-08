@@ -825,6 +825,59 @@ Matrix&lt;int, 4, 4&gt; e2 = result;
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6Peanut6Peanut6MatrixixE5Index">
+<span id="_CPPv3NK6Peanut6Peanut6MatrixixE5Index"></span><span id="_CPPv2NK6Peanut6Peanut6MatrixixE5Index"></span><span id="Peanut::Peanut::Matrix::subscript-operator__IndexC"></span><span class="target" id="struct_peanut_1_1_matrix_1aad6e9d0b4c8c2f032a27e30546504904"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_5Index_5IndexEN6Peanut6Peanut6MatrixE" title="Peanut::Peanut::Matrix::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">[]</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6Peanut5IndexE" title="Peanut::Index"><span class="n"><span class="pre">Index</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">i</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6Peanut6Peanut6MatrixixE5Index" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Subscript operator available only for vector usage (i.e., Row==1 or Col==1) </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>i</strong> – Index </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">T</span></code> type i’th element data. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6Peanut6Peanut6MatrixixE5Index">
+<span id="_CPPv3N6Peanut6Peanut6MatrixixE5Index"></span><span id="_CPPv2N6Peanut6Peanut6MatrixixE5Index"></span><span id="Peanut::Peanut::Matrix::subscript-operator__Index"></span><span class="target" id="struct_peanut_1_1_matrix_1a4fc849ec63c7f8281f6b2e321574d2d0"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_5Index_5IndexEN6Peanut6Peanut6MatrixE" title="Peanut::Peanut::Matrix::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="sig-name descname"><span class="k"><span class="pre">operator</span></span><span class="o"><span class="pre">[]</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6Peanut5IndexE" title="Peanut::Index"><span class="n"><span class="pre">Index</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">i</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Peanut6Peanut6MatrixixE5Index" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Subscript operator available only for vector usage. (i.e., Row==1 or Col==1) </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>i</strong> – Index </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Reference of i’th element. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6Peanut6Peanut6Matrix3dotERK6Matrix">
+<span id="_CPPv3NK6Peanut6Peanut6Matrix3dotERK6Matrix"></span><span id="_CPPv2NK6Peanut6Peanut6Matrix3dotERK6Matrix"></span><span id="Peanut::Peanut::Matrix::dot__MatrixCRC"></span><span class="target" id="struct_peanut_1_1_matrix_1a2e2a66262dd3e5a5576c43b16e9908ef"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_5Index_5IndexEN6Peanut6Peanut6MatrixE" title="Peanut::Peanut::Matrix::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">dot</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_5Index_5IndexEN6Peanut6Peanut6MatrixE" title="Peanut::Peanut::Matrix"><span class="n"><span class="pre">Matrix</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">vec</span></span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6Peanut6Peanut6Matrix3dotERK6Matrix" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Dot product available only for vector usage. (i.e., Row==1 or Col==1) </p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>vec</strong> – Equal-type matrix(vector). </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>T type dot product result. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6Peanut6Peanut6Matrix6lengthEv">
+<span id="_CPPv3NK6Peanut6Peanut6Matrix6lengthEv"></span><span id="_CPPv2NK6Peanut6Peanut6Matrix6lengthEv"></span><span id="Peanut::Peanut::Matrix::lengthC"></span><span class="target" id="struct_peanut_1_1_matrix_1a82a364765a14eafcfa06e3dbe8c434a2"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N6Peanut5FloatE" title="Peanut::Float"><span class="n"><span class="pre">Float</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">length</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6Peanut6Peanut6Matrix6lengthEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Vector normalization available only for vector usage. (i.e., Row==1 or Col==1) </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Float l2 distance of the vector. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6Peanut6Peanut6Matrix12subtract_rowE5Index5Index1T">
 <span id="_CPPv3N6Peanut6Peanut6Matrix12subtract_rowE5Index5Index1T"></span><span id="_CPPv2N6Peanut6Peanut6Matrix12subtract_rowE5Index5Index1T"></span><span id="Peanut::Peanut::Matrix::subtract_row__Index.Index.T"></span><span class="target" id="struct_peanut_1_1_matrix_1ab19b135a29df461b69ef58247eba3c1e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">subtract_row</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6Peanut5IndexE" title="Peanut::Index"><span class="n"><span class="pre">Index</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">r1</span></span>, <a class="reference internal" href="#_CPPv4N6Peanut5IndexE" title="Peanut::Index"><span class="n"><span class="pre">Index</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">r2</span></span>, <a class="reference internal" href="#_CPPv4I0_5Index_5IndexEN6Peanut6Peanut6MatrixE" title="Peanut::Peanut::Matrix::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">scalar</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Peanut6Peanut6Matrix12subtract_rowE5Index5Index1T" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Helper function for Gaussian elimination. It performs row subtraction after multiplying given scalar to the row (i.e., <code class="docutils literal notranslate"><span class="pre">r1</span> <span class="pre">=</span> <span class="pre">r1</span> <span class="pre">-</span> <span class="pre">(r2</span> <span class="pre">*</span> <span class="pre">scalar)</span></code>). </p>
