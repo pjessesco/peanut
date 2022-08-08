@@ -373,6 +373,33 @@ TEST_CASE("gaussian_elimination"){
     CHECK("TBD");
 }
 
+TEST_CASE("Vector-features : operator[]"){
+    auto vec1 = Peanut::Matrix<int, 3, 1>{1,2,4};
+    auto vec2 = Peanut::Matrix<int, 1, 3>{6,7,8};
+    SECTION("return value"){
+        CHECK(vec1[0] == 1);
+        CHECK(vec1[1] == 2);
+        CHECK(vec1[2] == 4);
+        CHECK(vec2[0] == 6);
+        CHECK(vec2[1] == 7);
+        CHECK(vec2[2] == 8);
+    }
+    SECTION("return reference"){
+        vec1[1] = 10;
+        vec2[2] = 0;
+        CHECK(vec1[0] == 1);
+        CHECK(vec1[1] == 10);
+        CHECK(vec1[2] == 4);
+        CHECK(vec2[0] == 6);
+        CHECK(vec2[1] == 7);
+        CHECK(vec2[2] == 0);
+    }
+}
+
+TEST_CASE("Vector-features : dot product, length(), normalize()"){
+    // TBD
+}
+
 TEST_CASE("Determinant"){
     Peanut::Matrix<int, 2, 2> int_22_mat{1,2,3,4};
 

@@ -29,6 +29,7 @@
 #include <cassert>
 #include <iostream>
 #include <type_traits>
+#include <cmath>
 
 // Peanut headers
 #include <Peanut/impl/common.h>
@@ -309,6 +310,73 @@ namespace Peanut {
         inline Matrix<Type, Row, Col> eval() const{
             return Matrix<Type, Row, Col>(*this);
         }
+
+        // =============== Features for vector usage begins ================
+
+        /**
+         * @brief Subscript operator available only for vector usage
+         *        (i.e., Row==1 or Col==1)
+         * @param i Index
+         * @return \p T type i'th element data.
+         */
+        inline T operator[](Index i) const
+            requires (Row==1) || (Col==1){
+            return m_data.d1[i];
+        }
+
+        /**
+         * @brief Subscript operator available only for vector usage.
+         *        (i.e., Row==1 or Col==1)
+         * @param i Index
+         * @return Reference of i'th element.
+         */
+        inline T& operator[](Index i)
+            requires (Row==1) || (Col==1){
+            return m_data.d1[i];
+        }
+
+        /**
+         * @brief Dot product available only for vector usage.
+         *        (i.e., Row==1 or Col==1)
+         * @param vec Equal-type matrix(vector).
+         * @return T type dot product result.
+         */
+        inline T dot(const Matrix &vec) const requires (Row==1) || (Col==1){
+            T ret = t_0;
+            for(int i=0;i<Row*Col;i++){
+                ret += (vec.m_data.d1[i] * m_data.d1[i]);
+            }
+            return ret;
+        }
+
+        /**
+         * @brief L2 distance available only for vector usage.
+         *        (i.e., Row==1 or Col==1)
+         * @return Float l2 distance of the vector.
+         */
+        inline Float length() const requires (Row==1) || (Col==1){
+            T ret = t_0;
+            for(int i=0;i<Row*Col;i++){
+                ret += (m_data.d1[i] * m_data.d1[i]);
+            }
+            return std::sqrt(ret);
+        }
+
+        /**
+         * @brief Vector normalization available only for vector usage.
+         *        (i.e., Row==1 or Col==1)
+         * @return Normalized Float matrix(vector).
+         */
+        inline Matrix<Float, Row, Col> normalize() const requires (Row==1) || (Col==1){
+            Matrix<Float, Row, Col> ret;
+            const Float len = length();
+            for(int i=0;i<Row*Col;i++){
+                 ret[i] = static_cast<Float>((*this)[i]) / len;
+            }
+            return ret;
+        }
+
+        // =============== Features for vector usage ends ================
 
         /**
          * @brief An implementation of `operator<<`
