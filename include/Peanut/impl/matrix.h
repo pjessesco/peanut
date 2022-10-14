@@ -30,6 +30,8 @@
 #include <iostream>
 #include <type_traits>
 #include <cmath>
+#include <cstring>
+#include <vector>
 
 // Peanut headers
 #include <Peanut/impl/common.h>
@@ -66,16 +68,6 @@ namespace Peanut {
         inline auto elem(Index r, Index c) const{
             return static_cast<const E&>(*this).elem(r, c);
         }
-
-        /**
-         * @brief R size of the expression \p E.
-         */
-        static constexpr Index Row = E::Row;
-
-        /**
-         * @brief Column size of the expression \p E.
-         */
-        static constexpr Index Col = E::Col;
     };
 
     /**
