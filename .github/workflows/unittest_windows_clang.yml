@@ -1,4 +1,4 @@
-name: Unit Test (Windows)
+name: Unit Test (Windows, Clang)
 
 on:
   push:
@@ -21,7 +21,7 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.3
 
     - name: Configure CMake
-      run: cmake -B ./build -DTEST=ON
+      run: cmake -B ./build -T ClangCL -DTEST=ON
 
     - name: Build
       # Build your program with the given configuration

@@ -2,7 +2,8 @@
 
 [![Unit Test (macOS)](https://github.com/pjessesco/peanut/actions/workflows/unittest_macos.yml/badge.svg?branch=main)](https://github.com/pjessesco/peanut/actions/workflows/unittest_macos.yml) 
 [![Unit Test (Ubuntu)](https://github.com/pjessesco/peanut/actions/workflows/unittest_ubuntu.yml/badge.svg?branch=main)](https://github.com/pjessesco/peanut/actions/workflows/unittest_ubuntu.yml) 
-[![Unit Test (Windows)](https://github.com/pjessesco/peanut/actions/workflows/unittest_windows.yml/badge.svg?branch=main)](https://github.com/pjessesco/peanut/actions/workflows/unittest_windows.yml) 
+[![Unit Test (Windows MSVC)](https://github.com/pjessesco/peanut/actions/workflows/unittest_windows_msvc.yml/badge.svg?branch=main)](https://github.com/pjessesco/peanut/actions/workflows/unittest_windows_msvc.yml)
+[![Unit Test (Windows Clang)](https://github.com/pjessesco/peanut/actions/workflows/unittest_windows_clang.yml/badge.svg?branch=main)](https://github.com/pjessesco/peanut/actions/workflows/unittest_windows_clang.yml) 
 [![Deploy doxygen documents](https://github.com/pjessesco/peanut/actions/workflows/docs.yml/badge.svg?branch=main)](https://github.com/pjessesco/peanut/actions/workflows/docs.yml)
 
 **Peanut** is a header-only matrix library using C++20 without any external dependencies, (except unit test), following a `expression templates` concept. It first constructs matrix expression as a user provides, and evaluates it using an automatically generated code in a compile-time.
