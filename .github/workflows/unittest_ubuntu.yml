@@ -1,0 +1,30 @@
+name: Unit Test (Ubuntu)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+env:
+  # Run unittest on debug config only
+  BUILD_TYPE: Debug
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Configure CMake
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST=ON
+
+    - name: Build
+      # Build your program with the given configuration
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build/test
+      run: ./PeanutTest
+      

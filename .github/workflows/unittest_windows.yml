@@ -1,4 +1,4 @@
-name: Unit Test
+name: Unit Test (Windows)
 
 on:
   push:
@@ -12,19 +12,22 @@ env:
 
 jobs:
   build:
-    runs-on: macos-12
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v3
 
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.3
+
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST=ON
+      run: cmake -B ./build -DTEST=ON
 
     - name: Build
       # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+      run: cmake --build ./build --config Debug
 
     - name: Test
       working-directory: ${{github.workspace}}/build/test
-      run: ./PeanutTest
+      run: .\Debug\PeanutTest.exe
       
