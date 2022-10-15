@@ -113,7 +113,7 @@ namespace Peanut {
         template <typename ...TList>
             requires std::conjunction_v<std::is_same<T, TList>...> &&
                      (sizeof...(TList) == Row*Col)
-        Matrix(TList ... tlist) : m_data{std::forward<T>(tlist)...} {}
+        Matrix(TList ... tlist) : m_data{{std::forward<T>(tlist)...}} {}
 
         /**
          * @brief Constructor with std::array.
