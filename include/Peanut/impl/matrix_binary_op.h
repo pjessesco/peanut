@@ -32,6 +32,7 @@
 #include <Peanut/impl/binary_expr/matrix_mult_scalar.h>
 #include <Peanut/impl/binary_expr/matrix_subtract.h>
 #include <Peanut/impl/binary_expr/matrix_sum.h>
+#include <Peanut/impl/binary_expr/matrix_emult.h>
 
 // Dependencies headers
 
