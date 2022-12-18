@@ -397,7 +397,24 @@ TEST_CASE("Vector-features : operator[]"){
 }
 
 TEST_CASE("Vector-features : dot product, length(), normalize()"){
-    // TBD
+    SECTION("Dot product"){
+        // TOOD
+    }
+    SECTION("length()"){
+        // TODO
+    }
+    SECTION("normalize()"){
+        // TODO
+    }
+    SECTION("min/max"){
+        Peanut::Matrix<float, 3, 1> fltvec{1.4f, 3.3f, -1.2f};
+        CHECK(fltvec.min() == Catch::Approx(-1.2f));
+        CHECK(fltvec.max() == Catch::Approx(3.3f));
+
+        Peanut::Matrix<int, 1, 4> intvec{-10, 20, 10, 20};
+        CHECK(intvec.min() == -10);
+        CHECK(intvec.max() == 20);
+    }
 }
 
 TEST_CASE("Determinant"){

@@ -368,6 +368,24 @@ namespace Peanut {
             return ret;
         }
 
+        /**
+         * @brief Return max element, available only for vector usage.
+         *        (i.e., Row==1 or Col==1)
+         * @return Max element in the vector.
+         */
+        inline T max() const requires (Row==1) || (Col==1){
+            return *std::max_element(m_data.d1.begin(), m_data.d1.end());
+        }
+
+        /**
+         * @brief Return min element, available only for vector usage.
+         *        (i.e., Row==1 or Col==1)
+         * @return Min element in the vector.
+         */
+        inline T min() const requires (Row==1) || (Col==1){
+            return *std::min_element(m_data.d1.begin(), m_data.d1.end());
+        }
+
         // =============== Features for vector usage ends ================
 
         /**
