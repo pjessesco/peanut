@@ -62,8 +62,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
-      <li>Peanut</li>
+      <li><a href="#" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Peanut</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -193,6 +193,23 @@ Matrix&lt;int, 4, 4&gt; e2 = result;
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Constructed <code class="docutils literal notranslate"><a class="reference internal" href="#struct_peanut_1_1_impl_1_1_matrix_div_scalar"><span class="std std-ref"><span class="pre">Impl::MatrixDivScalar</span></span></a></code> instance </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN6Peanut5EMultEN4Impl11MatrixEMultI2E12E2EERK10MatrixExprI2E1ERK10MatrixExprI2E2E">
+<span id="_CPPv3I00EN6Peanut5EMultERK10MatrixExprI2E1ERK10MatrixExprI2E2E"></span><span id="_CPPv2I00EN6Peanut5EMultERK10MatrixExprI2E1ERK10MatrixExprI2E2E"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">E1</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">E2</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="matrix__emult_8h_1a805ef9bf3db60f345960614a32dfe7b1"></span><span class="n"><span class="pre">Impl</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">MatrixEMult</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN6Peanut5EMultEN4Impl11MatrixEMultI2E12E2EERK10MatrixExprI2E1ERK10MatrixExprI2E2E" title="Peanut::EMult::E1"><span class="n"><span class="pre">E1</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN6Peanut5EMultEN4Impl11MatrixEMultI2E12E2EERK10MatrixExprI2E1ERK10MatrixExprI2E2E" title="Peanut::EMult::E2"><span class="n"><span class="pre">E2</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">Peanut</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">EMult</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixExpr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN6Peanut5EMultEN4Impl11MatrixEMultI2E12E2EERK10MatrixExprI2E1ERK10MatrixExprI2E2E" title="Peanut::EMult::E1"><span class="n"><span class="pre">E1</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixExpr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN6Peanut5EMultEN4Impl11MatrixEMultI2E12E2EERK10MatrixExprI2E1ERK10MatrixExprI2E2E" title="Peanut::EMult::E2"><span class="n"><span class="pre">E2</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">y</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN6Peanut5EMultEN4Impl11MatrixEMultI2E12E2EERK10MatrixExprI2E1ERK10MatrixExprI2E2E" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Element-wise multiplication of matrix. See <code class="docutils literal notranslate"><a class="reference internal" href="#struct_peanut_1_1_impl_1_1_matrix_e_mult"><span class="std std-ref"><span class="pre">Impl::MatrixEMult</span></span></a></code> </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>E1</strong> – Left hand side matrix expression type. </p></li>
+<li><p><strong>E2</strong> – Right hand side matrix expression type. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Constructed <code class="docutils literal notranslate"><a class="reference internal" href="#struct_peanut_1_1_impl_1_1_matrix_e_mult"><span class="std std-ref"><span class="pre">Impl::MatrixEMult</span></span></a></code> instance </p>
 </dd>
 </dl>
 </dd></dl>
@@ -894,6 +911,28 @@ Matrix&lt;int, 4, 4&gt; e2 = result;
 </dd></dl>
 
 <dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6Peanut6Peanut6Matrix3maxEv">
+<span id="_CPPv3NK6Peanut6Peanut6Matrix3maxEv"></span><span id="_CPPv2NK6Peanut6Peanut6Matrix3maxEv"></span><span id="Peanut::Peanut::Matrix::maxC"></span><span class="target" id="struct_peanut_1_1_matrix_1af56c460f180e10b8f7b217efff9ffebf"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_5Index_5IndexEN6Peanut6Peanut6MatrixE" title="Peanut::Peanut::Matrix::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">max</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6Peanut6Peanut6Matrix3maxEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Return max element, available only for vector usage. (i.e., Row==1 or Col==1) </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Max element in the vector. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4NK6Peanut6Peanut6Matrix3minEv">
+<span id="_CPPv3NK6Peanut6Peanut6Matrix3minEv"></span><span id="_CPPv2NK6Peanut6Peanut6Matrix3minEv"></span><span id="Peanut::Peanut::Matrix::minC"></span><span class="target" id="struct_peanut_1_1_matrix_1a060d419cc26c84bbe0b95f00bb08370e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_5Index_5IndexEN6Peanut6Peanut6MatrixE" title="Peanut::Peanut::Matrix::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">min</span></span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><span class="w"> </span><span class="k"><span class="pre">const</span></span><a class="headerlink" href="#_CPPv4NK6Peanut6Peanut6Matrix3minEv" title="Permalink to this definition"></a><br /></dt>
+<dd><p>Return min element, available only for vector usage. (i.e., Row==1 or Col==1) </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Min element in the vector. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
 <dt class="sig sig-object cpp" id="_CPPv4N6Peanut6Peanut6Matrix12subtract_rowE5Index5Index1T">
 <span id="_CPPv3N6Peanut6Peanut6Matrix12subtract_rowE5Index5Index1T"></span><span id="_CPPv2N6Peanut6Peanut6Matrix12subtract_rowE5Index5Index1T"></span><span id="Peanut::Peanut::Matrix::subtract_row__Index.Index.T"></span><span class="target" id="struct_peanut_1_1_matrix_1ab19b135a29df461b69ef58247eba3c1e"></span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">subtract_row</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv4N6Peanut5IndexE" title="Peanut::Index"><span class="n"><span class="pre">Index</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">r1</span></span>, <a class="reference internal" href="#_CPPv4N6Peanut5IndexE" title="Peanut::Index"><span class="n"><span class="pre">Index</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">r2</span></span>, <a class="reference internal" href="#_CPPv4I0_5Index_5IndexEN6Peanut6Peanut6MatrixE" title="Peanut::Peanut::Matrix::T"><span class="n"><span class="pre">T</span></span></a><span class="w"> </span><span class="n sig-param"><span class="pre">scalar</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Peanut6Peanut6Matrix12subtract_rowE5Index5Index1T" title="Permalink to this definition"></a><br /></dt>
 <dd><p>Helper function for Gaussian elimination. It performs row subtraction after multiplying given scalar to the row (i.e., <code class="docutils literal notranslate"><span class="pre">r1</span> <span class="pre">=</span> <span class="pre">r1</span> <span class="pre">-</span> <span class="pre">(r2</span> <span class="pre">*</span> <span class="pre">scalar)</span></code>). </p>
@@ -1169,6 +1208,22 @@ Matrix&lt;int, 4, 4&gt; e2 = result;
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>E</strong> – Left hand side matrix expression type. </p></li>
 <li><p><strong>T</strong> – Right hand side scalar type. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE">
+<span id="_CPPv3I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE"></span><span id="_CPPv2I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">E1</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">E2</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="struct_peanut_1_1_impl_1_1_matrix_e_mult"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MatrixEMult</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Peanut</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">MatrixExpr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE" title="Peanut::Impl::Peanut::Impl::MatrixEMult"><span class="n"><span class="pre">MatrixEMult</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE" title="Peanut::Impl::Peanut::Impl::MatrixEMult::E1"><span class="n"><span class="pre">E1</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE" title="Peanut::Impl::Peanut::Impl::MatrixEMult::E2"><span class="n"><span class="pre">E2</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE" title="Permalink to this definition"></a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;matrix_emult.h&gt;</em></div>
+<p>Expression class which represents <code class="docutils literal notranslate"><span class="pre">EMult()</span></code>, element-wise multiplication. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>E1</strong> – Left hand side matrix expression type. </p></li>
+<li><p><strong>E2</strong> – Right hand side matrix expression type. </p></li>
 </ul>
 </dd>
 </dl>
