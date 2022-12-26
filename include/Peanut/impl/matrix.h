@@ -26,6 +26,7 @@
 
 // Standard headers
 #include <array>
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 #include <type_traits>
