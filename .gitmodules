@@ -1,0 +1,6 @@
+[submodule "armadillo-code"]
+	path = armadillo-code
+	url = https://gitlab.com/conradsnicta/armadillo-code
+[submodule "eigen"]
+	path = eigen
+	url = https://gitlab.com/libeigen/eigen
