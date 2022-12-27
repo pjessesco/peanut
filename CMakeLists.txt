@@ -3,14 +3,10 @@ project(Peanut)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_library(Peanut Peanut.cpp)
 include_directories(include)
 
-if(TEST)
-    add_subdirectory(test)
-endif()
+add_executable(PeanutBenchmark peanut.cpp)
+target_include_directories(PeanutBenchmark PUBLIC peanut)
 
-if(DOCS)
-    set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake ${CMAKE_MODULE_PATH})
-    add_subdirectory(docs)
-endif()
+add_subdirectory(eigen)
+add_subdirectory(armadillo-code)
