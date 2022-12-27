@@ -229,7 +229,6 @@ namespace Peanut {
          * @return Rvalue of an element in \p r 'th Row and \p c 'th column.
          */
         inline T elem(Index r, Index c) const{
-            assert((0<=r) && (r < R) && (0<=c) && (c < C));
             return m_data.d2[r][c];
         }
 
@@ -242,7 +241,6 @@ namespace Peanut {
          * @return Reference of an element in \p r 'th Row and \p c 'th column.
          */
         inline T& elem(Index r, Index c) {
-            assert((0<=r) && (r < R) && (0<=c) && (c < C));
             return m_data.d2[r][c];
         }
 
@@ -252,7 +250,6 @@ namespace Peanut {
          * @return `Matrix<Type, 1, Col>` instance.
          */
         Matrix<Type, 1, Col> get_row(Index idx) const{
-            assert((0<=idx) && (idx < Row));
             Matrix<Type, 1, Col> ret;
             memcpy(ret.m_data.d2, m_data.d2[idx], sizeof(Type)*Col);
             return ret;
@@ -264,7 +261,6 @@ namespace Peanut {
          * @param row Row matrix which will be assigned to the r'th row of the matrix.
          */
         void set_row(Index idx, const Matrix<Type, 1, Col> &row){
-            assert((0<=idx) && (idx < R));
             memcpy(m_data.d2[idx], row.m_data.d2, sizeof(Type)*Col);
         }
 
@@ -274,7 +270,6 @@ namespace Peanut {
          * @return `Matrix<Type, Row, 1>` instance.
          */
         Matrix<Type, Row, 1> get_col(Index idx) const{
-            assert((0<=idx) && (idx < Col));
             Matrix<Type, Row, 1> ret;
             for(int i=0;i<Row;i++){
                 ret.m_data.d1[i] = m_data.d2[i][idx];
@@ -288,7 +283,6 @@ namespace Peanut {
          * @param row Column matrix which will be assigned to the idx'th column of the matrix.
          */
         void set_col(Index idx, const Matrix<Type, Row, 1> &col){
-            assert((0<=idx) && (idx < Col));
             for(int i=0;i<Row;i++){
                 m_data.d2[i][idx] = col.m_data.d1[i];
             }
