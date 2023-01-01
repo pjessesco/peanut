@@ -153,7 +153,7 @@ TEST_CASE("Test binary operation : Element-wise multiply"){
         Peanut::Matrix<float, 2, 2> flt_22_mat1{1.0f, 2.0f, 3.0f, 4.0f};
         Peanut::Matrix<float, 2, 2> flt_22_mat2{6.6f,7.7f,8.8f,9.9f};
         Peanut::Matrix<float, 2, 2> flt_22_mat3{5.5f, 4.4f, 3.3f, 2.2f};
-        Peanut::Matrix<float, 2, 2> mul_mat = Peanut::EMult(flt_22_mat1, Peanut::EMult(flt_22_mat2, flt_22_mat3));
+        Peanut::Matrix<float, 2, 2> mul_mat = flt_22_mat1 % flt_22_mat2 % flt_22_mat3;
 
         CHECK(mul_mat.elem(0, 0) == Catch::Approx(36.3f));
         CHECK(mul_mat.elem(0, 1) == Catch::Approx(67.76f));

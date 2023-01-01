@@ -71,7 +71,7 @@ namespace Peanut {
      */
     template<typename E1, typename E2>
         requires is_equal_size_mat_v<E1, E2>
-    Impl::MatrixEMult<E1, E2> EMult(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y) {
+    Impl::MatrixEMult<E1, E2> operator%(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y) {
         return Impl::MatrixEMult<E1, E2>(static_cast<const E1 &>(x), static_cast<const E2 &>(y));
     }
 }
