@@ -21,20 +21,54 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 //
-
 #pragma once
 
 // Standard headers
 
 // Peanut headers
-#include <Peanut/impl/unary_expr/adjugate.h>
-#include <Peanut/impl/unary_expr/block.h>
-#include <Peanut/impl/unary_expr/cast.h>
-#include <Peanut/impl/unary_expr/cofactor.h>
-#include <Peanut/impl/unary_expr/inverse.h>
-#include <Peanut/impl/unary_expr/minor.h>
-#include <Peanut/impl/unary_expr/negation.h>
-#include <Peanut/impl/unary_expr/submatrix.h>
-#include <Peanut/impl/unary_expr/transpose.h>
+#include <Peanut/impl/common.h>
+#include <Peanut/impl/matrix_type_traits.h>
 
 // Dependencies headers
+
+namespace Peanut::Impl {
+
+    /**
+     * @brief Expression class which represents its negation.
+     * @tparam E Matrix expression type.
+     */
+    template<typename E>
+        requires is_matrix_v<E>
+    struct MatrixNegation : public MatrixExpr<MatrixNegation<E>> {
+        using Type = typename E::Type;
+        MatrixNegation(const E &x) : x{x} {}
+
+        // Static polymorphism implementation of MatrixExpr
+        inline auto elem(Index r, Index c) const {
+            return -x.elem(r, c);
+        }
+
+        static constexpr Index Row = E::Row;
+        static constexpr Index Col = E::Col;
+
+        inline Matrix<Type, Row, Col> eval() const {
+            return Matrix<Type, Row, Col>(*this);
+        }
+
+        const E &x;
+    };
+}
+
+namespace Peanut{
+    /**
+     * @brief Negation operation of matrix.
+     * @tparam E Matrix expression type.
+     * @return Constructed `Impl::MatrixNegation` instance
+     */
+    template<typename E>
+        requires is_matrix_v<E>
+    Impl::MatrixNegation<E> operator-(const MatrixExpr<E> &x) {
+        return Impl::MatrixNegation<E>(static_cast<const E &>(x));
+    }
+
+}

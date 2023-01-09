@@ -82,6 +82,24 @@ TEST_CASE("Test unary operation : Block"){
     }
 }
 
+TEST_CASE("Test unary operation : Negation"){
+    Peanut::Matrix<int, 2, 2> mat{1,2,
+                                  3,4};
+
+    SECTION("Validation"){
+        Peanut::Matrix<int, 2, 2> n = -mat;
+        CHECK(n.elem(0, 0) == -1);
+        CHECK(n.elem(0, 1) == -2);
+        CHECK(n.elem(1, 0) == -3);
+        CHECK(n.elem(1, 1) == -4);
+
+        CHECK(mat.elem(0, 0) == 1);
+        CHECK(mat.elem(0, 1) == 2);
+        CHECK(mat.elem(1, 0) == 3);
+        CHECK(mat.elem(1, 1) == 4);
+    }
+}
+
 TEST_CASE("Test unary operation : SubMat"){
     Peanut::Matrix<int, 4, 4> mat{1,2,3,4,
                                   5,6,7,8,
@@ -604,6 +622,7 @@ TEST_CASE("Test unary operation : Adjugate"){
         CHECK(mmat2.elem(2, 2) == Catch::Approx(-1.5668290134411296e+6f));
     }
 }
+
 
 TEST_CASE("Test unary operation : Inverse"){
     Peanut::Matrix<float, 5, 5> mat1{6.5f, 8.1f, 7.6f, 2.5f, 3.8f,
