@@ -396,7 +396,7 @@ TEST_CASE("Vector-features : operator[]"){
     }
 }
 
-TEST_CASE("Vector-features : dot product, length(), normalize()"){
+TEST_CASE("Vector-features : dot product, length(), normalize(), cross()"){
     SECTION("Dot product"){
         // TOOD
     }
@@ -414,6 +414,14 @@ TEST_CASE("Vector-features : dot product, length(), normalize()"){
         Peanut::Matrix<int, 1, 4> intvec{-10, 20, 10, 20};
         CHECK(intvec.min() == -10);
         CHECK(intvec.max() == 20);
+    }
+    SECTION("cross"){
+        Peanut::Matrix<float, 3, 1> v1{1.0f, 0.0f, 0.0f};
+        Peanut::Matrix<float, 3, 1> v2{0.0f, 1.0f, 0.0f};
+        auto result = Peanut::Matrix<float, 3, 1>::cross(v1, v2);
+        CHECK(result[0] == 0.0f);
+        CHECK(result[1] == 0.0f);
+        CHECK(result[2] == 1.0f);
     }
 }
 

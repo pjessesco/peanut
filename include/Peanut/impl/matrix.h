@@ -381,6 +381,17 @@ namespace Peanut {
             return *std::min_element(m_data.d1.begin(), m_data.d1.end());
         }
 
+        /**
+         * @brief Cross product available for 3-size vectors.
+         * @return Cross-product result
+         */
+        static Matrix cross(const Matrix &m1, const Matrix &m2)
+            requires (Row==1 && Col==3) || (Row==3 && Col==1){
+            return {m1[1] * m2[2] - m1[2] * m2[1],
+                    m1[2] * m2[0] - m1[0] * m2[2],
+                    m1[0] * m2[1] - m1[1] * m2[0]};
+        }
+
         // =============== Features for vector usage ends ================
 
         /**
