@@ -34,6 +34,8 @@
 
 // Dependencies headers
 
+#define INLINE __attribute__((always_inline)) inline
+
 namespace Peanut {
     using Index = unsigned int;
     using Float = float;
