@@ -66,7 +66,7 @@ namespace Peanut {
          * @param c C index.
          * @return Rvalue of an element in \p r 'th Row and \p c 'th column.
          */
-        inline auto elem(Index r, Index c) const{
+        INLINE auto elem(Index r, Index c) const{
             return static_cast<const E&>(*this).elem(r, c);
         }
     };
@@ -228,7 +228,7 @@ namespace Peanut {
          * @param c Column index.
          * @return Rvalue of an element in \p r 'th Row and \p c 'th column.
          */
-        inline T elem(Index r, Index c) const{
+        INLINE T elem(Index r, Index c) const{
             return m_data.d2[r][c];
         }
 
@@ -240,7 +240,7 @@ namespace Peanut {
          * @param c Column index.
          * @return Reference of an element in \p r 'th Row and \p c 'th column.
          */
-        inline T& elem(Index r, Index c) {
+        INLINE T& elem(Index r, Index c) {
             return m_data.d2[r][c];
         }
 
@@ -294,7 +294,7 @@ namespace Peanut {
          *        method even though it is not a method of `MatrixExpr`.
          * @return Evaluated matrix
          */
-        inline Matrix<Type, Row, Col> eval() const{
+        INLINE Matrix<Type, Row, Col> eval() const{
             return Matrix<Type, Row, Col>(*this);
         }
 
@@ -306,7 +306,7 @@ namespace Peanut {
          * @param i Index
          * @return \p T type i'th element data.
          */
-        inline T operator[](Index i) const
+        INLINE T operator[](Index i) const
             requires (Row==1) || (Col==1){
             return m_data.d1[i];
         }
@@ -317,7 +317,7 @@ namespace Peanut {
          * @param i Index
          * @return Reference of i'th element.
          */
-        inline T& operator[](Index i)
+        INLINE T& operator[](Index i)
             requires (Row==1) || (Col==1){
             return m_data.d1[i];
         }

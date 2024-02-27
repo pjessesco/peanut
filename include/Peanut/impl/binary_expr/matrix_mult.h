@@ -47,7 +47,7 @@ namespace Peanut::Impl {
         MatrixMult(const E1 &_x, const E2 &_y) : x_eval{_x}, y_eval{_y} {}
 
         // Static polymorphism implementation of MatrixExpr
-        inline auto elem(Index r, Index c) const {
+        INLINE auto elem(Index r, Index c) const {
             auto ret = x_eval.elem(r, 0) * y_eval.elem(0, c);
             for (Index i = 1; i < E1::Col; i++) {
                 ret += x_eval.elem(r, i) * y_eval.elem(i, c);
@@ -58,7 +58,7 @@ namespace Peanut::Impl {
         static constexpr Index Row = E1::Row;
         static constexpr Index Col = E2::Col;
 
-        inline auto eval() const {
+        INLINE auto eval() const {
             return Matrix<Type, Row, Col>(*this);
         }
 
