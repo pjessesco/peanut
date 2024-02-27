@@ -48,14 +48,14 @@ namespace Peanut::Impl {
         MatrixBlock(const E &x) : x{x} {}
 
         // Static polymorphism implementation of MatrixExpr
-        inline auto elem(Index r, Index c) const {
+        INLINE auto elem(Index r, Index c) const {
             return x.elem(row_start + r, col_start + c);
         }
 
         static constexpr Index Row = row_size;
         static constexpr Index Col = col_size;
 
-        inline Matrix<Type, Row, Col> eval() const {
+        INLINE Matrix<Type, Row, Col> eval() const {
             return Matrix<Type, Row, Col>(*this);
         }
 
