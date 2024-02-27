@@ -47,14 +47,14 @@ namespace Peanut::Impl {
         MatrixMultScalar(const E &x, T y) : x{x}, y{y} {}
 
         // Static polymorphism implementation of MatrixExpr
-        inline Type elem(Index r, Index c) const {
+        INLINE Type elem(Index r, Index c) const {
             return static_cast<Type>(x.elem(r, c)) * static_cast<Type>(y);
         }
 
         static constexpr Index Row = E::Row;
         static constexpr Index Col = E::Col;
 
-        inline auto eval() const {
+        INLINE auto eval() const {
             return Matrix<Type, Row, Col>(*this);
         }
 

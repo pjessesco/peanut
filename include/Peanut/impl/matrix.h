@@ -66,7 +66,7 @@ namespace Peanut {
          * @param c C index.
          * @return Rvalue of an element in \p r 'th Row and \p c 'th column.
          */
-        inline auto elem(Index r, Index c) const{
+        INLINE auto elem(Index r, Index c) const{
             return static_cast<const E&>(*this).elem(r, c);
         }
     };
@@ -228,7 +228,7 @@ namespace Peanut {
          * @param c Column index.
          * @return Rvalue of an element in \p r 'th Row and \p c 'th column.
          */
-        inline T elem(Index r, Index c) const{
+        INLINE T elem(Index r, Index c) const{
             return m_data.d2[r][c];
         }
 
@@ -240,7 +240,7 @@ namespace Peanut {
          * @param c Column index.
          * @return Reference of an element in \p r 'th Row and \p c 'th column.
          */
-        inline T& elem(Index r, Index c) {
+        INLINE T& elem(Index r, Index c) {
             return m_data.d2[r][c];
         }
 
@@ -294,7 +294,7 @@ namespace Peanut {
          *        method even though it is not a method of `MatrixExpr`.
          * @return Evaluated matrix
          */
-        inline Matrix<Type, Row, Col> eval() const{
+        INLINE Matrix<Type, Row, Col> eval() const{
             return Matrix<Type, Row, Col>(*this);
         }
 
@@ -306,7 +306,7 @@ namespace Peanut {
          * @param i Index
          * @return \p T type i'th element data.
          */
-        inline T operator[](Index i) const
+        INLINE T operator[](Index i) const
             requires (Row==1) || (Col==1){
             return m_data.d1[i];
         }
@@ -317,7 +317,7 @@ namespace Peanut {
          * @param i Index
          * @return Reference of i'th element.
          */
-        inline T& operator[](Index i)
+        INLINE T& operator[](Index i)
             requires (Row==1) || (Col==1){
             return m_data.d1[i];
         }
@@ -328,7 +328,7 @@ namespace Peanut {
          * @param vec Equal-type matrix(vector).
          * @return T type dot product result.
          */
-        inline T dot(const Matrix &vec) const requires (Row==1) || (Col==1){
+        T dot(const Matrix &vec) const requires (Row==1) || (Col==1){
             T ret = t_0;
             for(int i=0;i<Row*Col;i++){
                 ret += (vec.m_data.d1[i] * m_data.d1[i]);
@@ -341,7 +341,7 @@ namespace Peanut {
          *        (i.e., Row==1 or Col==1)
          * @return Float l2 distance of the vector.
          */
-        inline Float length() const requires (Row==1) || (Col==1){
+        Float length() const requires (Row==1) || (Col==1){
             T ret = t_0;
             for(int i=0;i<Row*Col;i++){
                 ret += (m_data.d1[i] * m_data.d1[i]);
@@ -354,7 +354,7 @@ namespace Peanut {
          *        (i.e., Row==1 or Col==1)
          * @return Normalized Float matrix(vector).
          */
-        inline Matrix<Float, Row, Col> normalize() const requires (Row==1) || (Col==1){
+        Matrix<Float, Row, Col> normalize() const requires (Row==1) || (Col==1){
             Matrix<Float, Row, Col> ret;
             const Float len = length();
             for(int i=0;i<Row*Col;i++){
@@ -368,7 +368,7 @@ namespace Peanut {
          *        (i.e., Row==1 or Col==1)
          * @return Max element in the vector.
          */
-        inline T max() const requires (Row==1) || (Col==1){
+        T max() const requires (Row==1) || (Col==1){
             return *std::max_element(m_data.d1.begin(), m_data.d1.end());
         }
 
@@ -377,7 +377,7 @@ namespace Peanut {
          *        (i.e., Row==1 or Col==1)
          * @return Min element in the vector.
          */
-        inline T min() const requires (Row==1) || (Col==1){
+        T min() const requires (Row==1) || (Col==1){
             return *std::min_element(m_data.d1.begin(), m_data.d1.end());
         }
 

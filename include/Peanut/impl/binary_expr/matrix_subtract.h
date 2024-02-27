@@ -45,14 +45,14 @@ namespace Peanut::Impl {
         MatrixSubtract(const E1 &x, const E2 &y) : x{x}, y{y} {}
 
         // Static polymorphism implementation of MatrixExpr
-        inline auto elem(Index r, Index c) const {
+        INLINE auto elem(Index r, Index c) const {
             return x.elem(r, c) - y.elem(r, c);
         }
 
         static constexpr Index Row = E1::Row;
         static constexpr Index Col = E1::Col;
 
-        inline auto eval() const {
+        INLINE auto eval() const {
             return Matrix<Type, Row, Col>(*this);
         }
 

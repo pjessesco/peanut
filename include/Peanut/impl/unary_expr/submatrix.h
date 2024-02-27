@@ -47,14 +47,14 @@ namespace Peanut::Impl {
         MatrixSub(const E &x) : x{x} {}
 
         // Static polymorphism implementation of MatrixExpr
-        inline auto elem(Index r, Index c) const {
+        INLINE auto elem(Index r, Index c) const {
             return x.elem(r < row_ex ? r : r + 1, c < col_ex ? c : c + 1);
         }
 
         static constexpr Index Row = E::Row - 1;
         static constexpr Index Col = E::Col - 1;
 
-        inline Matrix<Type, Row, Col> eval() const {
+        INLINE Matrix<Type, Row, Col> eval() const {
             return Matrix<Type, Row, Col>(*this);
         }
 
