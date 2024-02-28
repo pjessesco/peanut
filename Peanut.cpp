@@ -11,12 +11,12 @@
 #include "longmatstr.h"
 
 #define SUM_STR (mat1+mat1)
-#define MAT_STR NUMSTR_1000
+#define MAT_STR NUMSTR_100, NUMSTR_100
 
 int main() {
-    constexpr int row = 100;
+    constexpr int row = 20;
     constexpr int col = 10;
-    int iter = 10000;
+    int iter = 100000;
     // Peanut benchmarking
     {
         Peanut::Matrix<int, row, col> mat1{MAT_STR};
