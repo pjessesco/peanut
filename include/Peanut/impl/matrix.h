@@ -96,9 +96,16 @@ namespace Peanut {
         static constexpr Index Col = C;
 
         /**
-         * @brief Constructor without any parameters initialize to zero matrix.
+         * @brief Default constructor does not initialize any data.
          */
-        Matrix() {m_data.d1.fill(t_0);}
+        Matrix() = default;
+
+        /**
+         * @brief Constructor with a single value
+         */
+        explicit Matrix(const T &val){
+            m_data.d1.fill(val);
+        }
 
         /**
          * @brief Constructor with row-major elements.
@@ -144,18 +151,20 @@ namespace Peanut {
         }
 
         /**
-         * @brief Equivalent with `Matrix::Matrix()`, but for explicit purpose.
+         * @brief Get zero matrix
          * @return Zero matrix with given \p R and \p C .
          */
-        static Matrix zeros() {return Matrix();}
+        static Matrix zeros() {
+            static const Matrix zero = Matrix(t_0);
+            return zero;
+        }
 
         /**
          * @brief Construct identity matrix. Available only for square matrix case.
          * @return Identity matrix with given \p R and \p C .
          */
         static Matrix identity() requires is_square_v<Matrix> {
-            Matrix a;
-            a.m_data.d1.fill(t_0);
+            Matrix a = Matrix::zeros();
             for (Index i = 0; i < R; i++) {
                 a.m_data.d2[i][i] = t_1;
             }
