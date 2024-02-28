@@ -16,7 +16,7 @@
 int main() {
     constexpr int row = 20;
     constexpr int col = 10;
-    int iter = 100000;
+    int iter = 1000000;
     // Peanut benchmarking
     {
         Peanut::Matrix<int, row, col> mat1{MAT_STR};
