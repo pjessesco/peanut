@@ -13,16 +13,16 @@ env:
 jobs:
   deploy:
 
-    runs-on: macos-12
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v3
 
     - name: Install Doxygen
-      run: brew install doxygen
+      run: brew install doxygen pipx
 
     - name: Install pip3 packages
-      run: pip3 install Sphinx sphinx-rtd-theme breathe sphinx-mdinclude
+      run: pip3 install Sphinx sphinx-rtd-theme breathe sphinx-mdinclude --break-system-packages
 
     - name: Configure CMake with DOCS
       run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DDOCS=ON

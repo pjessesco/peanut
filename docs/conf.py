@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Peanut'
-copyright = '2022, Jino Park'
+copyright = '2022-2024, Jino Park'
 author = 'Jino Park'
 
 

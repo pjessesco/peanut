@@ -12,7 +12,7 @@ env:
 
 jobs:
   build:
-    runs-on: macos-12
+    runs-on: macos-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -21,7 +21,7 @@ jobs:
       run: brew install llvm
 
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_C_COMPILER=/usr/local/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/usr/local/opt/llvm/bin/clang++ -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST=ON
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang -DCMAKE_CXX_COMPILER=/opt/homebrew/opt/llvm/bin/clang++ -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}} -DTEST=ON
 
     - name: Build
       # Build your program with the given configuration
