@@ -3,4 +3,7 @@
 build/
 cmake-build-debug/
 cmake-build-release/
+cmake-build-relwithdebinfo/
+armadillo-code/
+eigen/
 .vs/
