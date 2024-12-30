@@ -34,7 +34,11 @@
 
 // Dependencies headers
 
+#if defined(_MSC_VER) && !defined(__llvm__) && !defined(__INTEL_COMPILER)
+#define INLINE __forceinline
+#else
 #define INLINE __attribute__((always_inline)) inline
+#endif
 
 namespace Peanut {
     using Index = unsigned int;
