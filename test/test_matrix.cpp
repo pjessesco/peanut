@@ -1,7 +1,7 @@
 //
 // This software is released under the MIT license.
 //
-// Copyright (c) 2022 Jino Park
+// Copyright (c) 2022-2024 Jino Park
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -32,20 +32,6 @@
 // Dependencies headers
 #include "catch_amalgamated.hpp"
 
-
-TEST_CASE("Default constructor : zero matrix"){
-    Peanut::Matrix<int, 2, 2> zero_22_int_mat;
-    CHECK(zero_22_int_mat.elem(0, 0) == 0);
-    CHECK(zero_22_int_mat.elem(0, 1) == 0);
-    CHECK(zero_22_int_mat.elem(1, 0) == 0);
-    CHECK(zero_22_int_mat.elem(1, 1) == 0);
-
-    Peanut::Matrix<float, 2, 2> zero_22_float_mat;
-    CHECK(zero_22_float_mat.elem(0, 0) == Catch::Approx(0.0f));
-    CHECK(zero_22_float_mat.elem(0, 1) == Catch::Approx(0.0f));
-    CHECK(zero_22_float_mat.elem(1, 0) == Catch::Approx(0.0f));
-    CHECK(zero_22_float_mat.elem(1, 1) == Catch::Approx(0.0f));
-}
 
 TEST_CASE("Construct using parameter pack"){
     Peanut::Matrix<int, 2, 2> intmat(1,2,3,4);

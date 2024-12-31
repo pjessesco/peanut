@@ -1,7 +1,7 @@
 //
 // This software is released under the MIT license.
 //
-// Copyright (c) 2022 Jino Park
+// Copyright (c) 2022-2024 Jino Park
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,11 @@
 
 // Dependencies headers
 
+#if defined(_MSC_VER) && !defined(__llvm__) && !defined(__INTEL_COMPILER)
+#define INLINE __forceinline
+#else
 #define INLINE __attribute__((always_inline)) inline
+#endif
 
 namespace Peanut {
     using Index = unsigned int;

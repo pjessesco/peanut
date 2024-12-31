@@ -2,7 +2,6 @@
 
 [![Unit Test (macOS, AppleClang)](https://github.com/pjessesco/peanut/actions/workflows/unittest_macos_appleclang.yml/badge.svg?branch=main)](https://github.com/pjessesco/peanut/actions/workflows/unittest_macos_appleclang.yml) 
 [![Unit Test (macOS, Clang)](https://github.com/pjessesco/peanut/actions/workflows/unittest_macos_clang.yml/badge.svg?branch=main)](https://github.com/pjessesco/peanut/actions/workflows/unittest_macos_clang.yml) 
-[![Unit Test (Ubuntu)](https://github.com/pjessesco/peanut/actions/workflows/unittest_ubuntu.yml/badge.svg?branch=main)](https://github.com/pjessesco/peanut/actions/workflows/unittest_ubuntu.yml) 
 [![Unit Test (Windows MSVC)](https://github.com/pjessesco/peanut/actions/workflows/unittest_windows_msvc.yml/badge.svg?branch=main)](https://github.com/pjessesco/peanut/actions/workflows/unittest_windows_msvc.yml)
 [![Unit Test (Windows Clang)](https://github.com/pjessesco/peanut/actions/workflows/unittest_windows_clang.yml/badge.svg?branch=main)](https://github.com/pjessesco/peanut/actions/workflows/unittest_windows_clang.yml) 
 [![Deploy doxygen documents](https://github.com/pjessesco/peanut/actions/workflows/docs.yml/badge.svg?branch=main)](https://github.com/pjessesco/peanut/actions/workflows/docs.yml)
