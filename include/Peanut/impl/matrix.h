@@ -61,13 +61,13 @@ namespace Peanut {
          * @details It is also used for evaluation of an arbitrary matrix expression
          *          by recursively calling in derived classes. See also
          *          `Matrix::Matrix(const MatrixExpr<E> &expr)` and
-         *          `Matrix::elem(Index r, Index c)` and other derived classes.
+         *          `Matrix::operator(Index r, Index c)` and other derived classes.
          * @param r R index.
          * @param c C index.
          * @return Rvalue of an element in \p r 'th Row and \p c 'th column.
          */
-        INLINE auto elem(Index r, Index c) const{
-            return static_cast<const E&>(*this).elem(r, c);
+        INLINE auto operator()(Index r, Index c) const{
+            return static_cast<const E&>(*this)(r, c);
         }
     };
 
@@ -140,7 +140,7 @@ namespace Peanut {
         Matrix(const MatrixExpr<E> &expr) requires is_equal_type_size_v<E, Matrix>{
             for(Index r=0;r< R;r++){
                 for(Index c=0;c< C;c++){
-                    m_data[r*C+c] = expr.elem(r, c);
+                    m_data[r*C+c] = expr(r, c);
                 }
             }
         }
@@ -229,12 +229,12 @@ namespace Peanut {
         }
 
         /**
-         * @brief Implementation of `MatrixExpr::elem()` which returns rvalue.
+         * @brief Implementation of `MatrixExpr::operator()` which returns rvalue.
          * @param r Row index.
          * @param c Column index.
          * @return Rvalue of an element in \p r 'th Row and \p c 'th column.
          */
-        INLINE T elem(Index r, Index c) const{
+        INLINE T operator()(Index r, Index c) const{
             return m_data[r*C+c];
         }
 
@@ -246,7 +246,7 @@ namespace Peanut {
          * @param c Column index.
          * @return Reference of an element in \p r 'th Row and \p c 'th column.
          */
-        INLINE T& elem(Index r, Index c) {
+        INLINE T& operator()(Index r, Index c) {
             return m_data[r*C+c];
         }
 
@@ -421,7 +421,7 @@ namespace Peanut {
          */
         void subtract_row(Index r1, Index r2, T scalar){
             for(int i=0;i< C;i++){
-                elem(r1, i) -= scalar * elem(r2, i);
+                (*this)(r1, i) -= scalar * (*this)(r2, i);
             }
         }
 
@@ -435,12 +435,12 @@ namespace Peanut {
         Matrix<Float, R, C> gaussian_elem() const{
             Matrix<Float, R, C> ret = Cast<Float>(*this);
             for(int j=0;j< R -1;j++){
-                const Float denom = static_cast<Float>(ret.elem(j,j));
+                const Float denom = static_cast<Float>(ret(j,j));
                 if(is_zero(denom)){
                     continue;
                 }
                 for(int i=j+1;i< R;i++){
-                    const Float ratio = static_cast<Float>(ret.elem(i, j)) / denom;
+                    const Float ratio = static_cast<Float>(ret(i, j)) / denom;
                     ret.subtract_row(i, j, ratio);
                 }
             }
@@ -479,12 +479,12 @@ namespace Peanut {
                 return m_data[0];
             }
             else if constexpr (C ==2){
-                return elem(0, 0) * elem(1, 1) - elem(0, 1) * elem(1, 0);
+                return (*this)(0, 0) * (*this)(1, 1) - (*this)(0, 1) * (*this)(1, 0);
             }
             auto upper_triangular = gaussian_elem();
-            Float det = upper_triangular.elem(0, 0);
+            Float det = upper_triangular(0, 0);
             for(int i=1;i< R;i++){
-                det *= upper_triangular.elem(i, i);
+                det *= upper_triangular(i, i);
             }
             return det;
         }

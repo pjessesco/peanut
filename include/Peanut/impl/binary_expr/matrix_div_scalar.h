@@ -51,8 +51,8 @@ namespace Peanut::Impl {
         }
 
         // Static polymorphism implementation of MatrixExpr
-        INLINE Float elem(Index r, Index c) const {
-            return static_cast<Type>(x.elem(r, c)) / static_cast<Float>(y);
+        INLINE Float operator()(Index r, Index c) const {
+            return static_cast<Type>(x(r, c)) / static_cast<Float>(y);
         }
 
         static constexpr Index Row = E::Row;

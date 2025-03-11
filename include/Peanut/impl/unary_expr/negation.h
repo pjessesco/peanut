@@ -44,8 +44,8 @@ namespace Peanut::Impl {
         MatrixNegation(const E &x) : x{x} {}
 
         // Static polymorphism implementation of MatrixExpr
-        INLINE auto elem(Index r, Index c) const {
-            return -x.elem(r, c);
+        INLINE auto operator()(Index r, Index c) const {
+            return -x(r, c);
         }
 
         static constexpr Index Row = E::Row;

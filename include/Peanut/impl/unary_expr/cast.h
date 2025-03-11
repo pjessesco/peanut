@@ -44,8 +44,8 @@ namespace Peanut::Impl {
         MatrixCastType(const E &x) : x{x} {}
 
         // Static polymorphism implementation of MatrixExpr
-        INLINE T elem(Index r, Index c) const {
-            return static_cast<T>(x.elem(r, c));
+        INLINE T operator()(Index r, Index c) const {
+            return static_cast<T>(x(r, c));
         }
 
         static constexpr Index Row = E::Row;
