@@ -45,14 +45,14 @@ namespace Peanut::Impl {
         MatrixMinor(const E &_x) {
             for_<Row>([&](auto r) {
                 for_<Col>([&](auto c) {
-                    mat_eval.elem(r.value, c.value) = SubMat<r.value, c.value>(_x).eval().det();
+                    mat_eval(r.value, c.value) = SubMat<r.value, c.value>(_x).eval().det();
                 });
             });
         }
 
         // Static polymorphism implementation of MatrixExpr
-        INLINE auto elem(Index r, Index c) const {
-            return mat_eval.elem(r, c);
+        INLINE auto operator()(Index r, Index c) const {
+            return mat_eval(r, c);
         }
 
         static constexpr Index Row = E::Row;

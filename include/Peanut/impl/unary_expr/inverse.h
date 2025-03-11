@@ -52,8 +52,8 @@ namespace Peanut::Impl {
         }
 
         // Static polymorphism implementation of MatrixExpr
-        INLINE Float elem(Index r, Index c) const {
-            return invdet * cofactor_eval.elem(c, r);
+        INLINE Float operator()(Index r, Index c) const {
+            return invdet * cofactor_eval(c, r);
         }
 
         static constexpr Index Row = E::Row;

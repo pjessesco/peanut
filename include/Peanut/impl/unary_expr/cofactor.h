@@ -50,17 +50,17 @@ namespace Peanut::Impl {
                     constexpr Index cv = c.value;
                     const Type e = SubMat<rv, cv>(_x).eval().det();
                     if constexpr ((rv + cv) % 2 == 0) {
-                        mat_eval.elem(rv, cv) = e;
+                        mat_eval(rv, cv) = e;
                     } else {
-                        mat_eval.elem(rv, cv) = -e;
+                        mat_eval(rv, cv) = -e;
                     }
                 });
             });
         }
 
         // Static polymorphism implementation of MatrixExpr
-        INLINE auto elem(Index r, Index c) const {
-            return mat_eval.elem(r, c);
+        INLINE auto operator()(Index r, Index c) const {
+            return mat_eval(r, c);
         }
 
         static constexpr Index Row = E::Row;

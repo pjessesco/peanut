@@ -44,8 +44,8 @@ namespace Peanut::Impl {
         MatrixTranspose(const E &x) : x{x} {}
 
         // Static polymorphism implementation of MatrixExpr
-        INLINE auto elem(Index r, Index c) const {
-            return x.elem(c, r);
+        INLINE auto operator()(Index r, Index c) const {
+            return x(c, r);
         }
 
         static constexpr Index Row = E::Col;

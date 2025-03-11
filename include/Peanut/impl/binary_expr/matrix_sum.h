@@ -45,8 +45,8 @@ namespace Peanut::Impl {
         MatrixSum(const E1 &x, const E2 &y) : x{x}, y{y} {}
 
         // Static polymorphism implementation of MatrixExpr
-        INLINE auto elem(Index r, Index c) const {
-            return x.elem(r, c) + y.elem(r, c);
+        INLINE auto operator()(Index r, Index c) const {
+            return x(r, c) + y(r, c);
         }
 
         static constexpr Index Row = E1::Row;
