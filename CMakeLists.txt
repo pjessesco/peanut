@@ -5,6 +5,10 @@ set(CMAKE_CXX_STANDARD 20)
 
 include_directories(include)
 
+if(TEST)
+    add_subdirectory(test)
+endif()
+
 add_executable(PeanutBenchmark peanut.cpp)
 target_include_directories(PeanutBenchmark PUBLIC peanut)
 
