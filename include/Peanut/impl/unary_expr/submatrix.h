@@ -54,8 +54,12 @@ namespace Peanut::Impl {
         static constexpr Index Row = E::Row - 1;
         static constexpr Index Col = E::Col - 1;
 
-        INLINE Matrix<Type, Row, Col> eval() const {
-            return Matrix<Type, Row, Col>(*this);
+        void eval(Matrix<Type, Row, Col> &_result) const {
+            for (int i=0;i<Row;i++) {
+                for (int j=0;j<Col;j++) {
+                    _result(i,j) = x(i < row_ex ? i : i + 1, j < col_ex ? j : j + 1);
+                }
+            }
         }
 
         const E &x;

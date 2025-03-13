@@ -37,7 +37,8 @@ TEST_CASE("Test unary operation : T"){
                                   4,5,6};
 
     SECTION("Validation"){
-        auto tmat = T(mat).eval();
+        Peanut::Matrix<int, 3, 2> tmat;
+        T(mat).eval(tmat);
 
         CHECK(tmat(0, 0) == 1);
         CHECK(tmat(0, 1) == 4);
@@ -62,7 +63,8 @@ TEST_CASE("Test unary operation : Block"){
                                   13,14,15,16};
 
     SECTION("Validation"){
-        auto b1 = Peanut::Block<0,1,3,2>(mat).eval();
+        Peanut::Matrix<int, 3, 2> b1;
+        Peanut::Block<0,1,3,2>(mat).eval(b1);
         CHECK(b1(0, 0) == 2);
         CHECK(b1(0, 1) == 3);
         CHECK(b1(1, 0) == 6);
@@ -70,14 +72,16 @@ TEST_CASE("Test unary operation : Block"){
         CHECK(b1(2, 0) == 10);
         CHECK(b1(2, 1) == 11);
 
-        auto b2 = Peanut::Block<0,0,4,4>(mat).eval();
-        for(int i=0;i<4;i++){
+        Peanut::Matrix<int, 4, 4> b2;
+        Peanut::Block<0, 0, 4, 4>(mat).eval(b2);
+        for (int i=0;i<4;i++){
             for(int j=0;j<4;j++){
                 CHECK(mat(i,j) == b2(i,j));
             }
         }
 
-        auto b3 = Peanut::Block<3,3,1,1>(mat).eval();
+        Peanut::Matrix<int, 1, 1> b3;
+        Peanut::Block<3,3,1,1>(mat).eval(b3);
         CHECK(b3(0,0) == 16);
     }
 }
@@ -107,7 +111,8 @@ TEST_CASE("Test unary operation : SubMat"){
                                   13,14,15,16};
 
     SECTION("Validation"){
-        auto d1 = Peanut::SubMat<2, 1>(mat).eval();
+        Peanut::Matrix<int, 3, 3> d1;
+        Peanut::SubMat<2, 1>(mat).eval(d1);
 
         CHECK(d1(0, 0) == 1);
         CHECK(d1(0, 1) == 3);
@@ -119,7 +124,8 @@ TEST_CASE("Test unary operation : SubMat"){
         CHECK(d1(2, 1) == 15);
         CHECK(d1(2, 2) == 16);
 
-        auto d2 = Peanut::SubMat<0, 0>(mat).eval();
+        Peanut::Matrix<int, 3, 3> d2;
+        Peanut::SubMat<0, 0>(mat).eval(d2);
         CHECK(d2(0, 0) == 6);
         CHECK(d2(0, 1) == 7);
         CHECK(d2(0, 2) == 8);
@@ -130,7 +136,8 @@ TEST_CASE("Test unary operation : SubMat"){
         CHECK(d2(2, 1) == 15);
         CHECK(d2(2, 2) == 16);
 
-        auto d3 = Peanut::SubMat<3, 3>(mat).eval();
+        Peanut::Matrix<int, 3, 3> d3;
+        Peanut::SubMat<3, 3>(mat).eval(d3);
         CHECK(d3(0, 0) == 1);
         CHECK(d3(0, 1) == 2);
         CHECK(d3(0, 2) == 3);
@@ -149,7 +156,8 @@ TEST_CASE("Test unary operation : Cast"){
                                     3.3f, 4.4f};
 
     SECTION("Validation"){
-        auto intmat = Peanut::Cast<int>(mat).eval();
+        Peanut::Matrix<int, 2, 2> intmat;
+        Peanut::Cast<int>(mat).eval(intmat);
 
         CHECK(intmat(0, 0) != Catch::Approx(1.1f));
         CHECK(intmat(0, 1) != Catch::Approx(2.2f));
@@ -210,7 +218,8 @@ TEST_CASE("Test unary operation : Combination of unary operations (1)"){
         // 3.5 2.5 3.4
         // 4.2 4.1 5.2
 
-        auto result1 = T(Block<0, 0, 3, 3>(SubMat<1, 2>(T(Block<0, 0, 4, 4>(T(test))))));
+        Peanut::Matrix<float, 3, 3> result1;
+        T(Block<0, 0, 3, 3>(SubMat<1, 2>(T(Block<0, 0, 4, 4>(T(test)))))).eval(result1);
         CHECK(result1(0, 0) == Catch::Approx(1.2f));
         CHECK(result1(0, 1) == Catch::Approx(4.1f));
         CHECK(result1(0, 2) == Catch::Approx(2.1f));
@@ -221,7 +230,8 @@ TEST_CASE("Test unary operation : Combination of unary operations (1)"){
         CHECK(result1(2, 1) == Catch::Approx(4.1f));
         CHECK(result1(2, 2) == Catch::Approx(5.2f));
 
-        auto result2 = T(Block<0, 0, 3, 3>(SubMat<1, 2>(T(Block<0, 0, 4, 4>(T(test)))))).eval();
+        Peanut::Matrix<float, 3, 3> result2;
+        T(Block<0, 0, 3, 3>(SubMat<1, 2>(T(Block<0, 0, 4, 4>(T(test)))))).eval(result2);
         CHECK(result2(0, 0) == Catch::Approx(1.2f));
         CHECK(result2(0, 1) == Catch::Approx(4.1f));
         CHECK(result2(0, 2) == Catch::Approx(2.1f));
@@ -246,7 +256,8 @@ TEST_CASE("Test unary operation : Minor"){
                                      7.6f, 2.5f, 4.8f};
 
     SECTION("Validation"){
-        auto mmat = Peanut::Minor(mat).eval();
+        Peanut::Matrix<float, 5, 5> mmat;
+        Peanut::Minor(mat).eval(mmat);
 
         CHECK(mmat(0, 0) == Catch::Approx(-128.631f));
         CHECK(mmat(0, 1) == Catch::Approx(-928.599f));
@@ -323,7 +334,8 @@ TEST_CASE("Test unary operation : Minor"){
         CHECK(mmat(2, 1) == Catch::Approx(-1.26145e+06f));
         CHECK(mmat(2, 2) == Catch::Approx(-1.56683e+06f));
 
-        auto mmat2 = Minor(Minor(Minor(mat2))).eval();
+        Peanut::Matrix<float, 3, 3> mmat2;
+        Minor(Minor(Minor(mat2))).eval(mmat2);
         CHECK(mmat2(0, 0) == Catch::Approx(2.43166e+06f));
         CHECK(mmat2(0, 1) == Catch::Approx(1.88045e+06f));
         CHECK(mmat2(0, 2) == Catch::Approx(-2.87072e+06f));
@@ -370,7 +382,8 @@ TEST_CASE("Test unary operation : Minor"){
         CHECK(val(1, 0) == Catch::Approx(9.74f));
         CHECK(val(1, 1) == Catch::Approx(-2.4f));
 
-        auto val2 = T(Minor(SubMat<1, 1>(Minor(Block<0, 0, 3, 3>(mat))))).eval();
+        Peanut::Matrix<float, 2, 2> val2;
+        T(Minor(SubMat<1, 1>(Minor(Block<0, 0, 3, 3>(mat))))).eval(val2);
 
         CHECK(val2(0, 0) == Catch::Approx(-2.14f));
         CHECK(val2(0, 1) == Catch::Approx(0.25f));
@@ -392,7 +405,8 @@ TEST_CASE("Test unary operation : Cofactor"){
                                      7.6f, 2.5f, 4.8f};
 
     SECTION("Validation"){
-        auto mmat = Peanut::Cofactor(mat).eval();
+        Peanut::Matrix<float, 5, 5> mmat;
+        Peanut::Cofactor(mat).eval(mmat);
 
         CHECK(mmat(0, 0) == Catch::Approx(-128.631f));
         CHECK(mmat(0, 1) == Catch::Approx(928.599f));
@@ -469,7 +483,8 @@ TEST_CASE("Test unary operation : Cofactor"){
         CHECK(mmat(2, 1) == Catch::Approx(1.26145e+06f));
         CHECK(mmat(2, 2) == Catch::Approx(-1.56683e+06f));
 
-        auto mmat2 = Cofactor(Cofactor(Cofactor(mat2))).eval();
+        Peanut::Matrix<float, 3, 3> mmat2;
+        Cofactor(Cofactor(Cofactor(mat2))).eval(mmat2);
         CHECK(mmat2(0, 0) == Catch::Approx(2.43166e+06f));
         CHECK(mmat2(0, 1) == Catch::Approx(-1.88045e+06f));
         CHECK(mmat2(0, 2) == Catch::Approx(-2.87072e+06f));
@@ -513,7 +528,8 @@ TEST_CASE("Test unary operation : Cofactor"){
         CHECK(val(1, 0) == Catch::Approx(24.05f));
         CHECK(val(1, 1) == Catch::Approx(38.38f));
 
-        auto val2 = T(Cofactor(SubMat<1, 1>(Cofactor(mat2)))).eval();
+        Peanut::Matrix<float, 2, 2> val2;
+        T(Cofactor(SubMat<1, 1>(Cofactor(mat2)))).eval(val2);
 
         CHECK(val2(0, 0) == Catch::Approx(-24.73f));
         CHECK(val2(0, 1) == Catch::Approx(45.31f));
@@ -534,7 +550,8 @@ TEST_CASE("Test unary operation : Adjugate"){
                                      7.6f, 2.5f, 4.8f};
 
     SECTION("Validation"){
-        auto mmat = Peanut::Adjugate(mat).eval();
+        Peanut::Matrix<float, 5, 5> mmat;
+        Peanut::Adjugate(mat).eval(mmat);
         CHECK(mmat(0, 0) == Catch::Approx(-128.631f));
         CHECK(mmat(0, 1) == Catch::Approx(450.856f));
         CHECK(mmat(0, 2) == Catch::Approx(631.634f));
@@ -610,7 +627,8 @@ TEST_CASE("Test unary operation : Adjugate"){
         CHECK(mmat(2, 1) == Catch::Approx(2.3619646429876788e+6f));
         CHECK(mmat(2, 2) == Catch::Approx(-1.5668290134411296e+6f));
 
-        auto mmat2 = Adjugate(Adjugate(Adjugate(mat2))).eval();
+        Peanut::Matrix<float, 3, 3> mmat2;
+        Adjugate(Adjugate(Adjugate(mat2))).eval(mmat2);
         CHECK(mmat2(0, 0) == Catch::Approx(2.4316578057367792e+6f));
         CHECK(mmat2(0, 1) == Catch::Approx(-1.1207927718468895e+6f));
         CHECK(mmat2(0, 2) == Catch::Approx(-1.5237459673780494e+6f));
@@ -632,7 +650,8 @@ TEST_CASE("Test unary operation : Inverse"){
                                      1.5f, 3.1f, 7.6f, 2.3f, 1.7f};
 
     SECTION("Validation"){
-        auto inv1 = Peanut::Inverse(mat1).eval();
+        Peanut::Matrix<float, 5, 5> inv1;
+        Peanut::Inverse(mat1).eval(inv1);
         CHECK(inv1(0, 0) == Catch::Approx(-0.0449671f));
         CHECK(inv1(0, 1) == Catch::Approx(0.157612f));
         CHECK(inv1(0, 2) == Catch::Approx(0.220808f));

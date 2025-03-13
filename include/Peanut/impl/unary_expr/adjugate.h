@@ -48,10 +48,15 @@ namespace Peanut::Impl {
                 for_<Col>([&](auto c) {
                     constexpr Index rv = r.value;
                     constexpr Index cv = c.value;
-                    const Type e = SubMat<rv, cv>(_x).eval().det();
+
+                    Matrix<Type, Row-1, Col-1> submat;
+                    SubMat<rv, cv>(_x).eval(submat);
+                    const Type e = submat.det();
+
                     if constexpr ((rv + cv) % 2 == 0) {
                         mat_eval(cv, rv) = e;
-                    } else {
+                    }
+                    else {
                         mat_eval(cv, rv) = -e;
                     }
                 });
@@ -66,8 +71,12 @@ namespace Peanut::Impl {
         static constexpr Index Row = E::Row;
         static constexpr Index Col = E::Col;
 
-        INLINE Matrix<Type, Row, Col> eval() const {
-            return mat_eval;
+        INLINE void eval(Matrix<Type, Row, Col> &_result) const {
+            for (int i=0;i<Row;i++) {
+                for (int j=0;j<Col;j++) {
+                    _result(i,j) = mat_eval(i, j);
+                }
+            }
         }
 
         Matrix<Type, Row, Col> mat_eval;
