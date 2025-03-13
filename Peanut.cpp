@@ -59,7 +59,7 @@
 int main() {
     constexpr int row = 25;
     constexpr int col = 40;
-    int iter = 100;
+    int iter = 10000;
     // Peanut benchmarking
     {
         Peanut::Matrix<int, row, col> mat1{MAT_STR};
