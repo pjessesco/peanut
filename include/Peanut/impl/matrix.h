@@ -300,8 +300,12 @@ namespace Peanut {
          *        method even though it is not a method of `MatrixExpr`.
          * @return Evaluated matrix
          */
-        INLINE Matrix<Type, Row, Col> eval() const{
-            return Matrix<Type, Row, Col>(*this);
+        void eval(Matrix<Type, Row, Col> &_result) const{
+            for (int i=0;i<Row;i++) {
+                for (int j=0;j<Col;j++) {
+                    _result(i,j) = m_data[i*C+j];
+                }
+            }
         }
 
         // =============== Features for vector usage begins ================
@@ -461,8 +465,11 @@ namespace Peanut {
             }
             else{
                 T ret = static_cast<T>(0);
+
                 for_<C>([&] (auto c) {
-                    ret += (c.value % 2 ? -1 : 1) * m_data[c.value] * SubMat<0, c.value>(*this).eval().det();
+                    Matrix<T, R-1, C-1> submat;
+                    SubMat<0, c.value>(*this).eval(submat);
+                    ret += (c.value % 2 ? -1 : 1) * m_data[c.value] * submat.det();
                 });
                 return ret;
             }

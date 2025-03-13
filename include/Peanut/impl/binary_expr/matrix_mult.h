@@ -44,7 +44,10 @@ namespace Peanut::Impl {
         requires(E1::Col == E2::Row)
     struct MatrixMult : public MatrixExpr<MatrixMult<E1, E2>> {
         using Type = typename E1::Type;
-        MatrixMult(const E1 &_x, const E2 &_y) : x_eval{_x}, y_eval{_y} {}
+        MatrixMult(const E1 &_x, const E2 &_y) {
+            _x.eval(x_eval);
+            _y.eval(y_eval);
+        }
 
         // Static polymorphism implementation of MatrixExpr
         INLINE auto operator()(Index r, Index c) const {
@@ -58,13 +61,20 @@ namespace Peanut::Impl {
         static constexpr Index Row = E1::Row;
         static constexpr Index Col = E2::Col;
 
-        INLINE auto eval() const {
-            return Matrix<Type, Row, Col>(*this);
+        INLINE void eval(Matrix<Type, Row, Col> &_result) const {
+            for (int i=0;i<Row;i++) {
+                for (int j=0;j<Col;j++) {
+                    _result(i,j) = x_eval(i, 0) * y_eval(0, j);
+                    for (Index k = 1; k < E1::Col; k++) {
+                        _result(i, j) += x_eval(i, k) * y_eval(k, j);
+                    }
+                }
+            }
         }
 
         // Specify member type as Matrix for evaluation
-        const Matrix<Type, E1::Row, E1::Col> x_eval;
-        const Matrix<Type, E2::Row, E2::Col> y_eval;
+        Matrix<Type, E1::Row, E1::Col> x_eval;
+        Matrix<Type, E2::Row, E2::Col> y_eval;
     };
 
 }

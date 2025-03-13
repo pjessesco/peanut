@@ -59,8 +59,12 @@ namespace Peanut::Impl {
         static constexpr Index Row = E::Row;
         static constexpr Index Col = E::Col;
 
-        INLINE Matrix<Type, Row, Col> eval() const {
-            return Matrix<Type, Row, Col>(*this);
+        void eval(Matrix<Type, Row, Col> &_result) const {
+            for (int i=0;i<Row;i++) {
+                for (int j=0;j<Col;j++) {
+                    _result(i,j) = invdet * cofactor_eval(j, i);
+                }
+            }
         }
 
         const E &x;// used for optimization
