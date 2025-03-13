@@ -298,7 +298,7 @@ namespace Peanut {
          * @brief Evaluation expressions and return as a `Matrix` instance.
          *        Note that every matrix expression classes must implement this
          *        method even though it is not a method of `MatrixExpr`.
-         * @return Evaluated matrix
+         * @param Evaluated matrix (reference output)
          */
         void eval(Matrix<Type, Row, Col> &_result) const{
             for (int i=0;i<Row;i++) {
