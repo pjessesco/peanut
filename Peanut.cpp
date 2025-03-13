@@ -10,7 +10,7 @@
 
 #include "longmatstr.h"
 
-#define SUM_STR (mat1+mat1)
+#define SUM_STR (mat1+mat1+mat1+mat1+mat1+mat1+mat1+mat1)
 #define MAT_STR NUMSTR_10000, NUMSTR_10000, NUMSTR_10000, NUMSTR_10000, NUMSTR_10000, NUMSTR_10000
 
 int main() {
