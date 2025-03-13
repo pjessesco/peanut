@@ -112,8 +112,7 @@ namespace Peanut {
          *
          */
         template <typename ...TList>
-            requires std::conjunction_v<std::is_same<T, TList>...> &&
-                     (sizeof...(TList) == Row*Col)
+            requires (sizeof...(TList) == Row*Col)
         Matrix(TList ... tlist) : m_data{std::forward<T>(tlist)...} {}
 
         /**
@@ -184,8 +183,7 @@ namespace Peanut {
          *
          */
         template <typename ...RList>
-            requires std::conjunction_v<std::is_same<Matrix<Type, 1, Col>, RList>...> &&
-                     (sizeof...(RList) == Row)
+            requires (sizeof...(RList) == Row)
         static Matrix from_rows(RList ... rlist){
             Matrix ret;
             int idx = 0;
@@ -214,8 +212,7 @@ namespace Peanut {
          *
          */
         template <typename ...CList>
-            requires std::conjunction_v<std::is_same<Matrix<Type, Row, 1>, CList>...> &&
-                     (sizeof...(CList) == Col)
+            requires (sizeof...(CList) == Col)
         static Matrix from_cols(CList ... clist){
             Matrix<Type, Row, Col> ret;
             int c = 0;
