@@ -31,7 +31,7 @@ template <typename T, size_t Row, size_t Col>
 struct MatrixBT{
     MatrixBT() {m_data.fill(t_0);}
 
-    template <typename ...TList> requires std::conjunction_v<std::is_same<T, TList>...>
+    template <typename ...TList>
         MatrixBT(TList ... tlist) : m_data{std::forward<T>(tlist)...} {}
 
     MatrixBT operator+(const MatrixBT &o) const{
