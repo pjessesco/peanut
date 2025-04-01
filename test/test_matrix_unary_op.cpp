@@ -52,7 +52,14 @@ TEST_CASE("Test unary operation : T"){
     }
 
     SECTION("Optimization"){
-        CHECK(std::is_same_v<decltype(T(T(mat))), Peanut::Matrix<int, 2, 3>>);
+        CHECK(std::is_same_v<decltype(T(T(mat))), const Peanut::Matrix<int, 2, 3>&>);
+        auto test = T(T(mat));
+        CHECK(test(0, 0) == 1);
+        CHECK(test(0, 1) == 2);
+        CHECK(test(0, 2) == 3);
+        CHECK(test(1, 0) == 4);
+        CHECK(test(1, 1) == 5);
+        CHECK(test(1, 2) == 6);
     }
 }
 
@@ -101,6 +108,15 @@ TEST_CASE("Test unary operation : Negation"){
         CHECK(mat(0, 1) == 2);
         CHECK(mat(1, 0) == 3);
         CHECK(mat(1, 1) == 4);
+    }
+
+    SECTION("Optimization"){
+        const auto tmp = -(-(mat));
+        CHECK(std::is_same_v<decltype(-(-mat)), const Peanut::Matrix<int, 2, 2>&>);
+        CHECK(tmp(0, 0) == 1);
+        CHECK(tmp(0, 1) == 2);
+        CHECK(tmp(1, 0) == 3);
+        CHECK(tmp(1, 1) == 4);
     }
 }
 
@@ -712,6 +728,16 @@ TEST_CASE("Test unary operation : Inverse"){
         CHECK(inv2(4, 2) == Catch::Approx(0.521517f));
         CHECK(inv2(4, 3) == Catch::Approx(-0.124816f));
         CHECK(inv2(4, 4) == Catch::Approx(0.0938179f));
+    }
+
+    SECTION("Optimization"){
+        Peanut::Matrix<int, 2, 2> mat{1,2,3,4};
+        CHECK(std::is_same_v<decltype(Inverse(Inverse(mat))), const Peanut::Matrix<int, 2, 2>&>);
+        auto test = Inverse(Inverse(mat));
+        CHECK(test(0, 0) == 1);
+        CHECK(test(0, 1) == 2);
+        CHECK(test(1, 0) == 3);
+        CHECK(test(1, 1) == 4);
     }
 }
 

@@ -134,6 +134,19 @@ TEST_CASE("Test binary operation : Scalar * Mat, Mat * Scalar"){
     }
 }
 
+TEST_CASE("Test binary operation : Mat * Mat"){
+    SECTION("float matrix"){
+        Peanut::Matrix<float, 2, 2> flt_22_mat1{1.0f, 2.0f, 3.0f, 4.0f};
+        Peanut::Matrix<float, 2, 2> flt_22_mat2{6.6f,7.7f,8.8f,9.9f};
+        Peanut::Matrix<float, 2, 2> mul_mat = flt_22_mat1 * flt_22_mat2;
+
+        CHECK(mul_mat(0, 0) == Catch::Approx(24.2f));
+        CHECK(mul_mat(0, 1) == Catch::Approx(27.5f));
+        CHECK(mul_mat(1, 0) == Catch::Approx(55.0f));
+        CHECK(mul_mat(1, 1) == Catch::Approx(62.7f));
+    }
+}
+
 TEST_CASE("Test binary operation : Mat * Mat * Mat"){
     SECTION("float matrix"){
         Peanut::Matrix<float, 2, 2> flt_22_mat1{1.0f, 2.0f, 3.0f, 4.0f};
