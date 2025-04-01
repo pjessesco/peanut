@@ -86,7 +86,7 @@ namespace Peanut{
      */
     template<typename E>
         requires is_matrix_v<E>
-    E T(const Impl::MatrixTranspose<E> &x) {
+    const E& T(const Impl::MatrixTranspose<E> &x) {
         return static_cast<const E &>(x.x);
     }
 
