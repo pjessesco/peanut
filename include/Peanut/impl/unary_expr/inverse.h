@@ -97,7 +97,7 @@ namespace Peanut {
      */
     template<typename E>
         requires is_matrix_v<E> && is_square_v<E>
-    E Inverse(const Impl::MatrixInverse<E> &x) {
+    const E& Inverse(const Impl::MatrixInverse<E> &x) {
         return static_cast<const E &>(x.x);
     }
 }

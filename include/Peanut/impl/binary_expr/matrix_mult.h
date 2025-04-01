@@ -64,8 +64,10 @@ namespace Peanut::Impl {
         INLINE void eval(Matrix<Type, Row, Col> &_result) const {
             for (int i=0;i<Row;i++) {
                 for (int j=0;j<Col;j++) {
-                    _result(i,j) = x_eval(i, 0) * y_eval(0, j);
-                    for (Index k = 1; k < E1::Col; k++) {
+                    _result(i, j) = x_eval(i, 0) * y_eval(0, j);
+                }
+                for (Index k = 1; k < E1::Col; k++) {
+                    for (int j=0;j<Col;j++) {
                         _result(i, j) += x_eval(i, k) * y_eval(k, j);
                     }
                 }

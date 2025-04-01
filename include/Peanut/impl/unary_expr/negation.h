@@ -75,4 +75,19 @@ namespace Peanut{
         return Impl::MatrixNegation<E>(static_cast<const E &>(x));
     }
 
+    /**
+     * @brief Template specialization of `operator-` which represents a
+     *        negation of a negation of a matrix. It is equivalent to
+     *        a input of the given parameter (i.e., -(-x) = x), so
+     *        it does not construct a `MatrixNegation` instance.
+     * @tparam E Matrix expression type.
+     * @param x `MatrixInverse<E>` type matrix expression.
+     * @return Input of the given parameter `x`
+     */
+    template<typename E>
+        requires is_matrix_v<E>
+    const E& operator-(const Impl::MatrixNegation<E> &x) {
+        return static_cast<const E &>(x.x);
+    }
+
 }
