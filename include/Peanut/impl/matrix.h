@@ -301,11 +301,7 @@ namespace Peanut {
          * @param Evaluated matrix (reference output)
          */
         void eval(Matrix<Type, Row, Col> &_result) const{
-            for (int i=0;i<Row;i++) {
-                for (int j=0;j<Col;j++) {
-                    _result(i,j) = m_data[i*C+j];
-                }
-            }
+            _result.m_data = m_data;
         }
 
         // =============== Features for vector usage begins ================
