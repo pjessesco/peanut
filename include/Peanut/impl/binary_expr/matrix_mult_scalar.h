@@ -39,10 +39,10 @@ namespace Peanut::Impl {
      * @tparam T Scalar type operand.
      */
     template<typename E, typename T>
-        requires is_matrix_v<E> && std::is_arithmetic_v<T>
+        requires is_matrix_v<E> && IS_ARITHMETIC_V<T>
     struct MatrixMultScalar : public MatrixExpr<MatrixMultScalar<E, T>> {
         using Type = typename std::conditional<
-                std::is_floating_point_v<typename E::Type> || std::is_floating_point_v<T>,
+                IS_FLOATING_POINT_V<typename E::Type> || IS_FLOATING_POINT_V<T>,
                 Float, T>::type;
         MatrixMultScalar(const E &x, T y) : x{x}, y{y} {}
 
@@ -76,7 +76,7 @@ namespace Peanut {
      * @return Constructed `Impl::MatrixMultScalar` instance
      */
     template<typename E, typename T>
-        requires is_matrix_v<E> && std::is_arithmetic_v<T>
+        requires is_matrix_v<E> && IS_ARITHMETIC_V<T>
     Impl::MatrixMultScalar<E, T> operator*(const MatrixExpr<E> &x, const T &y) {
         return Impl::MatrixMultScalar<E, T>(static_cast<const E &>(x), y);
     }
@@ -88,7 +88,7 @@ namespace Peanut {
      * @return Constructed `Impl::MatrixMultScalar` instance
      */
     template<typename E, typename T>
-        requires is_matrix_v<E> && std::is_arithmetic_v<T>
+        requires is_matrix_v<E> && IS_ARITHMETIC_V<T>
     Impl::MatrixMultScalar<E, T> operator*(const T x, const MatrixExpr<E> &y) {
         return Impl::MatrixMultScalar<E, T>(static_cast<const E &>(y), x);
     }

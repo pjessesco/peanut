@@ -33,6 +33,10 @@
 // Peanut headers
 
 // Dependencies headers
+#ifdef PEANUT_APPLE_SIMD
+#include <simd/simd.h>
+#endif
+
 
 #if defined(_MSC_VER) && !defined(__llvm__) && !defined(__INTEL_COMPILER)
 #define INLINE __forceinline
@@ -41,8 +45,19 @@
 #endif
 
 namespace Peanut {
+#ifdef PEANUT_APPLE_SIMD
+    static constexpr bool APPLE_SIMD = true;
     using Index = unsigned int;
+    using Int = simd_int16;
+    using Float = simd_float16;
+    using Bool = simd_int16;
+#else
+    static constexpr bool APPLE_SIMD = false;
+    using Index = unsigned int;
+    using Int = int;
     using Float = float;
+    using Bool = bool;
+#endif
 
     /**
      * @brief Check if given \p val is zero or not.
@@ -51,14 +66,48 @@ namespace Peanut {
      * @return If \p T is floating point type, returns true if \p val is close to zero, false if not.
      *         If \p T is not a floating point type, returns true if \p val is zero, false if not.
      */
+
+#ifdef PEANUT_APPLE_SIMD
+#define any(x) simd_any(x)
+#define all(x) simd_all(x)
+#else
+#define any(x) x
+#define all(x) x
+#endif
+
     template<typename T>
-    bool is_zero(T val) requires std::is_arithmetic_v<T>{
-        if constexpr (std::is_floating_point_v<T>){
-            return std::fabs(val-static_cast<T>(0)) <= std::numeric_limits<T>::epsilon() ||
-                   std::fabs(val-static_cast<T>(0)) < std::numeric_limits<T>::min();
+#ifdef PEANUT_APPLE_SIMD
+    constexpr bool IS_ARITHMETIC_V = std::is_arithmetic_v<T> || std::is_same_v<T, simd_int16> || std::is_same_v<T, simd_float16>;
+#else
+    constexpr bool IS_ARITHMETIC_V = std::is_arithmetic_v<T>;
+#endif
+
+
+    template <typename T>
+#ifdef PEANUT_APPLE_SIMD
+    constexpr bool IS_FLOATING_POINT_V = std::is_floating_point_v<T> || std::is_same_v<T, simd_float16>;
+#else
+    constexpr bool IS_FLOATING_POINT_V = std::is_floating_point_v<T>;
+
+#endif
+
+    template <typename T>
+    Bool is_zero(T val) {
+        if constexpr(APPLE_SIMD) {
+            return simd_abs(val) <= 1e-6;
         }
-        else{
-            return val == static_cast<T>(0);
+        else {
+            return std::fabs(val) <= std::numeric_limits<T>::epsilon();
+        }
+    }
+
+    template <typename T>
+    Bool is_epsilon_equal(const T &v1, const T &v2, const T &epsilon=Float(1e-5f)) {
+        if constexpr(APPLE_SIMD) {
+            return simd_abs(v1 - v2) <= epsilon;
+        }
+        else {
+            return std::fabs(v1 - v2) <= epsilon;
         }
     }
 

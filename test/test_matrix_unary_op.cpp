@@ -26,7 +26,7 @@
 #include <type_traits>
 
 // Peanut headers
-#include <Peanut.h>
+#include <Peanut/Peanut.h>
 
 // Dependencies headers
 #include "catch_amalgamated.hpp"
@@ -679,68 +679,69 @@ TEST_CASE("Test unary operation : Inverse"){
                                      1.5f, 3.1f, 7.6f, 2.3f, 1.7f};
 
     SECTION("Validation"){
-        Peanut::Matrix<float, 5, 5> inv1;
+        Peanut::Matrix<Peanut::Float, 5, 5> inv1;
         Peanut::Inverse(mat1).eval(inv1);
-        CHECK(inv1(0, 0) == Catch::Approx(-0.0449671f));
-        CHECK(inv1(0, 1) == Catch::Approx(0.157612f));
-        CHECK(inv1(0, 2) == Catch::Approx(0.220808f));
-        CHECK(inv1(0, 3) == Catch::Approx(-0.229484f));
-        CHECK(inv1(0, 4) == Catch::Approx(-0.0689305f));
 
-        CHECK(inv1(1, 0) == Catch::Approx(0.324622f));
-        CHECK(inv1(1, 1) == Catch::Approx(-0.152746f));
-        CHECK(inv1(1, 2) == Catch::Approx(-0.441133f));
-        CHECK(inv1(1, 3) == Catch::Approx(0.280161f));
-        CHECK(inv1(1, 4) == Catch::Approx(-0.172604f));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(0, 0), Peanut::Float( -0.0449671261f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(0, 1), Peanut::Float( 0.157611504f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(0, 2), Peanut::Float( 0.220808372f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(0, 3), Peanut::Float( -0.229483768f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(0, 4), Peanut::Float( -0.0689305514f))));
 
-        CHECK(inv1(2, 0) == Catch::Approx(-0.0428394f));
-        CHECK(inv1(2, 1) == Catch::Approx(0.00717875f));
-        CHECK(inv1(2, 2) == Catch::Approx(0.00995737f));
-        CHECK(inv1(2, 3) == Catch::Approx(-0.0542712f));
-        CHECK(inv1(2, 4) == Catch::Approx(0.178479f));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(1, 0), Peanut::Float( 0.324622005f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(1, 1), Peanut::Float( -0.152746066f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(1, 2), Peanut::Float( -0.441133142f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(1, 3), Peanut::Float( 0.280160874f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(1, 4), Peanut::Float( -0.172604024f))));
 
-        CHECK(inv1(3, 0) == Catch::Approx(-0.136049f));
-        CHECK(inv1(3, 1) == Catch::Approx(0.0945844f));
-        CHECK(inv1(3, 2) == Catch::Approx(0.0321937f));
-        CHECK(inv1(3, 3) == Catch::Approx(0.0436414f));
-        CHECK(inv1(3, 4) == Catch::Approx(0.0532762f));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(2, 0), Peanut::Float( -0.0428393781f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(2, 1), Peanut::Float( 0.00717874616f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(2, 2), Peanut::Float( 0.00995733588f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(2, 3), Peanut::Float( -0.0542711616f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(2, 4), Peanut::Float( 0.178479299f))));
 
-        CHECK(inv1(4, 0) == Catch::Approx(-0.176698f));
-        CHECK(inv1(4, 1) == Catch::Approx(-0.0205924f));
-        CHECK(inv1(4, 2) == Catch::Approx(0.521517f));
-        CHECK(inv1(4, 3) == Catch::Approx(-0.124816f));
-        CHECK(inv1(4, 4) == Catch::Approx(0.0938179f));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(3, 0), Peanut::Float( -0.136048824f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(3, 1), Peanut::Float( 0.0945843979f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(3, 2), Peanut::Float( 0.032193657f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(3, 3), Peanut::Float( 0.0436413959f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(3, 4), Peanut::Float( 0.0532761849f))));
+
+        CHECK(all(Peanut::is_epsilon_equal(inv1(4, 0), Peanut::Float( -0.176697552f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(4, 1), Peanut::Float( -0.0205923785f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(4, 2), Peanut::Float( 0.521516979f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(4, 3), Peanut::Float( -0.12481612f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv1(4, 4), Peanut::Float( 0.0938179046f))));
 
         auto inv2 = (Peanut::Inverse(mat1));
-        CHECK(inv2(0, 0) == Catch::Approx(-0.0449671f));
-        CHECK(inv2(0, 1) == Catch::Approx(0.157612f));
-        CHECK(inv2(0, 2) == Catch::Approx(0.220808f));
-        CHECK(inv2(0, 3) == Catch::Approx(-0.229484f));
-        CHECK(inv2(0, 4) == Catch::Approx(-0.0689305f));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(0, 0), Peanut::Float( -0.0449671261f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(0, 1), Peanut::Float( 0.157611504f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(0, 2), Peanut::Float( 0.220808372f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(0, 3), Peanut::Float( -0.229483768f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(0, 4), Peanut::Float( -0.0689305514f))));
 
-        CHECK(inv2(1, 0) == Catch::Approx(0.324622f));
-        CHECK(inv2(1, 1) == Catch::Approx(-0.152746f));
-        CHECK(inv2(1, 2) == Catch::Approx(-0.441133f));
-        CHECK(inv2(1, 3) == Catch::Approx(0.280161f));
-        CHECK(inv2(1, 4) == Catch::Approx(-0.172604f));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(1, 0), Peanut::Float( 0.324622005f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(1, 1), Peanut::Float( -0.152746066f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(1, 2), Peanut::Float( -0.441133142f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(1, 3), Peanut::Float( 0.280160874f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(1, 4), Peanut::Float( -0.172604024f))));
 
-        CHECK(inv2(2, 0) == Catch::Approx(-0.0428394f));
-        CHECK(inv2(2, 1) == Catch::Approx(0.00717875f));
-        CHECK(inv2(2, 2) == Catch::Approx(0.00995737f));
-        CHECK(inv2(2, 3) == Catch::Approx(-0.0542712f));
-        CHECK(inv2(2, 4) == Catch::Approx(0.178479f));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(2, 0), Peanut::Float( -0.0428393781f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(2, 1), Peanut::Float( 0.00717874616f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(2, 2), Peanut::Float( 0.00995733588f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(2, 3), Peanut::Float( -0.0542711616f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(2, 4), Peanut::Float( 0.178479299f))));
 
-        CHECK(inv2(3, 0) == Catch::Approx(-0.136049f));
-        CHECK(inv2(3, 1) == Catch::Approx(0.0945844f));
-        CHECK(inv2(3, 2) == Catch::Approx(0.0321937f));
-        CHECK(inv2(3, 3) == Catch::Approx(0.0436414f));
-        CHECK(inv2(3, 4) == Catch::Approx(0.0532762f));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(3, 0), Peanut::Float( -0.136048824f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(3, 1), Peanut::Float( 0.0945843979f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(3, 2), Peanut::Float( 0.032193657f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(3, 3), Peanut::Float( 0.0436413959f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(3, 4), Peanut::Float( 0.0532761849f))));
 
-        CHECK(inv2(4, 0) == Catch::Approx(-0.176698f));
-        CHECK(inv2(4, 1) == Catch::Approx(-0.0205924f));
-        CHECK(inv2(4, 2) == Catch::Approx(0.521517f));
-        CHECK(inv2(4, 3) == Catch::Approx(-0.124816f));
-        CHECK(inv2(4, 4) == Catch::Approx(0.0938179f));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(4, 0), Peanut::Float( -0.176697552f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(4, 1), Peanut::Float( -0.0205923785f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(4, 2), Peanut::Float( 0.521516979f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(4, 3), Peanut::Float( -0.12481612f))));
+        CHECK(all(Peanut::is_epsilon_equal(inv2(4, 4), Peanut::Float( 0.0938179046f))));
     }
 
     SECTION("Optimization"){

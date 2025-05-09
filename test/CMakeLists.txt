@@ -8,4 +8,4 @@ add_executable(PeanutTest
     test_matrix_unary_op.cpp
 )
 
-target_include_directories(PeanutTest PUBLIC ../include/Peanut)
+target_link_libraries(PeanutTest Peanut)

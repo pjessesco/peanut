@@ -26,7 +26,7 @@
 #include <type_traits>
 
 // Peanut headers
-#include <Peanut.h>
+#include <Peanut/Peanut.h>
 
 // Dependencies headers
 #include "catch_amalgamated.hpp"

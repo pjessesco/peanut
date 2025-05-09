@@ -41,7 +41,7 @@ namespace Peanut::Impl {
      * @tparam T Right hand side scalar type.
      */
     template<typename E, typename T>
-        requires is_matrix_v<E> && std::is_arithmetic_v<T>
+        requires is_matrix_v<E> && IS_ARITHMETIC_V<T>
     struct MatrixDivScalar : public MatrixExpr<MatrixDivScalar<E, T>> {
         using Type = Float;
         MatrixDivScalar(const E &x, T y) : x{x}, y{y} {
@@ -80,7 +80,7 @@ namespace Peanut {
      * @return Constructed `Impl::MatrixDivScalar` instance
      */
     template<typename E, typename T>
-        requires is_matrix_v<E> && std::is_arithmetic_v<T>
+        requires is_matrix_v<E> && IS_ARITHMETIC_V<T>
     Impl::MatrixDivScalar<E, T> operator/(const MatrixExpr<E> &x, const T &y) {
         return Impl::MatrixDivScalar<E, T>(static_cast<const E &>(x), y);
     }

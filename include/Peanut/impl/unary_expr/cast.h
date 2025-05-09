@@ -38,7 +38,7 @@ namespace Peanut::Impl {
      * @tparam E Matrix expression type.
      */
     template<typename T, typename E>
-        requires std::is_arithmetic_v<T> && is_matrix_v<E>
+        requires is_matrix_v<E>
     struct MatrixCastType : public MatrixExpr<MatrixCastType<T, E>> {
         using Type = T;
         MatrixCastType(const E &x) : x{x} {}
@@ -77,7 +77,7 @@ namespace Peanut {
      *
      */
     template<typename T, typename E>
-        requires std::is_arithmetic_v<T> && is_matrix_v<E>
+        requires is_matrix_v<E>
     Impl::MatrixCastType<T, E> Cast(const MatrixExpr<E> &x) {
         return Impl::MatrixCastType<T, E>(static_cast<const E &>(x));
     }

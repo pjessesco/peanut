@@ -27,7 +27,7 @@
 #include <vector>
 
 // Peanut headers
-#include <Peanut.h>
+#include <Peanut/Peanut.h>
 
 // Dependencies headers
 #include "catch_amalgamated.hpp"
@@ -425,10 +425,5 @@ TEST_CASE("Determinant"){
         CHECK(int_22_mat.det() == -2);
         CHECK(flt_33_mat.det() == Catch::Approx(33.275f));
         CHECK(flt_55_mat.det() == Catch::Approx(2237986.3587442965f));
-    }
-    SECTION("Determinant calculation recursively (det2())"){
-        CHECK(int_22_mat.det2() == -2);
-        CHECK(flt_33_mat.det2() == Catch::Approx(33.275f));
-        CHECK(flt_55_mat.det2() == Catch::Approx(2237986.3587442965f));
     }
 }

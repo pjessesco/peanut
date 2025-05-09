@@ -77,7 +77,7 @@ namespace Peanut {
      * @tparam R Row size.
      * @tparam C Column size.
      */
-    template<typename T, Index R, Index C> requires std::is_arithmetic_v<T> && (R > 0) && (C > 0)
+    template<typename T, Index R, Index C> requires IS_ARITHMETIC_V<T> && (R > 0) && (C > 0)
     struct Matrix : public MatrixExpr<Matrix<T, R, C>>{
 
         /**
@@ -112,8 +112,7 @@ namespace Peanut {
          *
          */
         template <typename ...TList>
-            requires std::conjunction_v<std::is_same<T, TList>...> &&
-                     (sizeof...(TList) == Row*Col)
+            requires (sizeof...(TList) == Row*Col)
         Matrix(TList ... tlist) : m_data{std::forward<T>(tlist)...} {}
 
         /**
@@ -440,28 +439,6 @@ namespace Peanut {
         }
 
         /**
-         * @brief Perform brute-force Gaussian elimination, which elimiate
-         *        left-most element per row by repeating `subtract_row()`.
-         * @details Since it does not perform elimination efficiently, numerical
-         *          issue may exists with a extremely large/small numbers.
-         * @return Gaussian elimination-performed matrix.
-         */
-        Matrix<Float, R, C> gaussian_elem() const{
-            Matrix<Float, R, C> ret = Cast<Float>(*this);
-            for(int j=0;j< R -1;j++){
-                const Float denom = static_cast<Float>(ret(j,j));
-                if(is_zero(denom)){
-                    continue;
-                }
-                for(int i=j+1;i< R;i++){
-                    const Float ratio = static_cast<Float>(ret(i, j)) / denom;
-                    ret.subtract_row(i, j, ratio);
-                }
-            }
-            return ret;
-        }
-
-        /**
          * @brief Calculate a determinant by recursively calculate determinants
          *        of submatrices.
          * @return Determinant of the matrix.
@@ -483,27 +460,6 @@ namespace Peanut {
                 });
                 return ret;
             }
-        }
-
-        /**
-         * @brief Calculate a determinant by performing `gaussian_elem()` and
-         *        multiplying diagonal terms. It is equivalent to `det()`
-         *        theoretically, but numerical issue may exists.
-         * @return Determinant of the matrix.
-         */
-        constexpr T det2() const requires is_square_v<Matrix>{
-            if constexpr(C ==1){
-                return m_data[0];
-            }
-            else if constexpr (C ==2){
-                return (*this)(0, 0) * (*this)(1, 1) - (*this)(0, 1) * (*this)(1, 0);
-            }
-            auto upper_triangular = gaussian_elem();
-            Float det = upper_triangular(0, 0);
-            for(int i=1;i< R;i++){
-                det *= upper_triangular(i, i);
-            }
-            return det;
         }
 
         // Matrix data
