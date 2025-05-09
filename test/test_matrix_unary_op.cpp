@@ -682,66 +682,66 @@ TEST_CASE("Test unary operation : Inverse"){
         Peanut::Matrix<Peanut::Float, 5, 5> inv1;
         Peanut::Inverse(mat1).eval(inv1);
 
-        CHECK(all(Peanut::is_epsilon_equal(inv1(0, 0), Peanut::Float( -0.0449671261f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(0, 1), Peanut::Float( 0.157611504f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(0, 2), Peanut::Float( 0.220808372f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(0, 3), Peanut::Float( -0.229483768f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(0, 4), Peanut::Float( -0.0689305514f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(0, 0), Peanut::Float( -0.0449671261f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(0, 1), Peanut::Float( 0.157611504f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(0, 2), Peanut::Float( 0.220808372f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(0, 3), Peanut::Float( -0.229483768f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(0, 4), Peanut::Float( -0.0689305514f))));
 
-        CHECK(all(Peanut::is_epsilon_equal(inv1(1, 0), Peanut::Float( 0.324622005f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(1, 1), Peanut::Float( -0.152746066f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(1, 2), Peanut::Float( -0.441133142f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(1, 3), Peanut::Float( 0.280160874f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(1, 4), Peanut::Float( -0.172604024f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(1, 0), Peanut::Float( 0.324622005f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(1, 1), Peanut::Float( -0.152746066f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(1, 2), Peanut::Float( -0.441133142f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(1, 3), Peanut::Float( 0.280160874f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(1, 4), Peanut::Float( -0.172604024f))));
 
-        CHECK(all(Peanut::is_epsilon_equal(inv1(2, 0), Peanut::Float( -0.0428393781f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(2, 1), Peanut::Float( 0.00717874616f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(2, 2), Peanut::Float( 0.00995733588f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(2, 3), Peanut::Float( -0.0542711616f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(2, 4), Peanut::Float( 0.178479299f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(2, 0), Peanut::Float( -0.0428393781f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(2, 1), Peanut::Float( 0.00717874616f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(2, 2), Peanut::Float( 0.00995733588f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(2, 3), Peanut::Float( -0.0542711616f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(2, 4), Peanut::Float( 0.178479299f))));
 
-        CHECK(all(Peanut::is_epsilon_equal(inv1(3, 0), Peanut::Float( -0.136048824f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(3, 1), Peanut::Float( 0.0945843979f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(3, 2), Peanut::Float( 0.032193657f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(3, 3), Peanut::Float( 0.0436413959f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(3, 4), Peanut::Float( 0.0532761849f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(3, 0), Peanut::Float( -0.136048824f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(3, 1), Peanut::Float( 0.0945843979f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(3, 2), Peanut::Float( 0.032193657f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(3, 3), Peanut::Float( 0.0436413959f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(3, 4), Peanut::Float( 0.0532761849f))));
 
-        CHECK(all(Peanut::is_epsilon_equal(inv1(4, 0), Peanut::Float( -0.176697552f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(4, 1), Peanut::Float( -0.0205923785f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(4, 2), Peanut::Float( 0.521516979f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(4, 3), Peanut::Float( -0.12481612f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv1(4, 4), Peanut::Float( 0.0938179046f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(4, 0), Peanut::Float( -0.176697552f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(4, 1), Peanut::Float( -0.0205923785f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(4, 2), Peanut::Float( 0.521516979f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(4, 3), Peanut::Float( -0.12481612f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv1(4, 4), Peanut::Float( 0.0938179046f))));
 
         auto inv2 = (Peanut::Inverse(mat1));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(0, 0), Peanut::Float( -0.0449671261f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(0, 1), Peanut::Float( 0.157611504f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(0, 2), Peanut::Float( 0.220808372f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(0, 3), Peanut::Float( -0.229483768f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(0, 4), Peanut::Float( -0.0689305514f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(0, 0), Peanut::Float( -0.0449671261f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(0, 1), Peanut::Float( 0.157611504f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(0, 2), Peanut::Float( 0.220808372f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(0, 3), Peanut::Float( -0.229483768f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(0, 4), Peanut::Float( -0.0689305514f))));
 
-        CHECK(all(Peanut::is_epsilon_equal(inv2(1, 0), Peanut::Float( 0.324622005f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(1, 1), Peanut::Float( -0.152746066f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(1, 2), Peanut::Float( -0.441133142f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(1, 3), Peanut::Float( 0.280160874f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(1, 4), Peanut::Float( -0.172604024f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(1, 0), Peanut::Float( 0.324622005f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(1, 1), Peanut::Float( -0.152746066f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(1, 2), Peanut::Float( -0.441133142f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(1, 3), Peanut::Float( 0.280160874f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(1, 4), Peanut::Float( -0.172604024f))));
 
-        CHECK(all(Peanut::is_epsilon_equal(inv2(2, 0), Peanut::Float( -0.0428393781f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(2, 1), Peanut::Float( 0.00717874616f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(2, 2), Peanut::Float( 0.00995733588f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(2, 3), Peanut::Float( -0.0542711616f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(2, 4), Peanut::Float( 0.178479299f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(2, 0), Peanut::Float( -0.0428393781f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(2, 1), Peanut::Float( 0.00717874616f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(2, 2), Peanut::Float( 0.00995733588f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(2, 3), Peanut::Float( -0.0542711616f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(2, 4), Peanut::Float( 0.178479299f))));
 
-        CHECK(all(Peanut::is_epsilon_equal(inv2(3, 0), Peanut::Float( -0.136048824f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(3, 1), Peanut::Float( 0.0945843979f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(3, 2), Peanut::Float( 0.032193657f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(3, 3), Peanut::Float( 0.0436413959f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(3, 4), Peanut::Float( 0.0532761849f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(3, 0), Peanut::Float( -0.136048824f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(3, 1), Peanut::Float( 0.0945843979f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(3, 2), Peanut::Float( 0.032193657f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(3, 3), Peanut::Float( 0.0436413959f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(3, 4), Peanut::Float( 0.0532761849f))));
 
-        CHECK(all(Peanut::is_epsilon_equal(inv2(4, 0), Peanut::Float( -0.176697552f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(4, 1), Peanut::Float( -0.0205923785f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(4, 2), Peanut::Float( 0.521516979f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(4, 3), Peanut::Float( -0.12481612f))));
-        CHECK(all(Peanut::is_epsilon_equal(inv2(4, 4), Peanut::Float( 0.0938179046f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(4, 0), Peanut::Float( -0.176697552f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(4, 1), Peanut::Float( -0.0205923785f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(4, 2), Peanut::Float( 0.521516979f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(4, 3), Peanut::Float( -0.12481612f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(inv2(4, 4), Peanut::Float( 0.0938179046f))));
     }
 
     SECTION("Optimization"){

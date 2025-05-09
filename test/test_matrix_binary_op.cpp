@@ -38,10 +38,10 @@ TEST_CASE("Test binary operation : Mat + Mat + Mat"){
         Peanut::Matrix<Peanut::Int, 2, 2> int_22_mat2{6,7,8,9};
         Peanut::Matrix<Peanut::Int, 2, 2> sum_mat = int_22_mat1 + int_22_mat2 + int_22_mat2;
 
-        CHECK(all(sum_mat(0, 0) == 13));
-        CHECK(all(sum_mat(0, 1) == 16));
-        CHECK(all(sum_mat(1, 0) == 19));
-        CHECK(all(sum_mat(1, 1) == 22));
+        CHECK(pn_all(sum_mat(0, 0) == 13));
+        CHECK(pn_all(sum_mat(0, 1) == 16));
+        CHECK(pn_all(sum_mat(1, 0) == 19));
+        CHECK(pn_all(sum_mat(1, 1) == 22));
     }
 
     SECTION("float matrix"){
@@ -49,10 +49,10 @@ TEST_CASE("Test binary operation : Mat + Mat + Mat"){
         Peanut::Matrix<Peanut::Float, 2, 2> flt_22_mat2{6.6f,7.7f,8.8f,9.9f};
         Peanut::Matrix<Peanut::Float, 2, 2> sum_mat2 = flt_22_mat1 + flt_22_mat2 + flt_22_mat2;
 
-        CHECK(all(sum_mat2(0, 0) == 14.2f));
-        CHECK(all(sum_mat2(0, 1) == 17.4f));
-        CHECK(all(sum_mat2(1, 0) == 20.6f));
-        CHECK(all(sum_mat2(1, 1) == 23.8f));
+        CHECK(pn_all(sum_mat2(0, 0) == 14.2f));
+        CHECK(pn_all(sum_mat2(0, 1) == 17.4f));
+        CHECK(pn_all(sum_mat2(1, 0) == 20.6f));
+        CHECK(pn_all(sum_mat2(1, 1) == 23.8f));
     }
 }
 
@@ -62,10 +62,10 @@ TEST_CASE("Test binary operation : Mat - Mat - Mat"){
         Peanut::Matrix<Peanut::Int, 2, 2> int_22_mat2{6,7,8,9};
         Peanut::Matrix<Peanut::Int, 2, 2> sub_mat = int_22_mat1 - int_22_mat2 - int_22_mat2;
 
-        CHECK(all(sub_mat(0, 0) == -11));
-        CHECK(all(sub_mat(0, 1) == -12));
-        CHECK(all(sub_mat(1, 0) == -13));
-        CHECK(all(sub_mat(1, 1) == -14));
+        CHECK(pn_all(sub_mat(0, 0) == -11));
+        CHECK(pn_all(sub_mat(0, 1) == -12));
+        CHECK(pn_all(sub_mat(1, 0) == -13));
+        CHECK(pn_all(sub_mat(1, 1) == -14));
     }
 
     SECTION("float matrix"){
@@ -73,10 +73,10 @@ TEST_CASE("Test binary operation : Mat - Mat - Mat"){
         Peanut::Matrix<Peanut::Float, 2, 2> flt_22_mat2{6.6f,7.7f,8.8f,9.9f};
         Peanut::Matrix<Peanut::Float, 2, 2> sum_mat2 = flt_22_mat1 - flt_22_mat2 - flt_22_mat2;
 
-        CHECK(all(sum_mat2(0, 0) == -12.2f));
-        CHECK(all(sum_mat2(0, 1) == -13.4f));
-        CHECK(all(sum_mat2(1, 0) == -14.6f));
-        CHECK(all(Peanut::is_epsilon_equal(sum_mat2(1, 1), Peanut::Float(-15.8f))));
+        CHECK(pn_all(sum_mat2(0, 0) == -12.2f));
+        CHECK(pn_all(sum_mat2(0, 1) == -13.4f));
+        CHECK(pn_all(sum_mat2(1, 0) == -14.6f));
+        CHECK(pn_all(Peanut::is_epsilon_equal(sum_mat2(1, 1), Peanut::Float(-15.8f))));
     }
 }
 
@@ -88,15 +88,15 @@ TEST_CASE("Test binary operation : Scalar * Mat, Mat * Scalar"){
         // Build error
         // Peanut::Matrix<Peanut::Float, 2, 2> scalar_mat_mul1 = int_22_mat1 * 3;
 
-        CHECK(all(scalar_mat_mul1(0, 0) == 3));
-        CHECK(all(scalar_mat_mul1(0, 1) == 6));
-        CHECK(all(scalar_mat_mul1(1, 0) == 9));
-        CHECK(all(scalar_mat_mul1(1, 1) == 12));
+        CHECK(pn_all(scalar_mat_mul1(0, 0) == 3));
+        CHECK(pn_all(scalar_mat_mul1(0, 1) == 6));
+        CHECK(pn_all(scalar_mat_mul1(1, 0) == 9));
+        CHECK(pn_all(scalar_mat_mul1(1, 1) == 12));
 
-        CHECK(all(scalar_mat_mul2(0, 0) == 3));
-        CHECK(all(scalar_mat_mul2(0, 1) == 6));
-        CHECK(all(scalar_mat_mul2(1, 0) == 9));
-        CHECK(all(scalar_mat_mul2(1, 1) == 12));
+        CHECK(pn_all(scalar_mat_mul2(0, 0) == 3));
+        CHECK(pn_all(scalar_mat_mul2(0, 1) == 6));
+        CHECK(pn_all(scalar_mat_mul2(1, 0) == 9));
+        CHECK(pn_all(scalar_mat_mul2(1, 1) == 12));
     }
 
     SECTION("float matrix * float"){
@@ -104,10 +104,10 @@ TEST_CASE("Test binary operation : Scalar * Mat, Mat * Scalar"){
         Peanut::Matrix<Peanut::Float, 2, 2> scalar_mat_mul1 = flt_22_mat1 * 2.0f;
         // Build error
         // Peanut::Matrix<Peanut::Int, 2, 2> scalar_mat_mul2 = flt_22_mat1 * 2.0f;
-        CHECK(all(scalar_mat_mul1(0, 0) == 2.2f));
-        CHECK(all(scalar_mat_mul1(0, 1) == 4.4f));
-        CHECK(all(scalar_mat_mul1(1, 0) == 6.6f));
-        CHECK(all(scalar_mat_mul1(1, 1) == 8.8f));
+        CHECK(pn_all(scalar_mat_mul1(0, 0) == 2.2f));
+        CHECK(pn_all(scalar_mat_mul1(0, 1) == 4.4f));
+        CHECK(pn_all(scalar_mat_mul1(1, 0) == 6.6f));
+        CHECK(pn_all(scalar_mat_mul1(1, 1) == 8.8f));
     }
 }
 
@@ -117,10 +117,10 @@ TEST_CASE("Test binary operation : Mat * Mat"){
         Peanut::Matrix<Peanut::Float, 2, 2> flt_22_mat2{6.6f,7.7f,8.8f,9.9f};
         Peanut::Matrix<Peanut::Float, 2, 2> mul_mat = flt_22_mat1 * flt_22_mat2;
 
-        CHECK(all(mul_mat(0, 0) == 24.2f));
-        CHECK(all(mul_mat(0, 1) == 27.5f));
-        CHECK(all(mul_mat(1, 0) == 55.0f));
-        CHECK(all(Peanut::is_epsilon_equal(mul_mat(1, 1), Peanut::Float(62.7f), Peanut::Float(1e-5f))));
+        CHECK(pn_all(mul_mat(0, 0) == 24.2f));
+        CHECK(pn_all(mul_mat(0, 1) == 27.5f));
+        CHECK(pn_all(mul_mat(1, 0) == 55.0f));
+        CHECK(pn_all(Peanut::is_epsilon_equal(mul_mat(1, 1), Peanut::Float(62.7f), Peanut::Float(1e-5f))));
     }
 }
 
@@ -131,10 +131,10 @@ TEST_CASE("Test binary operation : Mat * Mat * Mat"){
         Peanut::Matrix<Peanut::Float, 2, 2> flt_22_mat3{5.5f, 4.4f, 3.3f, 2.2f};
         Peanut::Matrix<Peanut::Float, 2, 2> mul_mat = flt_22_mat1 * flt_22_mat2 * flt_22_mat3;
 
-        CHECK(all(Peanut::is_epsilon_equal(mul_mat(0, 0), Peanut::Float(223.85f))));
-        CHECK(all(Peanut::is_epsilon_equal(mul_mat(0, 1), Peanut::Float(166.98f), Peanut::Float(1e-4f))));
-        CHECK(all(Peanut::is_epsilon_equal(mul_mat(1, 0), Peanut::Float(509.41f), Peanut::Float(1e-4f))));
-        CHECK(all(mul_mat(1, 1) == 379.94f));
+        CHECK(pn_all(Peanut::is_epsilon_equal(mul_mat(0, 0), Peanut::Float(223.85f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(mul_mat(0, 1), Peanut::Float(166.98f), Peanut::Float(1e-4f))));
+        CHECK(pn_all(Peanut::is_epsilon_equal(mul_mat(1, 0), Peanut::Float(509.41f), Peanut::Float(1e-4f))));
+        CHECK(pn_all(mul_mat(1, 1) == 379.94f));
     }
 }
 
@@ -145,10 +145,10 @@ TEST_CASE("Test binary operation : Element-wise multiply"){
         Peanut::Matrix<Peanut::Float, 2, 2> flt_22_mat3{5.5f, 4.4f, 3.3f, 2.2f};
         Peanut::Matrix<Peanut::Float, 2, 2> mul_mat = flt_22_mat1 % flt_22_mat2 % flt_22_mat3;
 
-        CHECK(all(mul_mat(0, 0) == 36.3f));
-        CHECK(all(mul_mat(0, 1) == 67.76f));
-        CHECK(all(mul_mat(1, 0) == 87.12f));
-        CHECK(all(Peanut::is_epsilon_equal(mul_mat(1, 1), Peanut::Float(87.12f))));
+        CHECK(pn_all(mul_mat(0, 0) == 36.3f));
+        CHECK(pn_all(mul_mat(0, 1) == 67.76f));
+        CHECK(pn_all(mul_mat(1, 0) == 87.12f));
+        CHECK(pn_all(Peanut::is_epsilon_equal(mul_mat(1, 1), Peanut::Float(87.12f))));
     }
 }
 
@@ -183,22 +183,22 @@ TEST_CASE("Test binary operation : Random matrix arithmetic"){
 
     Peanut::Matrix<Peanut::Float, 4, 4> result = mat3 - (mat1 * (mat3 + mat2 - mat1) * mat2 * (mat2 - mat1 - mat3));
 
-    CHECK(all(Peanut::is_epsilon_equal(result(0, 0), Peanut::Float(10599.5645f))));
-    CHECK(all(Peanut::is_epsilon_equal(result(0, 1), Peanut::Float(42363.29f))));
-    CHECK(all(result(0, 2) == 44611.7f));
-    CHECK(all(Peanut::is_epsilon_equal(result(0, 3), Peanut::Float(61768.0508f))));
-    CHECK(all(Peanut::is_epsilon_equal(result(1, 0), Peanut::Float(14197.7305f))));
-    CHECK(all(Peanut::is_epsilon_equal(result(1, 1), Peanut::Float(51564.207f))));
-    CHECK(all(result(1, 2) == 53526.5f));
-    CHECK(all(Peanut::is_epsilon_equal(result(1, 3), Peanut::Float(72157.875f))));
-    CHECK(all(Peanut::is_epsilon_equal(result(2, 0), Peanut::Float(8774.53417))));
-    CHECK(all(Peanut::is_epsilon_equal(result(2, 1), Peanut::Float(39373.7188f))));
-    CHECK(all(Peanut::is_epsilon_equal(result(2, 2), Peanut::Float(42050.4219f))));
-    CHECK(all(Peanut::is_epsilon_equal(result(2, 3), Peanut::Float(59595.2578f))));
-    CHECK(all(Peanut::is_epsilon_equal(result(3, 0), Peanut::Float(14297.7168f))));
-    CHECK(all(Peanut::is_epsilon_equal(result(3, 1), Peanut::Float(61323.625f))));
-    CHECK(all(Peanut::is_epsilon_equal(result(3, 2), Peanut::Float(65321.7813f))));
-    CHECK(all(Peanut::is_epsilon_equal(result(3, 3), Peanut::Float(91666.5468f))));
+    CHECK(pn_all(Peanut::is_epsilon_equal(result(0, 0), Peanut::Float(10599.5645f))));
+    CHECK(pn_all(Peanut::is_epsilon_equal(result(0, 1), Peanut::Float(42363.29f))));
+    CHECK(pn_all(result(0, 2) == 44611.7f));
+    CHECK(pn_all(Peanut::is_epsilon_equal(result(0, 3), Peanut::Float(61768.0508f))));
+    CHECK(pn_all(Peanut::is_epsilon_equal(result(1, 0), Peanut::Float(14197.7305f))));
+    CHECK(pn_all(Peanut::is_epsilon_equal(result(1, 1), Peanut::Float(51564.207f))));
+    CHECK(pn_all(result(1, 2) == 53526.5f));
+    CHECK(pn_all(Peanut::is_epsilon_equal(result(1, 3), Peanut::Float(72157.875f))));
+    CHECK(pn_all(Peanut::is_epsilon_equal(result(2, 0), Peanut::Float(8774.53417))));
+    CHECK(pn_all(Peanut::is_epsilon_equal(result(2, 1), Peanut::Float(39373.7188f))));
+    CHECK(pn_all(Peanut::is_epsilon_equal(result(2, 2), Peanut::Float(42050.4219f))));
+    CHECK(pn_all(Peanut::is_epsilon_equal(result(2, 3), Peanut::Float(59595.2578f))));
+    CHECK(pn_all(Peanut::is_epsilon_equal(result(3, 0), Peanut::Float(14297.7168f))));
+    CHECK(pn_all(Peanut::is_epsilon_equal(result(3, 1), Peanut::Float(61323.625f))));
+    CHECK(pn_all(Peanut::is_epsilon_equal(result(3, 2), Peanut::Float(65321.7813f))));
+    CHECK(pn_all(Peanut::is_epsilon_equal(result(3, 3), Peanut::Float(91666.5468f))));
 }
 
 

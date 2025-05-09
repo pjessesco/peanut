@@ -68,11 +68,11 @@ namespace Peanut {
      */
 
 #ifdef PEANUT_APPLE_SIMD
-#define any(x) simd_any(x)
-#define all(x) simd_all(x)
+#define pn_any(x) simd_any(x)
+#define pn_all(x) simd_all(x)
 #else
-#define any(x) x
-#define all(x) x
+#define pn_any(x) x
+#define pn_all(x) x
 #endif
 
     template<typename T>
