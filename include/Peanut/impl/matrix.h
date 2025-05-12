@@ -398,6 +398,20 @@ namespace Peanut {
                     m1[0] * m2[1] - m1[1] * m2[0]};
         }
 
+        /**
+         * @brief L2 distance available only for vector usage.
+         *        (i.e., Row==1 or Col==1)
+         * @return Float l2 distance of given vectors.
+         */
+        static Float L2(const Matrix &m1, const Matrix &m2)
+        requires (Row==1) || (Col==1){
+            T ret = t_0;
+            for(int i=0;i<Row*Col;i++){
+                ret += std::pow(m1[i] - m2[i], 2);
+            }
+            return std::sqrt(ret);
+        }
+
         // =============== Features for vector usage ends ================
 
         /**
