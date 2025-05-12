@@ -128,6 +128,7 @@
 <li><a class="reference internal" href="#_CPPv4IDpEN6Peanut6Peanut6Matrix9from_rowsE6MatrixDp5RList"><code class="docutils literal notranslate"><span class="pre">from_rows()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4IDpEN6Peanut6Peanut6Matrix9from_colsE6MatrixDp5CList"><code class="docutils literal notranslate"><span class="pre">from_cols()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N6Peanut6Peanut6Matrix5crossERK6MatrixRK6Matrix"><code class="docutils literal notranslate"><span class="pre">cross()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4N6Peanut6Peanut6Matrix2L2ERK6MatrixRK6Matrix"><code class="docutils literal notranslate"><span class="pre">L2()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N6Peanut6Peanut6Matrix3RowE"><code class="docutils literal notranslate"><span class="pre">Row</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N6Peanut6Peanut6Matrix3ColE"><code class="docutils literal notranslate"><span class="pre">Col</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4N6Peanut6Peanut6MatrixlsERNSt7ostreamERK6Matrix"><code class="docutils literal notranslate"><span class="pre">operator&lt;&lt;</span></code></a></li>
@@ -1241,6 +1242,17 @@ Matrix&lt;int, 4, 4&gt; e2 = result;
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Cross-product result </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4N6Peanut6Peanut6Matrix2L2ERK6MatrixRK6Matrix">
+<span id="_CPPv3N6Peanut6Peanut6Matrix2L2ERK6MatrixRK6Matrix"></span><span id="_CPPv2N6Peanut6Peanut6Matrix2L2ERK6MatrixRK6Matrix"></span><span id="Peanut::Peanut::Matrix::L2__MatrixCR.MatrixCR"></span><span class="target" id="struct_peanut_1_1_matrix_1a52600730188b941f05db9b8b6ead8897"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">inline</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4N6Peanut5FloatE" title="Peanut::Float"><span class="n"><span class="pre">Float</span></span></a><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">L2</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_5Index_5IndexEN6Peanut6Peanut6MatrixE" title="Peanut::Peanut::Matrix"><span class="n"><span class="pre">Matrix</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">m1</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I0_5Index_5IndexEN6Peanut6Peanut6MatrixE" title="Peanut::Peanut::Matrix"><span class="n"><span class="pre">Matrix</span></span></a><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">m2</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4N6Peanut6Peanut6Matrix2L2ERK6MatrixRK6Matrix" title="Link to this definition"></a><br /></dt>
+<dd><p>L2 distance available only for vector usage. (i.e., Row==1 or Col==1) </p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Float l2 distance of given vectors. </p>
 </dd>
 </dl>
 </dd></dl>
