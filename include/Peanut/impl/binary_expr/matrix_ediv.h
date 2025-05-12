@@ -56,7 +56,7 @@ namespace Peanut::Impl {
         INLINE void eval(Matrix<Type, Row, Col> &_result) const {
             for (int i=0;i<Row;i++) {
                 for (int j=0;j<Col;j++) {
-                    _result(i,j) = x(i, j) * y(i, j);
+                    _result(i,j) = x(i, j) / y(i, j);
                 }
             }
         }
