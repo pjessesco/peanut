@@ -28,6 +28,7 @@
 
 // Peanut headers
 #include <Peanut/impl/common.h>
+#include <Peanut/impl/arithmetic.h>
 #include <Peanut/impl/matrix.h>
 #include <Peanut/impl/matrix_binary_op.h>
 #include <Peanut/impl/matrix_type_traits.h>

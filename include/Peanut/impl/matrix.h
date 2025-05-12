@@ -351,7 +351,7 @@ namespace Peanut {
             for(int i=0;i<Row*Col;i++){
                 ret += (m_data[i] * m_data[i]);
             }
-            return std::sqrt(ret);
+            return Peanut::sqrt(ret);
         }
 
         /**

@@ -48,9 +48,9 @@ namespace Peanut {
 #ifdef PEANUT_APPLE_SIMD
     static constexpr bool APPLE_SIMD = true;
     using Index = unsigned int;
-    using Int = simd_int16;
-    using Float = simd_float16;
-    using Bool = simd_int16;
+    using Int = simd_int4;
+    using Float = simd_float4;
+    using Bool = simd_int4;
 #else
     static constexpr bool APPLE_SIMD = false;
     using Index = unsigned int;
@@ -77,7 +77,7 @@ namespace Peanut {
 
     template<typename T>
 #ifdef PEANUT_APPLE_SIMD
-    constexpr bool IS_ARITHMETIC_V = std::is_arithmetic_v<T> || std::is_same_v<T, simd_int16> || std::is_same_v<T, simd_float16>;
+    constexpr bool IS_ARITHMETIC_V = std::is_arithmetic_v<T> || std::is_same_v<T, simd_int4> || std::is_same_v<T, simd_float4>;
 #else
     constexpr bool IS_ARITHMETIC_V = std::is_arithmetic_v<T>;
 #endif
@@ -85,7 +85,7 @@ namespace Peanut {
 
     template <typename T>
 #ifdef PEANUT_APPLE_SIMD
-    constexpr bool IS_FLOATING_POINT_V = std::is_floating_point_v<T> || std::is_same_v<T, simd_float16>;
+    constexpr bool IS_FLOATING_POINT_V = std::is_floating_point_v<T> || std::is_same_v<T, simd_float4>;
 #else
     constexpr bool IS_FLOATING_POINT_V = std::is_floating_point_v<T>;
 
