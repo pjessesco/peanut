@@ -58,6 +58,7 @@
 <li><a class="reference internal" href="#_CPPv4I00EN6Peanut15is_equal_type_vE"><code class="docutils literal notranslate"><span class="pre">is_equal_type_v</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I00EN6Peanut20is_equal_type_size_vE"><code class="docutils literal notranslate"><span class="pre">is_equal_type_size_v</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I00EN6PeanutdvEN4Impl15MatrixDivScalarI1E1TEERK10MatrixExprI1EERK1T"><code class="docutils literal notranslate"><span class="pre">operator/()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I00EN6Peanut4EDivEN4Impl10MatrixEDivI2E12E2EERK10MatrixExprI2E1ERK10MatrixExprI2E2E"><code class="docutils literal notranslate"><span class="pre">EDiv()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I00EN6PeanutrmEN4Impl11MatrixEMultI2E12E2EERK10MatrixExprI2E1ERK10MatrixExprI2E2E"><code class="docutils literal notranslate"><span class="pre">operator%()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I00EN6PeanutmlEN4Impl10MatrixMultI2E12E2EERK10MatrixExprI2E1ERK10MatrixExprI2E2E"><code class="docutils literal notranslate"><span class="pre">operator*()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I00EN6PeanutmlEN4Impl16MatrixMultScalarI1E1TEERK10MatrixExprI1EERK1T"><code class="docutils literal notranslate"><span class="pre">operator*()</span></code></a></li>
@@ -76,6 +77,7 @@
 <li><a class="reference internal" href="#_CPPv4I0EN6Peanut5MinorEN4Impl11MatrixMinorI1EEERK10MatrixExprI1EE"><code class="docutils literal notranslate"><span class="pre">Minor()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0EN6PeanutmiEN4Impl14MatrixNegationI1EEERK10MatrixExprI1EE"><code class="docutils literal notranslate"><span class="pre">operator-()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0EN6PeanutmiERK1ERKN4Impl14MatrixNegationI1EEE"><code class="docutils literal notranslate"><span class="pre">operator-()</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I0EN6Peanut4SqrtEN4Impl11MatrixESqrtI1EEERK10MatrixExprI1EE"><code class="docutils literal notranslate"><span class="pre">Sqrt()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I_5Index_5Index0EN6Peanut6SubMatEN4Impl9MatrixSubI6row_ex6col_ex1EEERK10MatrixExprI1EE"><code class="docutils literal notranslate"><span class="pre">SubMat()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0EN6Peanut1TEN4Impl15MatrixTransposeI1EEERK10MatrixExprI1EE"><code class="docutils literal notranslate"><span class="pre">T()</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0EN6Peanut1TERK1ERKN4Impl15MatrixTransposeI1EEE"><code class="docutils literal notranslate"><span class="pre">T()</span></code></a></li>
@@ -144,7 +146,9 @@
 <li><a class="reference internal" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl14MatrixCastTypeE"><code class="docutils literal notranslate"><span class="pre">Peanut::Impl::MatrixCastType</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0EN6Peanut4Impl6Peanut4Impl14MatrixCofactorE"><code class="docutils literal notranslate"><span class="pre">Peanut::Impl::MatrixCofactor</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl15MatrixDivScalarE"><code class="docutils literal notranslate"><span class="pre">Peanut::Impl::MatrixDivScalar</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl10MatrixEDivE"><code class="docutils literal notranslate"><span class="pre">Peanut::Impl::MatrixEDiv</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE"><code class="docutils literal notranslate"><span class="pre">Peanut::Impl::MatrixEMult</span></code></a></li>
+<li><a class="reference internal" href="#_CPPv4I0EN6Peanut4Impl6Peanut4Impl11MatrixESqrtE"><code class="docutils literal notranslate"><span class="pre">Peanut::Impl::MatrixESqrt</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0EN6Peanut4Impl6Peanut4Impl13MatrixInverseE"><code class="docutils literal notranslate"><span class="pre">Peanut::Impl::MatrixInverse</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I0EN6Peanut4Impl6Peanut4Impl11MatrixMinorE"><code class="docutils literal notranslate"><span class="pre">Peanut::Impl::MatrixMinor</span></code></a></li>
 <li><a class="reference internal" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl10MatrixMultE"><code class="docutils literal notranslate"><span class="pre">Peanut::Impl::MatrixMult</span></code></a></li>
@@ -306,6 +310,23 @@ Matrix&lt;int, 4, 4&gt; e2 = result;
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Constructed <code class="docutils literal notranslate"><a class="reference internal" href="#struct_peanut_1_1_impl_1_1_matrix_div_scalar"><span class="std std-ref"><span class="pre">Impl::MatrixDivScalar</span></span></a></code> instance </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN6Peanut4EDivEN4Impl10MatrixEDivI2E12E2EERK10MatrixExprI2E1ERK10MatrixExprI2E2E">
+<span id="_CPPv3I00EN6Peanut4EDivERK10MatrixExprI2E1ERK10MatrixExprI2E2E"></span><span id="_CPPv2I00EN6Peanut4EDivERK10MatrixExprI2E1ERK10MatrixExprI2E2E"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">E1</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">E2</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="matrix__ediv_8h_1a969cdad8baa08588cef401dc2f54e652"></span><span class="n"><span class="pre">Impl</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">MatrixEDiv</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN6Peanut4EDivEN4Impl10MatrixEDivI2E12E2EERK10MatrixExprI2E1ERK10MatrixExprI2E2E" title="Peanut::EDiv::E1"><span class="n"><span class="pre">E1</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN6Peanut4EDivEN4Impl10MatrixEDivI2E12E2EERK10MatrixExprI2E1ERK10MatrixExprI2E2E" title="Peanut::EDiv::E2"><span class="n"><span class="pre">E2</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">Peanut</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">EDiv</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixExpr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN6Peanut4EDivEN4Impl10MatrixEDivI2E12E2EERK10MatrixExprI2E1ERK10MatrixExprI2E2E" title="Peanut::EDiv::E1"><span class="n"><span class="pre">E1</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixExpr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN6Peanut4EDivEN4Impl10MatrixEDivI2E12E2EERK10MatrixExprI2E1ERK10MatrixExprI2E2E" title="Peanut::EDiv::E2"><span class="n"><span class="pre">E2</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">y</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I00EN6Peanut4EDivEN4Impl10MatrixEDivI2E12E2EERK10MatrixExprI2E1ERK10MatrixExprI2E2E" title="Link to this definition"></a><br /></dt>
+<dd><p>Element-wise division of matrix. See <code class="docutils literal notranslate"><a class="reference internal" href="#struct_peanut_1_1_impl_1_1_matrix_e_div"><span class="std std-ref"><span class="pre">Impl::MatrixEDiv</span></span></a></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>E1</strong> – Left hand side matrix expression type. </p></li>
+<li><p><strong>E2</strong> – Right hand side matrix expression type. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Constructed <code class="docutils literal notranslate"><a class="reference internal" href="#struct_peanut_1_1_impl_1_1_matrix_e_div"><span class="std std-ref"><span class="pre">Impl::MatrixEDiv</span></span></a></code> instance </p>
 </dd>
 </dl>
 </dd></dl>
@@ -605,6 +626,20 @@ Matrix&lt;int, 4, 4&gt; e2 = result;
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Input of the given parameter <code class="docutils literal notranslate"><span class="pre">x</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN6Peanut4SqrtEN4Impl11MatrixESqrtI1EEERK10MatrixExprI1EE">
+<span id="_CPPv3I0EN6Peanut4SqrtERK10MatrixExprI1EE"></span><span id="_CPPv2I0EN6Peanut4SqrtERK10MatrixExprI1EE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">E</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="sqrt_8h_1a2144b4804f18e39a11ef1301935d78a3"></span><span class="n"><span class="pre">Impl</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">MatrixESqrt</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN6Peanut4SqrtEN4Impl11MatrixESqrtI1EEERK10MatrixExprI1EE" title="Peanut::Sqrt::E"><span class="n"><span class="pre">E</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-prename descclassname"><span class="n"><span class="pre">Peanut</span></span><span class="p"><span class="pre">::</span></span></span><span class="sig-name descname"><span class="n"><span class="pre">Sqrt</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="n"><span class="pre">MatrixExpr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN6Peanut4SqrtEN4Impl11MatrixESqrtI1EEERK10MatrixExprI1EE" title="Peanut::Sqrt::E"><span class="n"><span class="pre">E</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">x</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv4I0EN6Peanut4SqrtEN4Impl11MatrixESqrtI1EEERK10MatrixExprI1EE" title="Link to this definition"></a><br /></dt>
+<dd><p>Element-wise sqrt operation of matrix. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>E</strong> – <a class="reference internal" href="#struct_peanut_1_1_matrix"><span class="std std-ref">Matrix</span></a> expression type. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Constructed <code class="docutils literal notranslate"><a class="reference internal" href="#struct_peanut_1_1_impl_1_1_matrix_e_sqrt"><span class="std std-ref"><span class="pre">Impl::MatrixESqrt</span></span></a></code> instance. </p>
 </dd>
 </dl>
 </dd></dl>
@@ -1368,17 +1403,46 @@ Matrix&lt;int, 4, 4&gt; e2 = result;
 </dd></dl>
 
 <dl class="cpp struct">
-<dt class="sig sig-object cpp" id="_CPPv4I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE">
-<span id="_CPPv3I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE"></span><span id="_CPPv2I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">E1</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">E2</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="struct_peanut_1_1_impl_1_1_matrix_e_mult"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MatrixEMult</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Peanut</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">MatrixExpr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE" title="Peanut::Impl::Peanut::Impl::MatrixEMult"><span class="n"><span class="pre">MatrixEMult</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE" title="Peanut::Impl::Peanut::Impl::MatrixEMult::E1"><span class="n"><span class="pre">E1</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE" title="Peanut::Impl::Peanut::Impl::MatrixEMult::E2"><span class="n"><span class="pre">E2</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE" title="Link to this definition"></a><br /></dt>
+<dt class="sig sig-object cpp" id="_CPPv4I00EN6Peanut4Impl6Peanut4Impl10MatrixEDivE">
+<span id="_CPPv3I00EN6Peanut4Impl6Peanut4Impl10MatrixEDivE"></span><span id="_CPPv2I00EN6Peanut4Impl6Peanut4Impl10MatrixEDivE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">E1</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">E2</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="struct_peanut_1_1_impl_1_1_matrix_e_div"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MatrixEDiv</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Peanut</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">MatrixExpr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl10MatrixEDivE" title="Peanut::Impl::Peanut::Impl::MatrixEDiv"><span class="n"><span class="pre">MatrixEDiv</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl10MatrixEDivE" title="Peanut::Impl::Peanut::Impl::MatrixEDiv::E1"><span class="n"><span class="pre">E1</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl10MatrixEDivE" title="Peanut::Impl::Peanut::Impl::MatrixEDiv::E2"><span class="n"><span class="pre">E2</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl10MatrixEDivE" title="Link to this definition"></a><br /></dt>
 <dd><div class="docutils container">
-<em>#include &lt;matrix_emult.h&gt;</em></div>
-<p>Expression class which represents <code class="docutils literal notranslate"><span class="pre">EMult()</span></code>, element-wise multiplication. </p>
+<em>#include &lt;matrix_ediv.h&gt;</em></div>
+<p>Expression class which represents <code class="docutils literal notranslate"><span class="pre">EDiv()</span></code>, element-wise division. </p>
 <dl class="field-list simple">
 <dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>E1</strong> – Left hand side matrix expression type. </p></li>
 <li><p><strong>E2</strong> – Right hand side matrix expression type. </p></li>
 </ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE">
+<span id="_CPPv3I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE"></span><span id="_CPPv2I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">E1</span></span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">E2</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="struct_peanut_1_1_impl_1_1_matrix_e_mult"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MatrixEMult</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Peanut</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">MatrixExpr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE" title="Peanut::Impl::Peanut::Impl::MatrixEMult"><span class="n"><span class="pre">MatrixEMult</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE" title="Peanut::Impl::Peanut::Impl::MatrixEMult::E1"><span class="n"><span class="pre">E1</span></span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE" title="Peanut::Impl::Peanut::Impl::MatrixEMult::E2"><span class="n"><span class="pre">E2</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I00EN6Peanut4Impl6Peanut4Impl11MatrixEMultE" title="Link to this definition"></a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;matrix_emult.h&gt;</em></div>
+<p>Expression class which represents <code class="docutils literal notranslate"><span class="pre">operator%()</span></code>, element-wise multiplication. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>E1</strong> – Left hand side matrix expression type. </p></li>
+<li><p><strong>E2</strong> – Right hand side matrix expression type. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv4I0EN6Peanut4Impl6Peanut4Impl11MatrixESqrtE">
+<span id="_CPPv3I0EN6Peanut4Impl6Peanut4Impl11MatrixESqrtE"></span><span id="_CPPv2I0EN6Peanut4Impl6Peanut4Impl11MatrixESqrtE"></span><span class="k"><span class="pre">template</span></span><span class="p"><span class="pre">&lt;</span></span><span class="k"><span class="pre">typename</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">E</span></span></span><span class="p"><span class="pre">&gt;</span></span><br /><span class="target" id="struct_peanut_1_1_impl_1_1_matrix_e_sqrt"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">MatrixESqrt</span></span></span><span class="w"> </span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="k"><span class="pre">public</span></span><span class="w"> </span><span class="n"><span class="pre">Peanut</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">MatrixExpr</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN6Peanut4Impl6Peanut4Impl11MatrixESqrtE" title="Peanut::Impl::Peanut::Impl::MatrixESqrt"><span class="n"><span class="pre">MatrixESqrt</span></span></a><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv4I0EN6Peanut4Impl6Peanut4Impl11MatrixESqrtE" title="Peanut::Impl::Peanut::Impl::MatrixESqrt::E"><span class="n"><span class="pre">E</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><a class="headerlink" href="#_CPPv4I0EN6Peanut4Impl6Peanut4Impl11MatrixESqrtE" title="Link to this definition"></a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;sqrt.h&gt;</em></div>
+<p>Expression class which represents a element-wise matrix sqrt. </p>
+<dl class="field-list simple">
+<dt class="field-odd">Template Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>E</strong> – <a class="reference internal" href="#struct_peanut_1_1_matrix"><span class="std std-ref">Matrix</span></a> expression type. </p>
 </dd>
 </dl>
 </dd></dl>
