@@ -32,50 +32,46 @@
 // Dependencies headers
 
 namespace Peanut::Impl {
-
     /**
-     * @brief Expression class which represents `operator%()`,
-     *        element-wise multiplication.
-     * @tparam E1 Left hand side matrix expression type.
-     * @tparam E2 Right hand side matrix expression type.
+     * @brief Expression class which represents a element-wise matrix sqrt.
+     * @tparam E Matrix expression type.
      */
-    template<typename E1, typename E2>
-        requires is_equal_size_mat_v<E1, E2>
-    struct MatrixEMult : public MatrixExpr<MatrixEMult<E1, E2>> {
-        using Type = typename E1::Type;
-        MatrixEMult(const E1 &x, const E2 &y) : x{x}, y{y} {}
+    template<typename E>
+        requires is_matrix_v<E>
+    struct MatrixESqrt : public MatrixExpr<MatrixESqrt<E>> {
+        using Type = Float;
+        MatrixESqrt(const E &x) : x{x} {}
 
         // Static polymorphism implementation of MatrixExpr
-        INLINE auto operator()(Index r, Index c) const {
-            return x(r, c) * y(r, c);
+        INLINE Type operator()(Index r, Index c) const {
+            return std::sqrt(x(r, c));
         }
 
-        static constexpr Index Row = E1::Row;
-        static constexpr Index Col = E1::Col;
+        static constexpr Index Row = E::Row;
+        static constexpr Index Col = E::Col;
 
-        INLINE void eval(Matrix<Type, Row, Col> &_result) const {
+        void eval(Matrix<Type, Row, Col> &_result) const {
             for (int i=0;i<Row;i++) {
                 for (int j=0;j<Col;j++) {
-                    _result(i,j) = x(i, j) * y(i, j);
+                    _result(i,j) = std::sqrt(x(i, j));
                 }
             }
         }
 
-        const E1 &x;
-        const E2 &y;
+        const E &x;
     };
 }
 
 namespace Peanut {
     /**
-     * @brief Element-wise multiplication of matrix. See `Impl::MatrixEMult`
-     * @tparam E1 Left hand side matrix expression type.
-     * @tparam E2 Right hand side matrix expression type.
-     * @return Constructed `Impl::MatrixEMult` instance
+     * @brief Element-wise sqrt operation of matrix.
+     * @tparam E Matrix expression type.
+     * @return Constructed `Impl::MatrixESqrt` instance.
+     *
      */
-    template<typename E1, typename E2>
-        requires is_equal_size_mat_v<E1, E2>
-    Impl::MatrixEMult<E1, E2> operator%(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y) {
-        return Impl::MatrixEMult<E1, E2>(static_cast<const E1 &>(x), static_cast<const E2 &>(y));
+    template<typename E>
+        requires is_matrix_v<E>
+    Impl::MatrixESqrt<E> Sqrt(const MatrixExpr<E> &x) {
+        return Impl::MatrixESqrt<E>(static_cast<const E &>(x));
     }
 }

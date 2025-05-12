@@ -34,6 +34,7 @@
 #include <Peanut/impl/unary_expr/inverse.h>
 #include <Peanut/impl/unary_expr/minor.h>
 #include <Peanut/impl/unary_expr/negation.h>
+#include <Peanut/impl/unary_expr/sqrt.h>
 #include <Peanut/impl/unary_expr/submatrix.h>
 #include <Peanut/impl/unary_expr/transpose.h>
 

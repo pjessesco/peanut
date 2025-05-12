@@ -28,6 +28,7 @@
 
 // Peanut headers
 #include <Peanut/impl/binary_expr/matrix_div_scalar.h>
+#include <Peanut/impl/binary_expr/matrix_ediv.h>
 #include <Peanut/impl/binary_expr/matrix_mult.h>
 #include <Peanut/impl/binary_expr/matrix_mult_scalar.h>
 #include <Peanut/impl/binary_expr/matrix_subtract.h>

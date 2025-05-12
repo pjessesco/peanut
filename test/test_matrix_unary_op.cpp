@@ -657,6 +657,19 @@ TEST_CASE("Test unary operation : Adjugate"){
     }
 }
 
+TEST_CASE("Test unary operation : sqrt") {
+    Peanut::Matrix<float, 3, 2> mat{1.0f, 4.0f,
+                                    9.0f, 16.0f,
+                                    25.0f, 36.0f};
+    Peanut::Matrix<float, 3, 2> sqrt_mat = Peanut::Sqrt(mat);
+
+    CHECK(sqrt_mat(0, 0) == Catch::Approx(1.0f));
+    CHECK(sqrt_mat(0, 1) == Catch::Approx(2.0f));
+    CHECK(sqrt_mat(1, 0) == Catch::Approx(3.0f));
+    CHECK(sqrt_mat(1, 1) == Catch::Approx(4.0f));
+    CHECK(sqrt_mat(2, 0) == Catch::Approx(5.0f));
+    CHECK(sqrt_mat(2, 1) == Catch::Approx(6.0f));
+}
 
 TEST_CASE("Test unary operation : Inverse"){
     Peanut::Matrix<float, 5, 5> mat1{6.5f, 8.1f, 7.6f, 2.5f, 3.8f,

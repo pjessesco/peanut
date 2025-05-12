@@ -34,20 +34,20 @@
 namespace Peanut::Impl {
 
     /**
-     * @brief Expression class which represents `operator%()`,
-     *        element-wise multiplication.
+     * @brief Expression class which represents `EDiv()`,
+     *        element-wise division.
      * @tparam E1 Left hand side matrix expression type.
      * @tparam E2 Right hand side matrix expression type.
      */
     template<typename E1, typename E2>
         requires is_equal_size_mat_v<E1, E2>
-    struct MatrixEMult : public MatrixExpr<MatrixEMult<E1, E2>> {
+    struct MatrixEDiv : public MatrixExpr<MatrixEDiv<E1, E2>> {
         using Type = typename E1::Type;
-        MatrixEMult(const E1 &x, const E2 &y) : x{x}, y{y} {}
+        MatrixEDiv(const E1 &x, const E2 &y) : x{x}, y{y} {}
 
         // Static polymorphism implementation of MatrixExpr
         INLINE auto operator()(Index r, Index c) const {
-            return x(r, c) * y(r, c);
+            return x(r, c) / y(r, c);
         }
 
         static constexpr Index Row = E1::Row;
@@ -68,14 +68,14 @@ namespace Peanut::Impl {
 
 namespace Peanut {
     /**
-     * @brief Element-wise multiplication of matrix. See `Impl::MatrixEMult`
+     * @brief Element-wise division of matrix. See `Impl::MatrixEDiv`
      * @tparam E1 Left hand side matrix expression type.
      * @tparam E2 Right hand side matrix expression type.
-     * @return Constructed `Impl::MatrixEMult` instance
+     * @return Constructed `Impl::MatrixEDiv` instance
      */
     template<typename E1, typename E2>
         requires is_equal_size_mat_v<E1, E2>
-    Impl::MatrixEMult<E1, E2> operator%(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y) {
-        return Impl::MatrixEMult<E1, E2>(static_cast<const E1 &>(x), static_cast<const E2 &>(y));
+    Impl::MatrixEDiv<E1, E2> EDiv(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y) {
+        return Impl::MatrixEDiv<E1, E2>(static_cast<const E1 &>(x), static_cast<const E2 &>(y));
     }
 }
