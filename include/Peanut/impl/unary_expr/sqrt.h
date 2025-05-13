@@ -44,7 +44,7 @@ namespace Peanut::Impl {
 
         // Static polymorphism implementation of MatrixExpr
         INLINE Type operator()(Index r, Index c) const {
-            return std::sqrt(x(r, c));
+            return Peanut::sqrt(x(r, c));
         }
 
         static constexpr Index Row = E::Row;

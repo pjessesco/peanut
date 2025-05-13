@@ -45,9 +45,11 @@ namespace Peanut::Impl {
     struct MatrixDivScalar : public MatrixExpr<MatrixDivScalar<E, T>> {
         using Type = Float;
         MatrixDivScalar(const E &x, T y) : x{x}, y{y} {
+#ifdef DEBUG
             if (is_zero(y)) {
                 throw std::invalid_argument("Divide by zero");
             }
+#endif
         }
 
         // Static polymorphism implementation of MatrixExpr

@@ -45,6 +45,14 @@
 #endif
 
 namespace Peanut {
+    constexpr int simd_lane() {
+#ifdef PEANUT_APPLE_SIMD
+        return 4;
+#else
+        return 1;
+#endif
+    }
+
 #ifdef PEANUT_APPLE_SIMD
     static constexpr bool APPLE_SIMD = true;
     using Index = unsigned int;
@@ -70,9 +78,11 @@ namespace Peanut {
 #ifdef PEANUT_APPLE_SIMD
 #define pn_any(x) simd_any(x)
 #define pn_all(x) simd_all(x)
+#define pn_none_of(x) !simd_any(x)
 #else
 #define pn_any(x) x
 #define pn_all(x) x
+#define pn_none_of(x) !x
 #endif
 
     template<typename T>
@@ -93,22 +103,20 @@ namespace Peanut {
 
     template <typename T>
     Bool is_zero(T val) {
-        if constexpr(APPLE_SIMD) {
-            return simd_abs(val) <= 1e-6;
-        }
-        else {
-            return std::fabs(val) <= std::numeric_limits<T>::epsilon();
-        }
+#ifdef PEANUT_APPLE_SIMD
+        return simd::abs(val) <= 1e-6;
+#else
+        return std::fabs(val) <= std::numeric_limits<T>::epsilon();
+#endif
     }
 
     template <typename T>
     Bool is_epsilon_equal(const T &v1, const T &v2, const T &epsilon=Float(1e-5f)) {
-        if constexpr(APPLE_SIMD) {
-            return simd_abs(v1 - v2) <= epsilon;
-        }
-        else {
-            return std::fabs(v1 - v2) <= epsilon;
-        }
+#ifdef PEANUT_APPLE_SIMD
+        return simd_abs(v1 - v2) <= epsilon;
+#else
+        return std::fabs(v1 - v2) <= epsilon;
+#endif
     }
 
     /**

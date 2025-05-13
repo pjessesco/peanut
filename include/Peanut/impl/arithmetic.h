@@ -26,12 +26,13 @@
 
 // Standard headers
 #include <cmath>
+
 #ifdef PEANUT_APPLE_SIMD
 #include <simd/simd.h>
 #endif
 
 // Peanut headers
-
+#include "matrix_type_traits.h"
 
 // Dependencies headers
 
@@ -52,6 +53,9 @@ namespace Peanut {
     Float atan(const Float &x) { return NAMESPACE::atan(x); }
     Float exp(const Float &x){ return NAMESPACE::exp(x); }
     Float log(const Float &x){ return NAMESPACE::log(x); }
+    Float clamp(const Float &x, const Float &min, const Float &max) {
+        return NAMESPACE::clamp(x, min, max);
+    }
 
 
     template <typename T> T min(const T &x, const T &y) { return NAMESPACE::min(x, y); }
@@ -66,11 +70,20 @@ namespace Peanut {
     }
 
     template <typename T>
-    T select(const T &a, const T &b, const Bool &c) {
+    T select(const Bool &cond, const T &a, const T &b) {
 #ifdef PEANUT_APPLE_SIMD
-        return simd_select(a, b, c);
+        T ret;
+        if constexpr(is_matrix_v<T>) {
+            for (int i=0;i<T::Row * T::Col;i++) {
+                ret[i] = simd_select(a[i], b[i], cond);
+            }
+            return ret;
+        }
+        else {
+            return simd_select(a, b, cond);
+        }
 #else
-        return c ? a : b;
+        return cond ? a : b;
 #endif
     }
 
