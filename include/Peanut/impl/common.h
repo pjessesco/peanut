@@ -30,6 +30,8 @@
 #include <utility>
 #include <iostream>
 
+#include "matrix_type_traits.h"
+
 // Peanut headers
 
 // Dependencies headers
@@ -102,21 +104,52 @@ namespace Peanut {
 #endif
 
     template <typename T>
-    Bool is_zero(T val) {
+    Bool is_zero(const T &val) {
+        if constexpr(is_matrix_v<T>) {
+            Bool active = true;
+            for (int i=0;i<T::Row * T::Col;i++) {
 #ifdef PEANUT_APPLE_SIMD
-        return simd::abs(val) <= 1e-6;
+                active &= simd::abs(val[i]) <= 1e-7;
 #else
-        return std::fabs(val) <= std::numeric_limits<T>::epsilon();
+                if (std::fabs(val[i]) > 1e-7) {
+                    return false;
+                }
 #endif
+            }
+            return active;
+        }
+        else {
+#ifdef PEANUT_APPLE_SIMD
+            return simd::abs(val) <= 1e-7;
+#else
+            return std::fabs(val) <= std::numeric_limits<T>::epsilon();
+#endif
+        }
     }
 
     template <typename T>
-    Bool is_epsilon_equal(const T &v1, const T &v2, const T &epsilon=Float(1e-5f)) {
+    Bool is_epsilon_equal(const T &v1, const T &v2) {
+        const T diff = v1 - v2;
+        if constexpr(is_matrix_v<T>) {
+            Bool active = true;
+            for (int i=0;i<T::Row * T::Col;i++) {
 #ifdef PEANUT_APPLE_SIMD
-        return simd_abs(v1 - v2) <= epsilon;
+                active &= simd::abs(diff[i]) <= 1e-7;
 #else
-        return std::fabs(v1 - v2) <= epsilon;
+                if (std::fabs(diff[i]) > 1e-7) {
+                    return false;
+                }
 #endif
+            }
+            return active;
+        }
+        else {
+#ifdef PEANUT_APPLE_SIMD
+            return simd::abs(diff) <= 1e-7;
+#else
+            return std::fabs(diff) <= std::numeric_limits<T>::epsilon();
+#endif
+        }
     }
 
     /**

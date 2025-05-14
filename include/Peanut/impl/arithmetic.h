@@ -45,15 +45,15 @@ namespace Peanut {
 #define NAMESPACE std
 #endif
 
-    Float acos(const Float &x) { return NAMESPACE::acos(x); }
-    Float sin(const Float &x) { return NAMESPACE::sin(x); }
-    Float cos(const Float &x) { return NAMESPACE::cos(x); }
-    Float tan(const Float &x) { return NAMESPACE::tan(x); }
-    Float atan2(const Float &x, const Float &y) {return NAMESPACE::atan2(x, y);}
-    Float atan(const Float &x) { return NAMESPACE::atan(x); }
-    Float exp(const Float &x){ return NAMESPACE::exp(x); }
-    Float log(const Float &x){ return NAMESPACE::log(x); }
-    Float clamp(const Float &x, const Float &min, const Float &max) {
+    INLINE Float acos(const Float &x) { return NAMESPACE::acos(x); }
+    INLINE Float sin(const Float &x) { return NAMESPACE::sin(x); }
+    INLINE Float cos(const Float &x) { return NAMESPACE::cos(x); }
+    INLINE Float tan(const Float &x) { return NAMESPACE::tan(x); }
+    INLINE Float atan2(const Float &x, const Float &y) {return NAMESPACE::atan2(x, y);}
+    INLINE Float atan(const Float &x) { return NAMESPACE::atan(x); }
+    INLINE Float exp(const Float &x){ return NAMESPACE::exp(x); }
+    INLINE Float log(const Float &x){ return NAMESPACE::log(x); }
+    INLINE Float clamp(const Float &x, const Float &min, const Float &max) {
         return NAMESPACE::clamp(x, min, max);
     }
 
