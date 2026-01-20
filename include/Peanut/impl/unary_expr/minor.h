@@ -24,6 +24,7 @@
 #pragma once
 
 // Standard headers
+#include <cstring>
 
 // Peanut headers
 #include <Peanut/impl/common.h>
@@ -59,13 +60,10 @@ namespace Peanut::Impl {
 
         static constexpr Index Row = E::Row;
         static constexpr Index Col = E::Col;
+        static constexpr bool prefers_eval = true;
 
         void eval(Matrix<Type, Row, Col> &_result) const {
-            for (int i=0;i<Row;i++) {
-                for (int j=0;j<Col;j++) {
-                    _result(i,j) = mat_eval(i, j);
-                }
-            }
+            memcpy(_result.m_data.data(), mat_eval.m_data.data(), sizeof(Type) * Row * Col);
         }
 
         Matrix<Type, Row, Col> mat_eval;
@@ -84,4 +82,5 @@ namespace Peanut {
     Impl::MatrixMinor<E> Minor(const MatrixExpr<E> &x) {
         return Impl::MatrixMinor<E>(static_cast<const E &>(x));
     }
+
 }

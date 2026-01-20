@@ -58,6 +58,7 @@ namespace Peanut::Impl {
 
         static constexpr Index Row = E::Row;
         static constexpr Index Col = E::Col;
+        static constexpr bool prefers_eval = true;
 
         void eval(Matrix<Type, Row, Col> &_result) const {
             for (int i=0;i<Row;i++) {
@@ -100,4 +101,5 @@ namespace Peanut {
     const E& Inverse(const Impl::MatrixInverse<E> &x) {
         return static_cast<const E &>(x.x);
     }
+
 }

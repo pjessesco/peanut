@@ -137,4 +137,28 @@ namespace Peanut {
      */
     template <typename E1, typename E2>
     constexpr bool is_equal_type_size_v = is_equal_type_size<E1, E2>::value;
+
+    // =========================================================================
+
+    /**
+     * @brief Compile-time check if given expression type prefers eval() over
+     *        element-wise access for better performance.
+     * @details Detected via E::prefers_eval static member if present, otherwise false.
+     *          Expression types that pre-compute their operands should define
+     *          `static constexpr bool prefers_eval = true;`
+     */
+    template <typename E, typename = void>
+    struct has_prefers_eval : std::false_type {};
+
+    template <typename E>
+    struct has_prefers_eval<E, std::void_t<decltype(E::prefers_eval)>> : std::true_type {};
+
+    template <typename E>
+    constexpr bool prefers_eval_v = [] {
+        if constexpr (has_prefers_eval<E>::value) {
+            return E::prefers_eval;
+        } else {
+            return false;
+        }
+    }();
 }

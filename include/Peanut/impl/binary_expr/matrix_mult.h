@@ -60,15 +60,20 @@ namespace Peanut::Impl {
 
         static constexpr Index Row = E1::Row;
         static constexpr Index Col = E2::Col;
+        static constexpr bool prefers_eval = true;
 
         INLINE void eval(Matrix<Type, Row, Col> &_result) const {
-            for (int i=0;i<Row;i++) {
-                for (int j=0;j<Col;j++) {
-                    _result(i, j) = x_eval(i, 0) * y_eval(0, j);
-                }
-                for (Index k = 1; k < E1::Col; k++) {
-                    for (int j=0;j<Col;j++) {
-                        _result(i, j) += x_eval(i, k) * y_eval(k, j);
+            constexpr Index K = E1::Col;
+            // Zero initialize result
+            for (Index i = 0; i < Row * Col; i++) {
+                _result.m_data[i] = Type{0};
+            }
+            // i-k-j order for cache efficiency (row-major access pattern)
+            for (Index i = 0; i < Row; i++) {
+                for (Index k = 0; k < K; k++) {
+                    const Type x_ik = x_eval.m_data[i * K + k];
+                    for (Index j = 0; j < Col; j++) {
+                        _result.m_data[i * Col + j] += x_ik * y_eval.m_data[k * Col + j];
                     }
                 }
             }
@@ -94,4 +99,5 @@ namespace Peanut {
     Impl::MatrixMult<E1, E2> operator*(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y) {
         return Impl::MatrixMult<E1, E2>(static_cast<const E1 &>(x), static_cast<const E2 &>(y));
     }
+
 }
