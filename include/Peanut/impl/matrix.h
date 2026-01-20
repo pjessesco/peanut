@@ -138,9 +138,15 @@ namespace Peanut {
          */
         template<typename E>
         Matrix(const MatrixExpr<E> &expr) requires is_equal_type_size_v<E, Matrix>{
-            for(Index r=0;r< R;r++){
-                for(Index c=0;c< C;c++){
-                    m_data[r*C+c] = expr(r, c);
+            if constexpr (prefers_eval_v<E>) {
+                // Types with optimized eval() (e.g., MatrixMult)
+                static_cast<const E&>(expr).eval(*this);
+            } else {
+                // Simple expressions benefit from compiler loop fusion
+                for(Index r=0;r<R;r++){
+                    for(Index c=0;c<C;c++){
+                        m_data[r*C+c] = expr(r, c);
+                    }
                 }
             }
         }
