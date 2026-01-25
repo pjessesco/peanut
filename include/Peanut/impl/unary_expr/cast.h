@@ -65,19 +65,24 @@ namespace Peanut::Impl {
 
 namespace Peanut {
     /**
-     * @brief Type casting of a matrix expression.
-     * @tparam T Target data type.
-     * @tparam E Matrix expression type.
-     * @return Constructed `Impl::MatrixCastType` instance.
-     *
-     *     Matrix<int, 2, 2> mat{1,2,
-     *                           3,4};
-     *
-     *     Matrix<float, 2, 2> ev = Cast<float>(mat);
-     *
+     * @brief Type casting for small matrices (eager evaluation)
      */
     template<typename T, typename E>
-        requires std::is_arithmetic_v<T> && is_matrix_v<E>
+        requires std::is_arithmetic_v<T> && is_matrix_v<E> && is_small_matrix_v<E>
+    Matrix<T, E::Row, E::Col> Cast(const MatrixExpr<E> &x) {
+        Matrix<typename E::Type, E::Row, E::Col> x_eval = static_cast<const E&>(x);
+        Matrix<T, E::Row, E::Col> result;
+        for (Index i = 0; i < E::Row * E::Col; i++) {
+            result.m_data[i] = static_cast<T>(x_eval.m_data[i]);
+        }
+        return result;
+    }
+
+    /**
+     * @brief Type casting for large matrices (lazy evaluation)
+     */
+    template<typename T, typename E>
+        requires std::is_arithmetic_v<T> && is_matrix_v<E> && (!is_small_matrix_v<E>)
     Impl::MatrixCastType<T, E> Cast(const MatrixExpr<E> &x) {
         return Impl::MatrixCastType<T, E>(static_cast<const E &>(x));
     }

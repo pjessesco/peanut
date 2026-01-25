@@ -74,13 +74,27 @@ namespace Peanut::Impl {
 namespace Peanut {
 
     /**
-     * @brief Element-wise division of matrix and scalar. See `Impl::MatrixDivScalar`.
-     * @tparam E Left hand side matrix expression type.
-     * @tparam T Right hand side scalar type.
-     * @return Constructed `Impl::MatrixDivScalar` instance
+     * @brief Scalar division for small matrices (eager evaluation)
      */
     template<typename E, typename T>
-        requires is_matrix_v<E> && std::is_arithmetic_v<T>
+        requires is_matrix_v<E> && std::is_arithmetic_v<T> && is_small_matrix_v<E>
+    Matrix<Float, E::Row, E::Col> operator/(const MatrixExpr<E> &x, const T &y) {
+        if (is_zero(y)) {
+            throw std::invalid_argument("Divide by zero");
+        }
+        Matrix<typename E::Type, E::Row, E::Col> x_eval = static_cast<const E&>(x);
+        Matrix<Float, E::Row, E::Col> result;
+        for (Index i = 0; i < E::Row * E::Col; i++) {
+            result.m_data[i] = static_cast<Float>(x_eval.m_data[i]) / static_cast<Float>(y);
+        }
+        return result;
+    }
+
+    /**
+     * @brief Scalar division for large matrices (lazy evaluation)
+     */
+    template<typename E, typename T>
+        requires is_matrix_v<E> && std::is_arithmetic_v<T> && (!is_small_matrix_v<E>)
     Impl::MatrixDivScalar<E, T> operator/(const MatrixExpr<E> &x, const T &y) {
         return Impl::MatrixDivScalar<E, T>(static_cast<const E &>(x), y);
     }

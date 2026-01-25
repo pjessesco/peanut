@@ -65,13 +65,26 @@ namespace Peanut::Impl {
 
 namespace Peanut{
     /**
-     * @brief Transpose operation of matrix. See `Impl::MatrixTranspose`
-     *        and https://en.wikipedia.org/wiki/Transpose for details.
-     * @tparam E Matrix expression type.
-     * @return Constructed `Impl::MatrixTranspose` instance
+     * @brief Transpose for small matrices (eager evaluation)
      */
     template<typename E>
-        requires is_matrix_v<E>
+        requires is_matrix_v<E> && is_small_matrix_v<E>
+    Matrix<typename E::Type, E::Col, E::Row> T(const MatrixExpr<E> &x) {
+        Matrix<typename E::Type, E::Row, E::Col> x_eval = static_cast<const E&>(x);
+        Matrix<typename E::Type, E::Col, E::Row> result;
+        for (Index i = 0; i < E::Row; i++) {
+            for (Index j = 0; j < E::Col; j++) {
+                result.m_data[j * E::Row + i] = x_eval.m_data[i * E::Col + j];
+            }
+        }
+        return result;
+    }
+
+    /**
+     * @brief Transpose for large matrices (lazy evaluation)
+     */
+    template<typename E>
+        requires is_matrix_v<E> && (!is_small_matrix_v<E>)
     Impl::MatrixTranspose<E> T(const MatrixExpr<E> &x) {
         return Impl::MatrixTranspose<E>(static_cast<const E &>(x));
     }

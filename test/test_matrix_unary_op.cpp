@@ -52,14 +52,15 @@ TEST_CASE("Test unary operation : T"){
     }
 
     SECTION("Optimization"){
-        CHECK(std::is_same_v<decltype(T(T(mat))), const Peanut::Matrix<int, 2, 3>&>);
-        auto test = T(T(mat));
-        CHECK(test(0, 0) == 1);
-        CHECK(test(0, 1) == 2);
-        CHECK(test(0, 2) == 3);
-        CHECK(test(1, 0) == 4);
-        CHECK(test(1, 1) == 5);
-        CHECK(test(1, 2) == 6);
+        // Use large matrix (>64 elements) to test T(T(x))=x optimization
+        // For small matrices, eager evaluation returns Matrix directly
+        Peanut::Matrix<int, 9, 8> large_mat;
+        for (int i = 0; i < 72; i++) large_mat.m_data[i] = i;
+        CHECK(std::is_same_v<decltype(T(T(large_mat))), const Peanut::Matrix<int, 9, 8>&>);
+        auto test = T(T(large_mat));
+        CHECK(test(0, 0) == 0);
+        CHECK(test(0, 1) == 1);
+        CHECK(test(8, 7) == 71);
     }
 }
 
@@ -111,12 +112,15 @@ TEST_CASE("Test unary operation : Negation"){
     }
 
     SECTION("Optimization"){
-        const auto tmp = -(-(mat));
-        CHECK(std::is_same_v<decltype(-(-mat)), const Peanut::Matrix<int, 2, 2>&>);
-        CHECK(tmp(0, 0) == 1);
-        CHECK(tmp(0, 1) == 2);
-        CHECK(tmp(1, 0) == 3);
-        CHECK(tmp(1, 1) == 4);
+        // Use large matrix (>64 elements) to test -(-x)=x optimization
+        // For small matrices, eager evaluation returns Matrix directly
+        Peanut::Matrix<int, 9, 9> large_mat;
+        for (int i = 0; i < 81; i++) large_mat.m_data[i] = i;
+        CHECK(std::is_same_v<decltype(-(-large_mat)), const Peanut::Matrix<int, 9, 9>&>);
+        const auto tmp = -(-large_mat);
+        CHECK(tmp(0, 0) == 0);
+        CHECK(tmp(0, 1) == 1);
+        CHECK(tmp(8, 8) == 80);
     }
 }
 

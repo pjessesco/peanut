@@ -68,26 +68,32 @@ namespace Peanut::Impl {
 
 namespace Peanut {
     /**
-     * @brief Get a submatrix matrix by excluding row and column in given
-     *        indices. See `Impl::MatrixSub`.
-     * @tparam row_ex R index which will be excluded.
-     * @tparam col_ex Column index which will be excluded.
-     * @tparam E Matrix expression type.
-     * @return Constructed `Impl::MatrixSub` instance
-     *
-     *     Matrix<int, 4, 4> mat{1,2,3,4,
-     *                           5,6,7,8,
-     *                           9,0,1,2,
-     *                           3,4,5,6};
-     *
-     *     Matrix<int, 3, 3> ev = SubMat<1,2>(mat11);
-     *     // 1 2 4
-     *     // 9 0 2
-     *     // 3 4 6
-     *
+     * @brief SubMat for small result matrices (eager evaluation)
      */
     template<Index row_ex, Index col_ex, typename E>
-        requires is_matrix_v<E> && is_between_v<0, row_ex, E::Row> && is_between_v<0, col_ex, E::Col>
+        requires is_matrix_v<E> && is_between_v<0, row_ex, E::Row> && is_between_v<0, col_ex, E::Col> &&
+                 ((E::Row - 1) * (E::Col - 1) <= EAGER_EVAL_THRESHOLD)
+    Matrix<typename E::Type, E::Row - 1, E::Col - 1> SubMat(const MatrixExpr<E> &x) {
+        constexpr Index Row = E::Row - 1;
+        constexpr Index Col = E::Col - 1;
+        Matrix<typename E::Type, E::Row, E::Col> x_eval = static_cast<const E&>(x);
+        Matrix<typename E::Type, Row, Col> result;
+        for (Index i = 0; i < Row; i++) {
+            for (Index j = 0; j < Col; j++) {
+                Index src_i = i < row_ex ? i : i + 1;
+                Index src_j = j < col_ex ? j : j + 1;
+                result.m_data[i * Col + j] = x_eval.m_data[src_i * E::Col + src_j];
+            }
+        }
+        return result;
+    }
+
+    /**
+     * @brief SubMat for large result matrices (lazy evaluation)
+     */
+    template<Index row_ex, Index col_ex, typename E>
+        requires is_matrix_v<E> && is_between_v<0, row_ex, E::Row> && is_between_v<0, col_ex, E::Col> &&
+                 ((E::Row - 1) * (E::Col - 1) > EAGER_EVAL_THRESHOLD)
     Impl::MatrixSub<row_ex, col_ex, E> SubMat(const MatrixExpr<E> &x) {
         return Impl::MatrixSub<row_ex, col_ex, E>(static_cast<const E &>(x));
     }

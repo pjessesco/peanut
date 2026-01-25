@@ -70,25 +70,49 @@ namespace Peanut::Impl {
 namespace Peanut {
 
     /**
-     * @brief Element-wise multiplication of matrix and scalar. See `Impl::MatrixMultScalar`.
-     * @tparam E Left hand side matrix expression type.
-     * @tparam T Right hand side scalar type.
-     * @return Constructed `Impl::MatrixMultScalar` instance
+     * @brief Scalar multiplication for small matrices (eager evaluation)
      */
     template<typename E, typename T>
-        requires is_matrix_v<E> && std::is_arithmetic_v<T>
+        requires is_matrix_v<E> && std::is_arithmetic_v<T> && is_small_matrix_v<E>
+    Matrix<typename Impl::MatrixMultScalar<E, T>::Type, E::Row, E::Col> operator*(const MatrixExpr<E> &x, const T &y) {
+        using ResultType = typename Impl::MatrixMultScalar<E, T>::Type;
+        Matrix<typename E::Type, E::Row, E::Col> x_eval = static_cast<const E&>(x);
+        Matrix<ResultType, E::Row, E::Col> result;
+        for (Index i = 0; i < E::Row * E::Col; i++) {
+            result.m_data[i] = static_cast<ResultType>(x_eval.m_data[i]) * static_cast<ResultType>(y);
+        }
+        return result;
+    }
+
+    /**
+     * @brief Scalar multiplication for large matrices (lazy evaluation)
+     */
+    template<typename E, typename T>
+        requires is_matrix_v<E> && std::is_arithmetic_v<T> && (!is_small_matrix_v<E>)
     Impl::MatrixMultScalar<E, T> operator*(const MatrixExpr<E> &x, const T &y) {
         return Impl::MatrixMultScalar<E, T>(static_cast<const E &>(x), y);
     }
 
     /**
-     * @brief Element-wise multiplication of matrix and scalar. See `Impl::MatrixMultScalar`.
-     * @tparam T Left hand side scalar type.
-     * @tparam E Right hand side matrix expression type.
-     * @return Constructed `Impl::MatrixMultScalar` instance
+     * @brief Scalar multiplication for small matrices (eager evaluation, reversed operands)
      */
     template<typename E, typename T>
-        requires is_matrix_v<E> && std::is_arithmetic_v<T>
+        requires is_matrix_v<E> && std::is_arithmetic_v<T> && is_small_matrix_v<E>
+    Matrix<typename Impl::MatrixMultScalar<E, T>::Type, E::Row, E::Col> operator*(const T x, const MatrixExpr<E> &y) {
+        using ResultType = typename Impl::MatrixMultScalar<E, T>::Type;
+        Matrix<typename E::Type, E::Row, E::Col> y_eval = static_cast<const E&>(y);
+        Matrix<ResultType, E::Row, E::Col> result;
+        for (Index i = 0; i < E::Row * E::Col; i++) {
+            result.m_data[i] = static_cast<ResultType>(x) * static_cast<ResultType>(y_eval.m_data[i]);
+        }
+        return result;
+    }
+
+    /**
+     * @brief Scalar multiplication for large matrices (lazy evaluation, reversed operands)
+     */
+    template<typename E, typename T>
+        requires is_matrix_v<E> && std::is_arithmetic_v<T> && (!is_small_matrix_v<E>)
     Impl::MatrixMultScalar<E, T> operator*(const T x, const MatrixExpr<E> &y) {
         return Impl::MatrixMultScalar<E, T>(static_cast<const E &>(y), x);
     }
