@@ -60,20 +60,44 @@ namespace Peanut::Impl {
 
         static constexpr Index Row = E1::Row;
         static constexpr Index Col = E2::Col;
+        static constexpr Index K = E1::Col;
+
+        // L1 cache size (conservative estimate: 32KB)
+        static constexpr std::size_t L1_CACHE_SIZE = 32768;
+        // Working set: A(Row×K) + B(K×Col) + C(Row×Col)
+        static constexpr std::size_t working_set_size =
+            (Row * K + K * Col + Row * Col) * sizeof(Type);
+        // Use cache-friendly i-k-j loop when:
+        // 1. Working set exceeds L1 cache, OR
+        // 2. K > 32 (column access in B matrix benefits from row-major traversal)
+        static constexpr bool use_cache_friendly_loop =
+            (working_set_size > L1_CACHE_SIZE) || (K > 32);
+        // Always use eval() for MatrixMult (operands already evaluated)
         static constexpr bool prefers_eval = true;
 
         INLINE void eval(Matrix<Type, Row, Col> &_result) const {
-            constexpr Index K = E1::Col;
-            // Zero initialize result
-            for (Index i = 0; i < Row * Col; i++) {
-                _result.m_data[i] = Type{0};
-            }
-            // i-k-j order for cache efficiency (row-major access pattern)
-            for (Index i = 0; i < Row; i++) {
-                for (Index k = 0; k < K; k++) {
-                    const Type x_ik = x_eval.m_data[i * K + k];
+            if constexpr (use_cache_friendly_loop) {
+                // Large matrices: i-k-j order for cache efficiency
+                for (Index i = 0; i < Row * Col; i++) {
+                    _result.m_data[i] = Type{0};
+                }
+                for (Index i = 0; i < Row; i++) {
+                    for (Index k = 0; k < K; k++) {
+                        const Type x_ik = x_eval.m_data[i * K + k];
+                        for (Index j = 0; j < Col; j++) {
+                            _result.m_data[i * Col + j] += x_ik * y_eval.m_data[k * Col + j];
+                        }
+                    }
+                }
+            } else {
+                // Small matrices: i-j-k order (simpler, less overhead)
+                for (Index i = 0; i < Row; i++) {
                     for (Index j = 0; j < Col; j++) {
-                        _result.m_data[i * Col + j] += x_ik * y_eval.m_data[k * Col + j];
+                        Type sum = x_eval.m_data[i * K] * y_eval.m_data[j];
+                        for (Index k = 1; k < K; k++) {
+                            sum += x_eval.m_data[i * K + k] * y_eval.m_data[k * Col + j];
+                        }
+                        _result.m_data[i * Col + j] = sum;
                     }
                 }
             }
