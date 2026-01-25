@@ -114,13 +114,37 @@ namespace Peanut::Impl {
 namespace Peanut {
 
     /**
-     * @brief Multiplication between matrices. See `Impl::MatrixMult`.
-     * @tparam E1 Left hand side matrix expression type.
-     * @tparam E2 Right hand side matrix expression type.
-     * @return Constructed `Impl::MatrixMult` instance
+     * @brief Multiplication for small matrices (eager evaluation)
      */
     template<typename E1, typename E2>
-        requires(E1::Col == E2::Row)
+        requires(E1::Col == E2::Row) && (E1::Row * E2::Col <= EAGER_EVAL_THRESHOLD)
+    Matrix<typename E1::Type, E1::Row, E2::Col> operator*(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y) {
+        using Type = typename E1::Type;
+        constexpr Index Row = E1::Row;
+        constexpr Index Col = E2::Col;
+        constexpr Index K = E1::Col;
+
+        Matrix<Type, E1::Row, E1::Col> x_eval = static_cast<const E1&>(x);
+        Matrix<Type, E2::Row, E2::Col> y_eval = static_cast<const E2&>(y);
+        Matrix<Type, Row, Col> result;
+
+        for (Index i = 0; i < Row; i++) {
+            for (Index j = 0; j < Col; j++) {
+                Type sum = x_eval.m_data[i * K] * y_eval.m_data[j];
+                for (Index k = 1; k < K; k++) {
+                    sum += x_eval.m_data[i * K + k] * y_eval.m_data[k * Col + j];
+                }
+                result.m_data[i * Col + j] = sum;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * @brief Multiplication for large matrices (lazy evaluation)
+     */
+    template<typename E1, typename E2>
+        requires(E1::Col == E2::Row) && (E1::Row * E2::Col > EAGER_EVAL_THRESHOLD)
     Impl::MatrixMult<E1, E2> operator*(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y) {
         return Impl::MatrixMult<E1, E2>(static_cast<const E1 &>(x), static_cast<const E2 &>(y));
     }

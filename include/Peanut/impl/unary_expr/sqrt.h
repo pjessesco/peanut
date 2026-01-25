@@ -64,13 +64,24 @@ namespace Peanut::Impl {
 
 namespace Peanut {
     /**
-     * @brief Element-wise sqrt operation of matrix.
-     * @tparam E Matrix expression type.
-     * @return Constructed `Impl::MatrixESqrt` instance.
-     *
+     * @brief Element-wise sqrt for small matrices (eager evaluation)
      */
     template<typename E>
-        requires is_matrix_v<E>
+        requires is_matrix_v<E> && is_small_matrix_v<E>
+    Matrix<Float, E::Row, E::Col> Sqrt(const MatrixExpr<E> &x) {
+        Matrix<typename E::Type, E::Row, E::Col> x_eval = static_cast<const E&>(x);
+        Matrix<Float, E::Row, E::Col> result;
+        for (Index i = 0; i < E::Row * E::Col; i++) {
+            result.m_data[i] = std::sqrt(x_eval.m_data[i]);
+        }
+        return result;
+    }
+
+    /**
+     * @brief Element-wise sqrt for large matrices (lazy evaluation)
+     */
+    template<typename E>
+        requires is_matrix_v<E> && (!is_small_matrix_v<E>)
     Impl::MatrixESqrt<E> Sqrt(const MatrixExpr<E> &x) {
         return Impl::MatrixESqrt<E>(static_cast<const E &>(x));
     }

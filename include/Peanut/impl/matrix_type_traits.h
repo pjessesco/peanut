@@ -161,4 +161,10 @@ namespace Peanut {
             return false;
         }
     }();
+
+    // Eager evaluation threshold: 64 elements (8x8)
+    inline constexpr Index EAGER_EVAL_THRESHOLD = 64;
+
+    template <typename E>
+    constexpr bool is_small_matrix_v = (E::Row * E::Col <= EAGER_EVAL_THRESHOLD);
 }

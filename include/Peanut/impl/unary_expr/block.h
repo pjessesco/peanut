@@ -69,28 +69,30 @@ namespace Peanut::Impl {
 
 namespace Peanut {
     /**
-     * @brief Get a submatrix matrix. See `Impl::MatrixBlock`
-     * @tparam row_start Lower row index of the block
-     * @tparam col_start Lower column index of the block
-     * @tparam row_size Row size of the block
-     * @tparam col_size Column size of the block
-     * @tparam E Matrix expression type.
-     * @return Constructed `Impl::MatrixBlock` instance
-     *
-     *     Matrix<int, 4, 4> mat{1,2,3,4,
-     *                           5,6,7,8,
-     *                           9,0,1,2,
-     *                           3,4,5,6};
-     *
-     *     Matrix<int, 3, 2> ev = Block<0, 1, 3, 2>(mat11);
-     *     // 2 3
-     *     // 6 7
-     *     // 0 1
-     *
+     * @brief Block extraction for small result matrices (eager evaluation)
      */
     template<Index row_start, Index col_start, Index row_size, Index col_size, typename E>
         requires is_matrix_v<E> && is_between_v<0, row_start, E::Row> && is_between_v<0, col_start, E::Col> &&
-                 is_between_v<0, row_start + row_size, E::Row + 1> && is_between_v<0, col_start + col_size, E::Col + 1>
+                 is_between_v<0, row_start + row_size, E::Row + 1> && is_between_v<0, col_start + col_size, E::Col + 1> &&
+                 (row_size * col_size <= EAGER_EVAL_THRESHOLD)
+    Matrix<typename E::Type, row_size, col_size> Block(const MatrixExpr<E> &x) {
+        Matrix<typename E::Type, E::Row, E::Col> x_eval = static_cast<const E&>(x);
+        Matrix<typename E::Type, row_size, col_size> result;
+        for (Index i = 0; i < row_size; i++) {
+            for (Index j = 0; j < col_size; j++) {
+                result.m_data[i * col_size + j] = x_eval.m_data[(row_start + i) * E::Col + (col_start + j)];
+            }
+        }
+        return result;
+    }
+
+    /**
+     * @brief Block extraction for large result matrices (lazy evaluation)
+     */
+    template<Index row_start, Index col_start, Index row_size, Index col_size, typename E>
+        requires is_matrix_v<E> && is_between_v<0, row_start, E::Row> && is_between_v<0, col_start, E::Col> &&
+                 is_between_v<0, row_start + row_size, E::Row + 1> && is_between_v<0, col_start + col_size, E::Col + 1> &&
+                 (row_size * col_size > EAGER_EVAL_THRESHOLD)
     Impl::MatrixBlock<row_start, col_start, row_size, col_size, E> Block(const MatrixExpr<E> &x) {
         return Impl::MatrixBlock<row_start, col_start, row_size, col_size, E>(static_cast<const E &>(x));
     }

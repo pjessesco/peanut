@@ -65,12 +65,24 @@ namespace Peanut::Impl {
 
 namespace Peanut{
     /**
-     * @brief Negation operation of matrix.
-     * @tparam E Matrix expression type.
-     * @return Constructed `Impl::MatrixNegation` instance
+     * @brief Negation for small matrices (eager evaluation)
      */
     template<typename E>
-        requires is_matrix_v<E>
+        requires is_matrix_v<E> && is_small_matrix_v<E>
+    Matrix<typename E::Type, E::Row, E::Col> operator-(const MatrixExpr<E> &x) {
+        Matrix<typename E::Type, E::Row, E::Col> x_eval = static_cast<const E&>(x);
+        Matrix<typename E::Type, E::Row, E::Col> result;
+        for (Index i = 0; i < E::Row * E::Col; i++) {
+            result.m_data[i] = -x_eval.m_data[i];
+        }
+        return result;
+    }
+
+    /**
+     * @brief Negation for large matrices (lazy evaluation)
+     */
+    template<typename E>
+        requires is_matrix_v<E> && (!is_small_matrix_v<E>)
     Impl::MatrixNegation<E> operator-(const MatrixExpr<E> &x) {
         return Impl::MatrixNegation<E>(static_cast<const E &>(x));
     }

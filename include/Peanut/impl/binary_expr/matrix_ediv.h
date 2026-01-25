@@ -68,13 +68,25 @@ namespace Peanut::Impl {
 
 namespace Peanut {
     /**
-     * @brief Element-wise division of matrix. See `Impl::MatrixEDiv`
-     * @tparam E1 Left hand side matrix expression type.
-     * @tparam E2 Right hand side matrix expression type.
-     * @return Constructed `Impl::MatrixEDiv` instance
+     * @brief Element-wise division for small matrices (eager evaluation)
      */
     template<typename E1, typename E2>
-        requires is_equal_size_mat_v<E1, E2>
+        requires is_equal_size_mat_v<E1, E2> && is_small_matrix_v<E1>
+    Matrix<typename E1::Type, E1::Row, E1::Col> EDiv(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y) {
+        Matrix<typename E1::Type, E1::Row, E1::Col> x_eval = static_cast<const E1&>(x);
+        Matrix<typename E1::Type, E1::Row, E1::Col> y_eval = static_cast<const E2&>(y);
+        Matrix<typename E1::Type, E1::Row, E1::Col> result;
+        for (Index i = 0; i < E1::Row * E1::Col; i++) {
+            result.m_data[i] = x_eval.m_data[i] / y_eval.m_data[i];
+        }
+        return result;
+    }
+
+    /**
+     * @brief Element-wise division for large matrices (lazy evaluation)
+     */
+    template<typename E1, typename E2>
+        requires is_equal_size_mat_v<E1, E2> && (!is_small_matrix_v<E1>)
     Impl::MatrixEDiv<E1, E2> EDiv(const MatrixExpr<E1> &x, const MatrixExpr<E2> &y) {
         return Impl::MatrixEDiv<E1, E2>(static_cast<const E1 &>(x), static_cast<const E2 &>(y));
     }
