@@ -55,8 +55,8 @@ namespace Peanut {
     template<typename T>
     bool is_zero(T val) requires is_arithmetic<T>{
         if constexpr (std::is_floating_point_v<T>){
-            return std::fabs(val-static_cast<T>(0)) <= std::numeric_limits<T>::epsilon() ||
-                   std::fabs(val-static_cast<T>(0)) < std::numeric_limits<T>::min();
+            return fabs(val) <= std::numeric_limits<T>::epsilon() ||
+                   fabs(val) < std::numeric_limits<T>::min();
         }
         else{
             return val == static_cast<T>(0);

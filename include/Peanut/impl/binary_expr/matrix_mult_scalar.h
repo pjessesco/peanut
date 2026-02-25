@@ -41,18 +41,16 @@ namespace Peanut::Impl {
     template<typename E, typename T>
         requires is_matrix_v<E> && is_arithmetic<T>
     struct MatrixMultScalar : public MatrixExpr<MatrixMultScalar<E, T>> {
-        using Type = typename std::conditional<
-                std::is_floating_point_v<typename E::Type> || std::is_floating_point_v<T>,
-                Float, T>::type;
+        using Type = E::Type;
+        static constexpr Index Row = E::Row;
+        static constexpr Index Col = E::Col;
+
         MatrixMultScalar(const E &x, T y) : x{x}, y{y} {}
 
         // Static polymorphism implementation of MatrixExpr
         INLINE Type operator()(Index r, Index c) const {
             return static_cast<Type>(x(r, c)) * static_cast<Type>(y);
         }
-
-        static constexpr Index Row = E::Row;
-        static constexpr Index Col = E::Col;
 
         INLINE void eval(Matrix<Type, Row, Col> &_result) const {
             for (int i=0;i<Row;i++) {
