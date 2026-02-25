@@ -137,4 +137,9 @@ namespace Peanut {
      */
     template <typename E1, typename E2>
     constexpr bool is_equal_type_size_v = is_equal_type_size<E1, E2>::value;
+
+    // =========================================================================
+
+    template<typename T>
+    concept is_arithmetic = std::is_arithmetic_v<T>; // || simd || gpu || etc
 }

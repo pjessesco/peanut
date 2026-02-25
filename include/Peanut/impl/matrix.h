@@ -77,7 +77,7 @@ namespace Peanut {
      * @tparam R Row size.
      * @tparam C Column size.
      */
-    template<typename T, Index R, Index C> requires std::is_arithmetic_v<T> && (R > 0) && (C > 0)
+    template<typename T, Index R, Index C> requires is_arithmetic<T> && (R > 0) && (C > 0)
     struct Matrix : public MatrixExpr<Matrix<T, R, C>>{
 
         /**

@@ -26,11 +26,12 @@
 
 // Standard headers
 #include <cmath>
+#include <iostream>
 #include <limits>
 #include <utility>
-#include <iostream>
 
 // Peanut headers
+#include <Peanut/impl/matrix_type_traits.h>
 
 // Dependencies headers
 
@@ -52,7 +53,7 @@ namespace Peanut {
      *         If \p T is not a floating point type, returns true if \p val is zero, false if not.
      */
     template<typename T>
-    bool is_zero(T val) requires std::is_arithmetic_v<T>{
+    bool is_zero(T val) requires is_arithmetic<T>{
         if constexpr (std::is_floating_point_v<T>){
             return std::fabs(val-static_cast<T>(0)) <= std::numeric_limits<T>::epsilon() ||
                    std::fabs(val-static_cast<T>(0)) < std::numeric_limits<T>::min();
