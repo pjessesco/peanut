@@ -121,7 +121,9 @@ namespace Peanut {
          * @param data A std::array having `T` type and \p R * \p C size.
          */
         explicit Matrix(const std::array<T, R * C> &data) {
-            memcpy(m_data.data(), data.data(), sizeof(T)*R*C);
+            for (Index i = 0; i < R * C; i++) {
+                m_data[i] = data[i];
+            }
         }
 
         /**
@@ -188,9 +190,10 @@ namespace Peanut {
         static Matrix from_rows(RList ... rlist){
             Matrix ret;
             int idx = 0;
-            constexpr size_t copy_byte = sizeof(Type) * Col;
             for(const Matrix<Type, 1, Col> p : {rlist...}){
-                memcpy(&(ret.m_data[idx*C]), p.m_data.data(), copy_byte);
+                for(Index c=0;c<Col;c++){
+                    ret.m_data[idx*C+c] = p.m_data[c];
+                }
                 idx++;
             }
             return ret;
@@ -256,7 +259,9 @@ namespace Peanut {
          */
         Matrix<Type, 1, Col> get_row(Index idx) const{
             Matrix<Type, 1, Col> ret;
-            memcpy(ret.m_data.data(), &(m_data[idx*C]), sizeof(Type)*Col);
+            for(Index c=0;c<Col;c++){
+                ret.m_data[c] = m_data[idx*C+c];
+            }
             return ret;
         }
 
@@ -266,7 +271,9 @@ namespace Peanut {
          * @param row Row matrix which will be assigned to the r'th row of the matrix.
          */
         void set_row(Index idx, const Matrix<Type, 1, Col> &row){
-            memcpy(&(m_data[idx*C]), row.m_data.data(), sizeof(Type)*Col);
+            for(Index c=0;c<Col;c++){
+                m_data[idx*C+c] = row.m_data[c];
+            }
         }
 
         /**
@@ -346,7 +353,7 @@ namespace Peanut {
          *        (i.e., Row==1 or Col==1)
          * @return Float l2 distance of the vector.
          */
-        Float length() const requires (Row==1) || (Col==1){
+        T length() const requires (Row==1) || (Col==1){
             T ret = t_0;
             for(int i=0;i<Row*Col;i++){
                 ret += (m_data[i] * m_data[i]);
@@ -360,11 +367,11 @@ namespace Peanut {
          *        (i.e., Row==1 or Col==1)
          * @return Normalized Float matrix(vector).
          */
-        Matrix<Float, Row, Col> normalize() const requires (Row==1) || (Col==1){
-            Matrix<Float, Row, Col> ret;
-            const Float len = length();
+        Matrix<T, Row, Col> normalize() const requires (Row==1) || (Col==1){
+            Matrix<T, Row, Col> ret;
+            const T len = length();
             for(int i=0;i<Row*Col;i++){
-                 ret[i] = static_cast<Float>((*this)[i]) / len;
+                 ret[i] = (*this)[i] / len;
             }
             return ret;
         }
@@ -375,7 +382,12 @@ namespace Peanut {
          * @return Max element in the vector.
          */
         T max() const requires (Row==1) || (Col==1){
-            return *std::max_element(m_data.begin(), m_data.end());
+            T result = m_data[0];
+            for (int i = 1; i < Row*Col; i++) {
+                using std::max;
+                result = max(result, m_data[i]);
+            }
+            return result;
         }
 
         /**
@@ -384,7 +396,12 @@ namespace Peanut {
          * @return Min element in the vector.
          */
         T min() const requires (Row==1) || (Col==1){
-            return *std::min_element(m_data.begin(), m_data.end());
+            T result = m_data[0];
+            for (int i = 1; i < Row*Col; i++) {
+                using std::min;
+                result = min(result, m_data[i]);
+            }
+            return result;
         }
 
         /**
@@ -403,11 +420,11 @@ namespace Peanut {
          *        (i.e., Row==1 or Col==1)
          * @return Float l2 distance of given vectors.
          */
-        static Float L2(const Matrix &m1, const Matrix &m2) requires (Row==1) || (Col==1){
+        static T L2(const Matrix &m1, const Matrix &m2) requires (Row==1) || (Col==1){
             T ret = t_0;
-            using std::pow;
             for(int i=0;i<Row*Col;i++){
-                ret += pow(m1[i] - m2[i], 2);
+                T diff = m1[i] - m2[i];
+                ret += diff * diff;
             }
             using std::sqrt;
             return sqrt(ret);
@@ -447,15 +464,15 @@ namespace Peanut {
          *          issue may exists with a extremely large/small numbers.
          * @return Gaussian elimination-performed matrix.
          */
-        Matrix<Float, R, C> gaussian_elem() const{
-            Matrix<Float, R, C> ret = Cast<Float>(*this);
+        Matrix<T, R, C> gaussian_elem() const{
+            Matrix<T, R, C> ret = *this;
             for(int j=0;j< R -1;j++){
-                const Float denom = static_cast<Float>(ret(j,j));
+                const T denom = ret(j,j);
                 if(is_zero(denom)){
                     continue;
                 }
                 for(int i=j+1;i< R;i++){
-                    const Float ratio = static_cast<Float>(ret(i, j)) / denom;
+                    const T ratio = ret(i, j) / denom;
                     ret.subtract_row(i, j, ratio);
                 }
             }
@@ -500,7 +517,7 @@ namespace Peanut {
                 return (*this)(0, 0) * (*this)(1, 1) - (*this)(0, 1) * (*this)(1, 0);
             }
             auto upper_triangular = gaussian_elem();
-            Float det = upper_triangular(0, 0);
+            T det = upper_triangular(0, 0);
             for(int i=1;i< R;i++){
                 det *= upper_triangular(i, i);
             }
@@ -515,7 +532,7 @@ namespace Peanut {
         // } m_data;
 
     private:
-        static constexpr T t_1 = static_cast<T>(1);
-        static constexpr T t_0 = static_cast<T>(0);
+        static inline const T t_1 = T(1);
+        static inline const T t_0 = T(0);
     };
 }

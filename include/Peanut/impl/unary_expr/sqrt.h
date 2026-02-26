@@ -39,7 +39,7 @@ namespace Peanut::Impl {
     template<typename E>
         requires is_matrix_v<E>
     struct MatrixESqrt : public MatrixExpr<MatrixESqrt<E>> {
-        using Type = Float;
+        using Type = E::Type;
         MatrixESqrt(const E &x) : x{x} {}
 
         // Static polymorphism implementation of MatrixExpr

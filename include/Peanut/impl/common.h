@@ -34,6 +34,7 @@
 #include <Peanut/impl/matrix_type_traits.h>
 
 // Dependencies headers
+#include <simd/simd.h>
 
 #if defined(_MSC_VER) && !defined(__llvm__) && !defined(__INTEL_COMPILER)
 #define INLINE __forceinline
@@ -43,7 +44,7 @@
 
 namespace Peanut {
     using Index = unsigned int;
-    using Float = float;
+    using Float = simd_float4;
 
     /**
      * @brief Check if given \p val is zero or not.
@@ -53,7 +54,7 @@ namespace Peanut {
      *         If \p T is not a floating point type, returns true if \p val is zero, false if not.
      */
     template<typename T>
-    bool is_zero(T val) requires is_arithmetic<T>{
+    bool is_zero(T val) requires is_arithmetic<T> && (!std::is_same_v<T, simd_float4>){
         if constexpr (std::is_floating_point_v<T>){
             return fabs(val) <= std::numeric_limits<T>::epsilon() ||
                    fabs(val) < std::numeric_limits<T>::min();
@@ -61,6 +62,10 @@ namespace Peanut {
         else{
             return val == static_cast<T>(0);
         }
+    }
+
+    inline bool is_zero(simd_float4 val){
+        return simd_reduce_max(simd_abs(val)) <= 1e-7f;
     }
 
     /**

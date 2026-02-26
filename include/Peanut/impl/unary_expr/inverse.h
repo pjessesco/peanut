@@ -44,7 +44,7 @@ namespace Peanut::Impl {
     template<typename E>
         requires is_matrix_v<E> && is_square_v<E>
     struct MatrixInverse : public MatrixExpr<MatrixInverse<E>> {
-        using Type = Float;
+        using Type = E::Type;
         MatrixInverse(const E &_x) : x{_x} {
             Matrix<Float, E::Row, E::Col> x_eval = Cast<Float>(x);
             cofactor_eval = Cofactor(x_eval);

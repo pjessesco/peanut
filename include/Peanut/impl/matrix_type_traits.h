@@ -30,6 +30,7 @@
 // Peanut headers
 
 // Dependencies headers
+#include <simd/vector_types.h>
 
 namespace Peanut {
 
@@ -140,6 +141,12 @@ namespace Peanut {
 
     // =========================================================================
 
+    // template<typename T>
+    // concept is_arithmetic = std::is_arithmetic_v<T>; // || simd || gpu || etc
+
     template<typename T>
-    concept is_arithmetic = std::is_arithmetic_v<T>; // || simd || gpu || etc
+    struct is_arithmetic_trait : std::bool_constant<std::is_arithmetic_v<T>> {};
+    template<> struct is_arithmetic_trait<simd_float4> : std::true_type {};
+    template<typename T>
+    concept is_arithmetic = is_arithmetic_trait<T>::value;
 }

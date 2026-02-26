@@ -43,7 +43,7 @@ namespace Peanut::Impl {
     template<typename E, typename T>
         requires is_matrix_v<E> && is_arithmetic<T>
     struct MatrixDivScalar : public MatrixExpr<MatrixDivScalar<E, T>> {
-        using Type = Float;
+        using Type = E::Type;
         MatrixDivScalar(const E &x, T y) : x{x}, y{y} {
             if (is_zero(y)) {
                 throw std::invalid_argument("Divide by zero");
