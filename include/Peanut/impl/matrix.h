@@ -77,7 +77,7 @@ namespace Peanut {
      * @tparam R Row size.
      * @tparam C Column size.
      */
-    template<typename T, Index R, Index C> requires std::is_arithmetic_v<T> && (R > 0) && (C > 0)
+    template<typename T, Index R, Index C> requires is_arithmetic<T> && (R > 0) && (C > 0)
     struct Matrix : public MatrixExpr<Matrix<T, R, C>>{
 
         /**
@@ -151,7 +151,7 @@ namespace Peanut {
          */
         static Matrix zeros() {
             auto m = Matrix();
-            memset(m.m_data.data(), 0, sizeof(T)*R*C);
+            m.m_data.fill(T{0});
             return m;
         }
 
@@ -160,8 +160,7 @@ namespace Peanut {
          * @return Identity matrix with given \p R and \p C .
          */
         static Matrix identity() requires is_square_v<Matrix> {
-            Matrix a;
-            memset(a.m_data.data(), 0, sizeof(T)*R*C);
+            Matrix a = Matrix::zeros();
             for (Index i = 0; i < R; i++) {
                 a.m_data[i*C+i] = t_1;
             }
@@ -352,7 +351,8 @@ namespace Peanut {
             for(int i=0;i<Row*Col;i++){
                 ret += (m_data[i] * m_data[i]);
             }
-            return std::sqrt(ret);
+            using std::sqrt;
+            return sqrt(ret);
         }
 
         /**
@@ -403,13 +403,14 @@ namespace Peanut {
          *        (i.e., Row==1 or Col==1)
          * @return Float l2 distance of given vectors.
          */
-        static Float L2(const Matrix &m1, const Matrix &m2)
-        requires (Row==1) || (Col==1){
+        static Float L2(const Matrix &m1, const Matrix &m2) requires (Row==1) || (Col==1){
             T ret = t_0;
+            using std::pow;
             for(int i=0;i<Row*Col;i++){
-                ret += std::pow(m1[i] - m2[i], 2);
+                ret += pow(m1[i] - m2[i], 2);
             }
-            return std::sqrt(ret);
+            using std::sqrt;
+            return sqrt(ret);
         }
 
         // =============== Features for vector usage ends ================

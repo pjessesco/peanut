@@ -101,7 +101,7 @@ TEST_CASE("Test binary operation : Scalar * Mat, Mat * Scalar"){
 
     SECTION("int matrix * float"){
         Peanut::Matrix<int, 2, 2> int_22_mat1{1,2,3,4};
-        Peanut::Matrix<float, 2, 2> scalar_mat_mul1 = int_22_mat1 * 2.0f;
+        Peanut::Matrix<int, 2, 2> scalar_mat_mul1 = int_22_mat1 * 2.0f;
         // Build error
         // Peanut::Matrix<int, 2, 2> scalar_mat_mul2 = int_22_mat1 * 2.0f;
 
