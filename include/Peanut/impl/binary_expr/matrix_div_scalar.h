@@ -35,15 +35,16 @@
 namespace Peanut::Impl {
 
     /**
-     * @brief Expression class which represents `operator/()`. It represents
-     *        `Float` type matrix while evaluation always.
+     * @brief Expression class which represents `operator/()`.
+     *        May produce incorrect results for non-floating-point element types
+     *        (e.g., integer) due to truncation in division.
      * @tparam E Left hand side matrix expression type.
      * @tparam T Right hand side scalar type.
      */
     template<typename E, typename T>
         requires is_matrix_v<E> && is_arithmetic<T>
     struct MatrixDivScalar : public MatrixExpr<MatrixDivScalar<E, T>> {
-        using Type = E::Type;
+        using Type = typename E::Type;
         MatrixDivScalar(const E &x, T y) : x{x}, y{y} {
             if (is_zero(y)) {
                 throw std::invalid_argument("Divide by zero");
@@ -51,8 +52,8 @@ namespace Peanut::Impl {
         }
 
         // Static polymorphism implementation of MatrixExpr
-        INLINE Float operator()(Index r, Index c) const {
-            return static_cast<Type>(x(r, c)) / static_cast<Float>(y);
+        INLINE Type operator()(Index r, Index c) const {
+            return static_cast<Type>(x(r, c)) / static_cast<Type>(y);
         }
 
         static constexpr Index Row = E::Row;
@@ -61,7 +62,7 @@ namespace Peanut::Impl {
         INLINE void eval(Matrix<Type, Row, Col> &_result) const {
             for (int i=0;i<Row;i++) {
                 for (int j=0;j<Col;j++) {
-                    _result(i,j) = static_cast<Type>(x(i, j)) / static_cast<Float>(y);
+                    _result(i,j) = static_cast<Type>(x(i, j)) / static_cast<Type>(y);
                 }
             }
         }

@@ -112,9 +112,9 @@ namespace Peanut {
          *
          */
         template <typename ...TList>
-            requires std::conjunction_v<std::is_same<T, TList>...> &&
+            requires std::conjunction_v<std::is_constructible<T, TList>...> &&
                      (sizeof...(TList) == Row*Col)
-        Matrix(TList ... tlist) : m_data{std::forward<T>(tlist)...} {}
+        Matrix(TList ... tlist) : m_data{Type(tlist)...} {}
 
         /**
          * @brief Constructor with std::array.
@@ -122,7 +122,7 @@ namespace Peanut {
          */
         explicit Matrix(const std::array<T, R * C> &data) {
             for (Index i = 0; i < R * C; i++) {
-                m_data[i] = data[i];
+                m_data[i] = Type(data[i]);
             }
         }
 
@@ -130,7 +130,11 @@ namespace Peanut {
          * @brief Constructor with std::vector.
          * @param data std::vector having `T` type.
          */
-        explicit Matrix(const std::vector<T> &data) : m_data{data} {}
+        explicit Matrix(const std::vector<T> &data) {
+            for (Index i = 0; i < R * C && i < data.size(); i++) {
+                m_data[i] = Type(data[i]);
+            }
+        }
 
         /**
          * @brief Constructor from arbitrary Peanut matrix expression.
@@ -153,7 +157,7 @@ namespace Peanut {
          */
         static Matrix zeros() {
             auto m = Matrix();
-            m.m_data.fill(T{0});
+            m.m_data.fill(t_0);
             return m;
         }
 
@@ -236,7 +240,7 @@ namespace Peanut {
          * @param c Column index.
          * @return Rvalue of an element in \p r 'th Row and \p c 'th column.
          */
-        INLINE T operator()(Index r, Index c) const{
+        INLINE Type operator()(Index r, Index c) const{
             return m_data[r*C+c];
         }
 
@@ -248,7 +252,7 @@ namespace Peanut {
          * @param c Column index.
          * @return Reference of an element in \p r 'th Row and \p c 'th column.
          */
-        INLINE T& operator()(Index r, Index c) {
+        INLINE Type& operator()(Index r, Index c) {
             return m_data[r*C+c];
         }
 
@@ -318,7 +322,7 @@ namespace Peanut {
          * @param i Index
          * @return \p T type i'th element data.
          */
-        INLINE T operator[](Index i) const
+        INLINE Type operator[](Index i) const
             requires (Row==1) || (Col==1){
             return m_data[i];
         }
@@ -329,7 +333,7 @@ namespace Peanut {
          * @param i Index
          * @return Reference of i'th element.
          */
-        INLINE T& operator[](Index i)
+        INLINE Type& operator[](Index i)
             requires (Row==1) || (Col==1){
             return m_data[i];
         }
@@ -340,8 +344,8 @@ namespace Peanut {
          * @param vec Equal-type matrix(vector).
          * @return T type dot product result.
          */
-        T dot(const Matrix &vec) const requires (Row==1) || (Col==1){
-            T ret = t_0;
+        Type dot(const Matrix &vec) const requires (Row==1) || (Col==1){
+            Type ret = t_0;
             for(int i=0;i<Row*Col;i++){
                 ret += (vec.m_data[i] * m_data[i]);
             }
@@ -353,8 +357,8 @@ namespace Peanut {
          *        (i.e., Row==1 or Col==1)
          * @return Float l2 distance of the vector.
          */
-        T length() const requires (Row==1) || (Col==1){
-            T ret = t_0;
+        Type length() const requires (Row==1) || (Col==1){
+            Type ret = t_0;
             for(int i=0;i<Row*Col;i++){
                 ret += (m_data[i] * m_data[i]);
             }
@@ -365,11 +369,11 @@ namespace Peanut {
         /**
          * @brief Vector normalization available only for vector usage.
          *        (i.e., Row==1 or Col==1)
-         * @return Normalized Float matrix(vector).
+         * @return Normalized matrix(vector).
          */
-        Matrix<T, Row, Col> normalize() const requires (Row==1) || (Col==1){
-            Matrix<T, Row, Col> ret;
-            const T len = length();
+        Matrix normalize() const requires (Row==1) || (Col==1){
+            Matrix ret;
+            const Type len = length();
             for(int i=0;i<Row*Col;i++){
                  ret[i] = (*this)[i] / len;
             }
@@ -381,8 +385,8 @@ namespace Peanut {
          *        (i.e., Row==1 or Col==1)
          * @return Max element in the vector.
          */
-        T max() const requires (Row==1) || (Col==1){
-            T result = m_data[0];
+        Type max() const requires (Row==1) || (Col==1){
+            Type result = m_data[0];
             for (int i = 1; i < Row*Col; i++) {
                 using std::max;
                 result = max(result, m_data[i]);
@@ -395,8 +399,8 @@ namespace Peanut {
          *        (i.e., Row==1 or Col==1)
          * @return Min element in the vector.
          */
-        T min() const requires (Row==1) || (Col==1){
-            T result = m_data[0];
+        Type min() const requires (Row==1) || (Col==1){
+            Type result = m_data[0];
             for (int i = 1; i < Row*Col; i++) {
                 using std::min;
                 result = min(result, m_data[i]);
@@ -420,10 +424,10 @@ namespace Peanut {
          *        (i.e., Row==1 or Col==1)
          * @return Float l2 distance of given vectors.
          */
-        static T L2(const Matrix &m1, const Matrix &m2) requires (Row==1) || (Col==1){
-            T ret = t_0;
+        static Type L2(const Matrix &m1, const Matrix &m2) requires (Row==1) || (Col==1){
+            Type ret = t_0;
             for(int i=0;i<Row*Col;i++){
-                T diff = m1[i] - m2[i];
+                Type diff = m1[i] - m2[i];
                 ret += diff * diff;
             }
             using std::sqrt;
@@ -451,7 +455,7 @@ namespace Peanut {
          * @param r2 Row index.
          * @param scalar Scalar which will be multiplied to \p r2 'th Row.
          */
-        void subtract_row(Index r1, Index r2, T scalar){
+        void subtract_row(Index r1, Index r2, Type scalar){
             for(int i=0;i< C;i++){
                 (*this)(r1, i) -= scalar * (*this)(r2, i);
             }
@@ -462,17 +466,19 @@ namespace Peanut {
          *        left-most element per row by repeating `subtract_row()`.
          * @details Since it does not perform elimination efficiently, numerical
          *          issue may exists with a extremely large/small numbers.
+         *          May produce incorrect results for non-floating-point element
+         *          types (e.g., integer) due to truncation in division.
          * @return Gaussian elimination-performed matrix.
          */
-        Matrix<T, R, C> gaussian_elem() const{
-            Matrix<T, R, C> ret = *this;
+        Matrix gaussian_elem() const{
+            Matrix ret = *this;
             for(int j=0;j< R -1;j++){
-                const T denom = ret(j,j);
+                const Type denom = ret(j,j);
                 if(is_zero(denom)){
                     continue;
                 }
                 for(int i=j+1;i< R;i++){
-                    const T ratio = ret(i, j) / denom;
+                    const Type ratio = ret(i, j) / denom;
                     ret.subtract_row(i, j, ratio);
                 }
             }
@@ -484,7 +490,7 @@ namespace Peanut {
          *        of submatrices.
          * @return Determinant of the matrix.
          */
-        constexpr T det() const requires is_square_v<Matrix>{
+        Type det() const requires is_square_v<Matrix>{
             if constexpr(C ==1){
                 return m_data[0];
             }
@@ -492,12 +498,12 @@ namespace Peanut {
                 return m_data[0] * m_data[C+1] - m_data[1] * m_data[C];
             }
             else{
-                T ret = static_cast<T>(0);
+                Type ret = t_0;
 
                 for_<C>([&] (auto c) {
-                    Matrix<T, R-1, C-1> submat;
+                    Matrix<Type, R-1, C-1> submat;
                     SubMat<0, c.value>(*this).eval(submat);
-                    ret += (c.value % 2 ? -1 : 1) * m_data[c.value] * submat.det();
+                    ret += Type(c.value % 2 ? -1 : 1) * m_data[c.value] * submat.det();
                 });
                 return ret;
             }
@@ -507,9 +513,11 @@ namespace Peanut {
          * @brief Calculate a determinant by performing `gaussian_elem()` and
          *        multiplying diagonal terms. It is equivalent to `det()`
          *        theoretically, but numerical issue may exists.
+         *        May produce incorrect results for non-floating-point element
+         *        types (e.g., integer) due to truncation in division.
          * @return Determinant of the matrix.
          */
-        constexpr T det2() const requires is_square_v<Matrix>{
+        Type det2() const requires is_square_v<Matrix>{
             if constexpr(C ==1){
                 return m_data[0];
             }
@@ -517,7 +525,7 @@ namespace Peanut {
                 return (*this)(0, 0) * (*this)(1, 1) - (*this)(0, 1) * (*this)(1, 0);
             }
             auto upper_triangular = gaussian_elem();
-            T det = upper_triangular(0, 0);
+            Type det = upper_triangular(0, 0);
             for(int i=1;i< R;i++){
                 det *= upper_triangular(i, i);
             }
@@ -525,14 +533,10 @@ namespace Peanut {
         }
 
         // Matrix data
-        std::array<T, R*C> m_data;
-        // union {
-        //     std::array<T, R * C> d1;
-        //     T d2[R][C];
-        // } m_data;
+        std::array<Type, R*C> m_data;
 
     private:
-        static inline const T t_1 = T(1);
-        static inline const T t_0 = T(0);
+        static inline const Type t_1 = Type(T(1));
+        static inline const Type t_0 = Type(T(0));
     };
 }

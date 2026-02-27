@@ -34,6 +34,8 @@
 namespace Peanut::Impl {
     /**
      * @brief Expression class which represents a element-wise matrix sqrt.
+     *        May produce incorrect results for non-floating-point element types
+     *        (e.g., integer) due to truncation.
      * @tparam E Matrix expression type.
      */
     template<typename E>

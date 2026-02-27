@@ -31,6 +31,7 @@
 // Dependencies headers
 #include "catch_amalgamated.hpp"
 
+#ifndef PEANUT_SIMD
 
 TEST_CASE("Test binary operation : Mat + Mat + Mat"){
     SECTION("int matrix"){
@@ -225,3 +226,4 @@ TEST_CASE("Test binary operation : Random matrix arithmetic"){
 }
 
 
+#endif

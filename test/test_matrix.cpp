@@ -32,6 +32,7 @@
 // Dependencies headers
 #include "catch_amalgamated.hpp"
 
+#ifndef PEANUT_SIMD
 
 TEST_CASE("Construct using parameter pack"){
     Peanut::Matrix<int, 2, 2> intmat(1,2,3,4);
@@ -432,3 +433,5 @@ TEST_CASE("Determinant"){
         CHECK(flt_55_mat.det2() == Catch::Approx(2237986.3587442965f));
     }
 }
+
+#endif

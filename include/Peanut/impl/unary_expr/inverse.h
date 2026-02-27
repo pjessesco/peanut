@@ -39,20 +39,22 @@ namespace Peanut::Impl {
      * @brief Expression class which represents an inverse matrix.
      * @details Note that `MatrixInverse` evaluates its input expression
      *          internally during construction to avoid duplicated calculation.
+     *          May produce incorrect results for non-floating-point element types
+     *          (e.g., integer) due to truncation in division.
      * @tparam E Matrix expression type.
      */
     template<typename E>
         requires is_matrix_v<E> && is_square_v<E>
     struct MatrixInverse : public MatrixExpr<MatrixInverse<E>> {
-        using Type = E::Type;
+        using Type = typename E::Type;
         MatrixInverse(const E &_x) : x{_x} {
-            Matrix<Float, E::Row, E::Col> x_eval = Cast<Float>(x);
+            Matrix<Type, E::Row, E::Col> x_eval = _x;
             cofactor_eval = Cofactor(x_eval);
-            invdet = static_cast<Float>(1) / x_eval.det();
+            invdet = Type(1) / x_eval.det();
         }
 
         // Static polymorphism implementation of MatrixExpr
-        INLINE Float operator()(Index r, Index c) const {
+        INLINE Type operator()(Index r, Index c) const {
             return invdet * cofactor_eval(c, r);
         }
 
@@ -68,8 +70,8 @@ namespace Peanut::Impl {
         }
 
         const E &x;// used for optimization
-        Matrix<Float, Row, Col> cofactor_eval;
-        Float invdet;
+        Matrix<Type, Row, Col> cofactor_eval;
+        Type invdet;
     };
 }
 

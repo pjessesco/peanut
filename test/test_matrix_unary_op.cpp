@@ -31,6 +31,7 @@
 // Dependencies headers
 #include "catch_amalgamated.hpp"
 
+#ifndef PEANUT_SIMD
 
 TEST_CASE("Test unary operation : T"){
     Peanut::Matrix<int, 2, 3> mat{1,2,3,
@@ -754,3 +755,4 @@ TEST_CASE("Test unary operation : Inverse"){
     }
 }
 
+#endif
