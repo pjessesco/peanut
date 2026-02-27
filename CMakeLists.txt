@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 20)
 
 option(PEANUT_SIMD "Enable soa simd support" OFF)
 
+message(STATUS "Peanut : Enable SIMD : ${PEANUT_SIMD}")
+
 add_library(Peanut Peanut.cpp)
 include_directories(include)
 
