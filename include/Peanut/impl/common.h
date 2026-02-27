@@ -46,8 +46,14 @@
 
 namespace Peanut {
     using Index = unsigned int;
+#ifdef PEANUT_SIMD
     using Float = simd_float8;
     using Int = simd_int8;
+#else
+    using Float = float;
+    using Int = int;
+#endif
+
 
     /**
      * @brief Check if given \p val is zero or not.
