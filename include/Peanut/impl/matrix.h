@@ -362,7 +362,7 @@ namespace Peanut {
             for(int i=0;i<Row*Col;i++){
                 ret += (m_data[i] * m_data[i]);
             }
-            using std::sqrt;
+            ADL_PATTERN(sqrt)
             return sqrt(ret);
         }
 
@@ -388,7 +388,7 @@ namespace Peanut {
         Type max() const requires (Row==1) || (Col==1){
             Type result = m_data[0];
             for (int i = 1; i < Row*Col; i++) {
-                using std::max;
+                ADL_PATTERN(max)
                 result = max(result, m_data[i]);
             }
             return result;
@@ -402,7 +402,7 @@ namespace Peanut {
         Type min() const requires (Row==1) || (Col==1){
             Type result = m_data[0];
             for (int i = 1; i < Row*Col; i++) {
-                using std::min;
+                ADL_PATTERN(min)
                 result = min(result, m_data[i]);
             }
             return result;
@@ -430,7 +430,7 @@ namespace Peanut {
                 Type diff = m1[i] - m2[i];
                 ret += diff * diff;
             }
-            using std::sqrt;
+            ADL_PATTERN(sqrt)
             return sqrt(ret);
         }
 

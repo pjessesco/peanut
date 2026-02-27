@@ -46,7 +46,7 @@ namespace Peanut::Impl {
 
         // Static polymorphism implementation of MatrixExpr
         INLINE Type operator()(Index r, Index c) const {
-            using std::sqrt;
+            ADL_PATTERN(sqrt)
             return sqrt(x(r, c));
         }
 
@@ -54,7 +54,7 @@ namespace Peanut::Impl {
         static constexpr Index Col = E::Col;
 
         void eval(Matrix<Type, Row, Col> &_result) const {
-            using std::sqrt;
+            ADL_PATTERN(sqrt)
             for (int i=0;i<Row;i++) {
                 for (int j=0;j<Col;j++) {
                     _result(i,j) = sqrt(x(i, j));

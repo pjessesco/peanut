@@ -44,16 +44,28 @@
 #define INLINE __attribute__((always_inline)) inline
 #endif
 
+#ifdef PEANUT_SIMD
+#define ADL_PATTERN(func)\
+    using simd::func; \
+    using std::func;
+#else
+#define ADL_PATTERN(func)\
+    using std::func;
+#endif
+
+
 namespace Peanut {
     using Index = unsigned int;
 #ifdef PEANUT_SIMD
     using Float = simd_float8;
     using Int = simd_int8;
     using Double = simd_double8;
+    using Bool = simd_int8;
 #else
     using Float = float;
     using Int = int;
     using Double = double;
+    using Bool = bool;
 #endif
 
 
