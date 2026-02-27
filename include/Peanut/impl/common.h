@@ -49,9 +49,11 @@ namespace Peanut {
 #ifdef PEANUT_SIMD
     using Float = simd_float8;
     using Int = simd_int8;
+    using Double = simd_double8;
 #else
     using Float = float;
     using Int = int;
+    using Double = double;
 #endif
 
 
