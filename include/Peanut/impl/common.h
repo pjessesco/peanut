@@ -36,6 +36,7 @@
 // Dependencies headers
 #ifdef PEANUT_SIMD
 #include <simd/simd.h>
+#include <simd/logic.h>
 #endif
 
 #if defined(_MSC_VER) && !defined(__llvm__) && !defined(__INTEL_COMPILER)
@@ -46,11 +47,14 @@
 
 #ifdef PEANUT_SIMD
 #define ADL_PATTERN(func)\
-    using simd::func; \
-    using std::func;
+    using simd::func;
+#define LOGIC_MACRO(signature, simd_impl, scalar_impl) \
+    signature{simd_impl;}
 #else
 #define ADL_PATTERN(func)\
     using std::func;
+#define LOGIC_MACRO(signature, simd_impl, scalar_impl) \
+signature{scalar_impl;}
 #endif
 
 
@@ -61,12 +65,23 @@ namespace Peanut {
     using Int = simd_int8;
     using Double = simd_double8;
     using Bool = simd_int8;
+    static const Bool True = simd_int8(-1);
+    static const Bool False = simd_int8(0);
 #else
     using Float = float;
     using Int = int;
     using Double = double;
     using Bool = bool;
+    static const Bool True = true;
+    static const Bool False = false;
 #endif
+
+    LOGIC_MACRO(Float select(const Bool cond, const Float &a, const Float &b), return simd_select(a, b, cond), return cond ? a : b)
+    LOGIC_MACRO(Int select(const Bool &cond, const Int &a, const Int &b), return  (b & cond) | (a & ~cond), return cond ? a : b)
+    LOGIC_MACRO(bool any(const Bool &cond), return simd_any(cond), return cond)
+    LOGIC_MACRO(bool all(const Bool &cond), return simd_all(cond), return cond)
+    LOGIC_MACRO(bool none(const Bool &cond), return !simd_any(cond), return !cond)
+    LOGIC_MACRO(Float clamp(const Float &a, const Float &min, const Float &max), return simd_clamp(a, min, max), std::clamp(a, min, max))
 
 
     /**
@@ -77,7 +92,7 @@ namespace Peanut {
      *         If \p T is not a floating point type, returns true if \p val is zero, false if not.
      */
     template<typename T>
-    bool is_zero(T val) requires is_arithmetic<T>
+    Bool is_zero(T val) requires is_arithmetic<T>
 #ifdef PEANUT_SIMD
         && (!std::is_same_v<T, simd_float4>)
 #endif
@@ -139,3 +154,5 @@ namespace Peanut {
     }
 
 }
+
+#undef LOGIC_MACRO
