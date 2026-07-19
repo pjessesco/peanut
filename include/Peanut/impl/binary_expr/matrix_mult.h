@@ -44,10 +44,17 @@ namespace Peanut::Impl {
         requires(E1::Col == E2::Row)
     struct MatrixMult : public MatrixExpr<MatrixMult<E1, E2>> {
         using Type = typename E1::Type;
-        MatrixMult(const E1 &_x, const E2 &_y) {
-            _x.eval(x_eval);
-            _y.eval(y_eval);
-        }
+
+        // If an operand is already an evaluated `Matrix`, hold a reference to it
+        // instead of copying. Otherwise evaluate the expression into a Matrix.
+        static constexpr bool is_x_mat = std::is_same_v<E1, Matrix<Type, E1::Row, E1::Col>>;
+        static constexpr bool is_y_mat = std::is_same_v<E2, Matrix<Type, E2::Row, E2::Col>>;
+
+        using XEval = std::conditional_t<is_x_mat, const E1 &, Matrix<Type, E1::Row, E1::Col>>;
+        using YEval = std::conditional_t<is_y_mat, const E2 &, Matrix<Type, E2::Row, E2::Col>>;
+
+        MatrixMult(const E1 &_x, const E2 &_y) : x_eval{eval_operand<is_x_mat>(_x)},
+                                                 y_eval{eval_operand<is_y_mat>(_y)} {}
 
         // Static polymorphism implementation of MatrixExpr
         INLINE auto operator()(Index r, Index c) const {
@@ -74,9 +81,21 @@ namespace Peanut::Impl {
             }
         }
 
-        // Specify member type as Matrix for evaluation
-        Matrix<Type, E1::Row, E1::Col> x_eval;
-        Matrix<Type, E2::Row, E2::Col> y_eval;
+        // Bind a reference for `Matrix` operands, evaluate into a temporary otherwise.
+        template<bool IsMat, typename E>
+        static decltype(auto) eval_operand(const E &_e) {
+            if constexpr (IsMat) {
+                return (_e);
+            } else {
+                Matrix<Type, E::Row, E::Col> ret;
+                _e.eval(ret);
+                return ret;
+            }
+        }
+
+        // Reference to a `Matrix` operand, or an evaluated Matrix for expressions.
+        XEval x_eval;
+        YEval y_eval;
     };
 
 }
